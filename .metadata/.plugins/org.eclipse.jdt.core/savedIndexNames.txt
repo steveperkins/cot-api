@@ -62,7 +62,6 @@ INDEX VERSION 1.127+F:\consultingprojects\collegeopentextbooks\workspace\.metada
 3229272584.index
 3449055620.index
 2756300456.index
-4074466843.index
 2725125150.index
 1763518940.index
 1902751234.index
