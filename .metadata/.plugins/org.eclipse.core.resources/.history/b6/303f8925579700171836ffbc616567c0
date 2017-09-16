@@ -1,0 +1,12 @@
+package org.collegeopentextbooks.api.db;
+
+import org.collegeopentextbooks.api.model.Book;
+import org.springframework.stereotype.Component;
+
+@Component
+public class BookDao {
+	
+	public Book getBook(Long id) {
+		return null;
+	}
+}

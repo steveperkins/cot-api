@@ -1,0 +1,13 @@
+package org.collegeopentextbooks.api.service;
+
+import org.collegeopentextbooks.api.model.Book;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ReviewService {
+	
+	public Book getBook(Long id) {
+		
+	}
+	
+}

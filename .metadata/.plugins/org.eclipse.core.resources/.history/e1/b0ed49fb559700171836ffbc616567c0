@@ -1,0 +1,5 @@
+package org.collegeopentextbooks.api.db;
+
+public class BookDao {
+
+}

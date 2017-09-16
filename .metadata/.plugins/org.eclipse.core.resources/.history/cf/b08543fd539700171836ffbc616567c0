@@ -1,0 +1,83 @@
+package org.collegeopentextbooks.api.model;
+
+import java.util.List;
+
+/**
+ * A single textbook
+ * @author Steve
+ *
+ */
+public class Book {
+	private Long id;
+	private List<Author> authors;
+	private String contentUrl;
+	private String title;
+	private String license;
+	private String licenseUrl;
+	private String reviewUrl;
+	private String ancillariesUrl;
+	private String accessibilityUrl;
+	private List<Tag> tags;
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public List<Author> getAuthor() {
+		return authors;
+	}
+	public void setAuthor(List<Author> authors) {
+		this.authors = authors;
+	}
+	public String getContentUrl() {
+		return contentUrl;
+	}
+	public void setContentUrl(String contentUrl) {
+		this.contentUrl = contentUrl;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getLicense() {
+		return license;
+	}
+	public void setLicense(String license) {
+		this.license = license;
+	}
+	public String getLicenseUrl() {
+		return licenseUrl;
+	}
+	public void setLicenseUrl(String licenseUrl) {
+		this.licenseUrl = licenseUrl;
+	}
+	public String getReviewUrl() {
+		return reviewUrl;
+	}
+	public void setReviewUrl(String reviewUrl) {
+		this.reviewUrl = reviewUrl;
+	}
+	public String getAncillariesUrl() {
+		return ancillariesUrl;
+	}
+	public void setAncillariesUrl(String ancillariesUrl) {
+		this.ancillariesUrl = ancillariesUrl;
+	}
+	public String getAccessibilityUrl() {
+		return accessibilityUrl;
+	}
+	public void setAccessibilityUrl(String accessibilityUrl) {
+		this.accessibilityUrl = accessibilityUrl;
+	}
+	public List<Tag> getTags() {
+		return tags;
+	}
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
+	
+}
