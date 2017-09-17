@@ -1,51 +1,46 @@
 package org.collegeopentextbooks.api.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.collegeopentextbooks.api.model.BookReview;
+import org.collegeopentextbooks.api.db.ReviewDaoImpl;
+import org.collegeopentextbooks.api.model.Review;
 import org.collegeopentextbooks.api.model.ReviewType;
-import org.collegeopentextbooks.api.model.Reviewer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ReviewService {
 	
+	@Autowired
+	private ReviewDaoImpl reviewDao;
+	
+	
 	/**
-	 * Retrieves all reviews for the given book ID
-	 * @param id the book ID for which to search reviews
+	 * Retrieves ALL reviews regardless of resource or review type
 	 * @return
 	 */
-	public List<BookReview> getReviews(Long bookId, ReviewType reviewType) {
-		BookReview review = new BookReview();
-		review.setId(1L);
-		review.setComments("This book was terrible");
-		review.setReviewImageUrl("http://www.dogpile.com");
-		review.setReviewType(reviewType);
-		
-		Reviewer reviewer = new Reviewer();
-		reviewer.setId(11L);
-		reviewer.setName("George Galifinakas");
-		review.setReviewer(reviewer);
-		
-		List<BookReview> reviews = new ArrayList<BookReview>();
-		reviews.add(review);
-		reviews.add(getReview(1L));
+	public List<Review> getReviews() {
+		return reviewDao.getReviews();
+	}
+	
+	/**
+	 * Retrieves all reviews for the given resource ID and review type
+	 * @param id the resource ID for which to search reviews
+	 * @param reviewType the review type to filter on
+	 * @return
+	 */
+	public List<Review> getReviews(Integer resourceId, ReviewType reviewType) {
+		List<Review> reviews = reviewDao.getReviews(resourceId, reviewType);
 		return reviews;
 	}
 
-	public BookReview getReview(Long id) {
-		BookReview review = new BookReview();
-		review.setId(1L);
-		review.setComments("I thought this was a great book");
-		review.setReviewImageUrl("http://www.google.com");
-		review.setReviewType(ReviewType.CONTENT);
-		
-		Reviewer reviewer = new Reviewer();
-		reviewer.setId(10L);
-		reviewer.setName("George Galifinakas");
-		review.setReviewer(reviewer);
+	public Review getReview(Integer reviewId) {
+		Review review = reviewDao.getById(reviewId);
 		return review;
+	}
+	
+	public Review save(Review review) {
+		return reviewDao.save(review);
 	}
 	
 }

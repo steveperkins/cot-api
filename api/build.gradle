@@ -36,16 +36,27 @@ targetCompatibility = 1.8
 dependencies {
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.21'
-    compile("org.springframework.boot:spring-boot-starter-web:1.5.6.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-web:1.5.7.RELEASE")
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: '1.5.7.RELEASE'
+
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
+    compile group: 'commons-dbcp', name: 'commons-dbcp', version: '1.4'
+    
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
+    
+    
     // Requires Spring Security
     //compile("org.springframework.boot:spring-boot-starter-actuator")
+    // Swagger2 for API documentation. Creates docs at http://<webroot>/swagger-ui.html.
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.7.0'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.7.0'
     
 
-    // Declare the dependency for your favourite test framework you want to use in your tests.
+    // Unit tests
     // TestNG is also supported by the Gradle Test task. Just change the
     // testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '1.5.7.RELEASE'
+    
 }

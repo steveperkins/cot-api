@@ -1,35 +1,26 @@
 package org.collegeopentextbooks.api.model;
 
 /**
- * A single review of a single textbook
+ * A single review of a single resource
  * @author Steve
  *
  */
-public class BookReview {
-	private Long id;
-	private Book book;
+public class Review extends AbstractModelObject {
+	private Resource resource;
 	private Reviewer reviewer;
 	private ReviewType reviewType;
-	private String reviewImageUrl;
+	private Double score;
+	private String chartUrl;
 	private String comments;
 	
 	/**
-	 * @return the review's ID
+	 * @return the resource on which this review was performed
 	 */
-	public Long getId() {
-		return id;
+	public Resource getResource() {
+		return resource;
 	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	/**
-	 * @return the book on which this review was performed
-	 */
-	public Book getBook() {
-		return book;
-	}
-	public void setBook(Book book) {
-		this.book = book;
+	public void setResource(Resource resource) {
+		this.resource = resource;
 	}
 	/**
 	 * 
@@ -50,15 +41,21 @@ public class BookReview {
 	public void setReviewType(ReviewType reviewType) {
 		this.reviewType = reviewType;
 	}
+	public Double getScore() {
+		return score;
+	}
+	public void setScore(Double score) {
+		this.score = score;
+	}
 	/**
 	 * To be deprecated; use database-driven review classes instead
 	 * @return the relative URL to the image of this review's rating graph
 	 */
-	public String getReviewImageUrl() {
-		return reviewImageUrl;
+	public String getChartUrl() {
+		return chartUrl;
 	}
-	public void setReviewImageUrl(String reviewImageUrl) {
-		this.reviewImageUrl = reviewImageUrl;
+	public void setChartUrl(String reviewImageUrl) {
+		this.chartUrl = reviewImageUrl;
 	}
 	/**
 	 * @return the reviewer's freeform evaluation of this review's book
