@@ -9,6 +9,7 @@ import org.collegeopentextbooks.api.service.ResourceService;
 import org.collegeopentextbooks.api.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,23 +28,24 @@ public class ApiResourceController {
 	@Autowired
 	private ReviewService reviewService;
 	
-	@RequestMapping(method=RequestMethod.GET, value="/")
+	@RequestMapping(method=RequestMethod.GET, value="")
     @ResponseBody List<Resource> getResources() {
         return resourceService.getResources();
     }
 	
 	@RequestMapping(method=RequestMethod.GET, value="{resourceId}")
-    @ResponseBody Resource getResource(Integer resourceId) {
+    @ResponseBody Resource getResource(@PathVariable Integer resourceId) {
         return resourceService.getResource(resourceId);
     }
 	
 	@RequestMapping(method=RequestMethod.GET, value="/tag/{tagId}")
-    @ResponseBody List<Resource> getResourcesByTag(Integer tagId) {
+    @ResponseBody List<Resource> getResourcesByTag(@PathVariable Integer tagId) {
         return resourceService.getResourcesByTag(tagId);
     }
 	
 	@RequestMapping(method=RequestMethod.GET, value="{resourceId}/reviews/{reviewType}")
-    @ResponseBody List<Review> getReviews(Integer resourceId, ReviewType reviewType) {
+    @ResponseBody List<Review> getReviews(@PathVariable Integer resourceId, 
+    		@PathVariable("reviewType") ReviewType reviewType) {
         return reviewService.getReviews(resourceId, reviewType);
     }
 	

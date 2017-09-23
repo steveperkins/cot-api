@@ -2,7 +2,7 @@ package org.collegeopentextbooks.api.model;
 
 /**
  * A category in the rubric under which a resource is reviewed
- * @author Steve
+ * @author steve.perkins
  *
  */
 public class ReviewCategory extends AbstractModelObject {

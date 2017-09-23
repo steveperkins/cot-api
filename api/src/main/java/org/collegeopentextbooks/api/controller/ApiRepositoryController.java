@@ -6,6 +6,7 @@ import org.collegeopentextbooks.api.model.Repository;
 import org.collegeopentextbooks.api.service.RepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,13 +22,13 @@ public class ApiRepositoryController {
 	@Autowired
 	private RepositoryService repositoryService;
 	
-	@RequestMapping(method=RequestMethod.GET, value="/")
+	@RequestMapping(method=RequestMethod.GET, value="")
     @ResponseBody List<Repository> getRepositories() {
         return repositoryService.getRepositories();
     }
 	
 	@RequestMapping(method=RequestMethod.GET, value="{repositoryId}")
-    @ResponseBody Repository getRepository(Integer repositoryId) {
+    @ResponseBody Repository getRepository(@PathVariable Integer repositoryId) {
         return repositoryService.getRepository(repositoryId);
     }
 	

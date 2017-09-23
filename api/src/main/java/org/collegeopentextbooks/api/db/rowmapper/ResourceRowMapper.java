@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Maps a Resource, its corresponding Repository, and the repository's Organization. Expects the ResultSet to have all Repository fields prefixed with repository_ and all Organization fields prefixed with organization_/
- * @author Steve
+ * @author steve.perkins
  *
  */
 @Component
@@ -21,7 +21,6 @@ public class ResourceRowMapper extends AbstractRowMapper<Resource> {
 		Resource resource = new Resource();
 		resource.setAncillariesUrl(rs.getString("ancillaries_url"));
 		resource.setExternalReviewUrl(rs.getString("external_review_url"));
-		resource.setLicense(rs.getString("license"));
 		resource.setTitle(rs.getString("title"));
 		resource.setSearchTitle(rs.getString("search_title"));
 		resource.setUrl(rs.getString("url"));

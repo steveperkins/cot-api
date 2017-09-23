@@ -2,7 +2,7 @@ package org.collegeopentextbooks.api.model;
 
 /**
  * A repository containing resources
- * @author Steve
+ * @author steve.perkins
  *
  */
 public class Repository extends AbstractModelObject {

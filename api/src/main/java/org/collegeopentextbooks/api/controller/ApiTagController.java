@@ -8,6 +8,7 @@ import org.collegeopentextbooks.api.model.TagType;
 import org.collegeopentextbooks.api.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,13 +24,13 @@ public class ApiTagController {
 	@Autowired
 	private TagService tagService;
 	
-	@RequestMapping(method=RequestMethod.GET, value="/")
+	@RequestMapping(method=RequestMethod.GET, value="")
     @ResponseBody List<Tag> getAllTags() {
         return tagService.getAll();
     }
 	
-	@RequestMapping(method=RequestMethod.GET, value="/{tagType}")
-    @ResponseBody List<Tag> getTagsByType(String tagType) {
+	@RequestMapping(method=RequestMethod.GET, value="{tagType}")
+    @ResponseBody List<Tag> getTagsByType(@PathVariable String tagType) {
 		TagType type = TagType.fromString(tagType);
 		if(null == type) {
 			return new ArrayList<Tag>();

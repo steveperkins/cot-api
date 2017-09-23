@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Maps a Repository and its corresponding Organization. Expects the ResultSet to have all Organization fields prefixed with organization_/
- * @author Steve
+ * @author steve.perkins
  *
  */
 @Component

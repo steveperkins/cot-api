@@ -2,7 +2,7 @@ package org.collegeopentextbooks.api.model;
 
 /**
  * An organization contributing reviewers, authors, or editors
- * @author Steve
+ * @author steve.perkins
  *
  */
 public class Organization extends AbstractModelObject {

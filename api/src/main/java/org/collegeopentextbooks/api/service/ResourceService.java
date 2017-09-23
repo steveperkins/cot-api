@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.collegeopentextbooks.api.db.AuthorDaoImpl;
 import org.collegeopentextbooks.api.db.EditorDaoImpl;
+import org.collegeopentextbooks.api.db.LicenseDaoImpl;
 import org.collegeopentextbooks.api.db.ResourceDaoImpl;
 import org.collegeopentextbooks.api.db.TagDaoImpl;
 import org.collegeopentextbooks.api.exception.InvalidAuthorException;
@@ -17,6 +18,7 @@ import org.collegeopentextbooks.api.exception.ValueTooLongException;
 import org.collegeopentextbooks.api.model.Author;
 import org.collegeopentextbooks.api.model.Editor;
 import org.collegeopentextbooks.api.model.Resource;
+import org.collegeopentextbooks.api.model.SearchCriteria;
 import org.collegeopentextbooks.api.model.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +30,7 @@ public class ResourceService {
 	private static final Integer URL_MAX_LENGTH = 255;
 	private static final Integer ANCILLARIES_URL_MAX_LENGTH = 255;
 	private static final Integer EXTERNAL_REVIEW_URL_MAX_LENGTH = 255;
-	private static final Integer LICENSE_MAX_LENGTH = 255;
+	private static final Integer LICENSE_ID_MAX_LENGTH = 2;
 	
 	@Autowired
 	private ResourceDaoImpl resourceDao;
@@ -41,6 +43,19 @@ public class ResourceService {
 	
 	@Autowired
 	private EditorDaoImpl editorDao;
+	
+	@Autowired
+	private LicenseDaoImpl licenseDao;
+	
+	/**
+	 * Finds resources using the given criteria
+	 * @param searchCriteria
+	 * @return
+	 * @author steve.perkins
+	 */
+	public List<Resource> search(SearchCriteria searchCriteria) {
+		return resourceDao.search(searchCriteria);
+	}
 	
 	/**
 	 * Retrieves ALL resources
@@ -200,6 +215,48 @@ public class ResourceService {
 	}
 	
 	/**
+	 * Adds an association between a resource and a license
+	 * @param resource
+	 * @param licenseId
+	 * @throws RequiredValueEmptyException if the provided resource ID or license ID is missing or blank
+	 * @throws ValueTooLongException if the provided license ID is longer than its max length
+	 * @author steve.perkins
+	 */
+	public void addLicenseToResource(Resource resource, String licenseId) {
+		if(null == resource || null == resource.getId())
+			throw new RequiredValueEmptyException("Resource ID is required");
+		
+		if(StringUtils.isBlank(licenseId))
+			throw new RequiredValueEmptyException("License Code cannot be blank");
+			
+		if(licenseId.length() > LICENSE_ID_MAX_LENGTH)
+			throw new ValueTooLongException("License Code exceeds max length (" + LICENSE_ID_MAX_LENGTH + ")");
+		
+		licenseDao.addLicenseToResource(resource.getId(), licenseId);
+	}
+	
+	/**
+	 * Removes an existing association between a resource and a license
+	 * @param resourceId
+	 * @param licenseId
+	 * @throws RequiredValueEmptyException if the provided resource ID or license ID is missing or blank
+	 * @throws ValueTooLongException if the provided license ID is longer than its max length
+	 * @author steve.perkins
+	 */
+	public void deleteLicenseFromResource(Integer resourceId, String licenseId) {
+		if(null == resourceId)
+			throw new RequiredValueEmptyException("Resource ID is required");
+		
+		if(StringUtils.isBlank(licenseId))
+			throw new RequiredValueEmptyException("License Code cannot be blank");
+		
+		if(licenseId.length() > LICENSE_ID_MAX_LENGTH)
+			throw new ValueTooLongException("License Code exceeds max length (" + LICENSE_ID_MAX_LENGTH + ")");
+		
+		licenseDao.deleteLicenseFromResource(resourceId, licenseId);
+	}
+	
+	/**
 	 * Creates or updates the given resource's scalar values.
 	 * @param repository the resource to create or update
 	 * @return the updated resource. If this is a create operation, the new object's ID is populated on both the returned object and the given object.
@@ -229,10 +286,6 @@ public class ResourceService {
 				&& resource.getExternalReviewUrl().length() > EXTERNAL_REVIEW_URL_MAX_LENGTH)
 			throw new ValueTooLongException("External Review URL exceeds max length (" + EXTERNAL_REVIEW_URL_MAX_LENGTH + ")");
 		
-		if(StringUtils.isNotBlank(resource.getLicense()) 
-				&& resource.getLicense().length() > LICENSE_MAX_LENGTH)
-			throw new ValueTooLongException("License Code exceeds max length (" + LICENSE_MAX_LENGTH + ")");
-		
 		return resourceDao.save(resource);
 	}
 	
@@ -249,6 +302,7 @@ public class ResourceService {
 		resource.setAuthors(authorDao.getAuthorsByResourceId(resource.getId()));
 		resource.setEditors(editorDao.getEditorsByResourceId(resource.getId()));
 		resource.setTags(tagDao.getTagsByResourceId(resource.getId()));
+		resource.setLicenses(licenseDao.getLicensesByResourceId(resource.getId()));
 		return resource;
 	}
 	

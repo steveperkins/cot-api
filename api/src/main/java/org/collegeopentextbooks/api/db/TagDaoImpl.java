@@ -84,7 +84,7 @@ public class TagDaoImpl {
 	}
 	
 	/**
-	 * Removes an existing association bewteen a resource and a tag
+	 * Removes an existing association between a resource and a tag
 	 * @param resourceId
 	 * @param tagId
 	 * @author steve.perkins

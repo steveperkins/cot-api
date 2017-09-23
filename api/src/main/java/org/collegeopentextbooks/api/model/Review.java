@@ -2,7 +2,7 @@ package org.collegeopentextbooks.api.model;
 
 /**
  * A single review of a single resource
- * @author Steve
+ * @author steve.perkins
  *
  */
 public class Review extends AbstractModelObject {

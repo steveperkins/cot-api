@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.collegeopentextbooks.api.model.Author;
 import org.collegeopentextbooks.api.model.Editor;
+import org.collegeopentextbooks.api.model.License;
 import org.collegeopentextbooks.api.model.Organization;
 import org.collegeopentextbooks.api.model.Repository;
 import org.collegeopentextbooks.api.model.Resource;
@@ -17,6 +18,7 @@ import org.collegeopentextbooks.api.model.Reviewer;
 import org.collegeopentextbooks.api.model.Tag;
 import org.collegeopentextbooks.api.service.AuthorService;
 import org.collegeopentextbooks.api.service.EditorService;
+import org.collegeopentextbooks.api.service.LicenseService;
 import org.collegeopentextbooks.api.service.OrganizationService;
 import org.collegeopentextbooks.api.service.RepositoryService;
 import org.collegeopentextbooks.api.service.ResourceService;
@@ -92,8 +94,13 @@ public class ParserApplication {
     @Autowired
     private ReviewerService reviewerService;
     
+    @Autowired
+    private LicenseService licenseService;
+    
     public void start() {
         // TODO Put parser code here
+    	List<License> licenses = licenseService.getAll();
+    	
     	Organization organization = new Organization();
     	organization.setName("Muggle Myopia");
     	organization.setUrl("http://www.amazon.com");
@@ -123,9 +130,12 @@ public class ParserApplication {
     	resource.setTitle("Muggles in the Wild");
     	resource.setUrl("http://www.google.com/books/Muggles-in-the-Wild");
     	resource.setExternalReviewUrl("http://www.amazon.com/book-review");
-    	resource.setLicense("CC");
     	resource.setAncillariesUrl("http://www.collegeopentextbooks.org/ancillaries");
     	resourceService.save(resource);
+    	
+    	List<License> resourceLicenses = new ArrayList<License>();
+    	resourceLicenses.add(new License("CC", "Creative Commons"));
+    	resourceLicenses.add(new License("BY", "Attribution"));
     	
     	for(Author currentAuthor: authors) {
     		resourceService.addAuthorToResource(resource, currentAuthor);
@@ -133,8 +143,16 @@ public class ParserApplication {
     	for(Editor currentEditor: editors) {
     		resourceService.addEditorToResource(resource, currentEditor);
     	}
+    	for(License license: resourceLicenses) {
+    		if(!licenses.contains(license)) {
+    			license = licenseService.save(license);
+    		}
+    		resourceService.addLicenseToResource(resource, license.getId());
+    	}
     	resource.setAuthors(authors);
     	resource.setEditors(editors);
+    	
+    	
     	
     	Tag tag = tagService.getByName("Literature");
     	resourceService.addTagToResource(resource, tag);
