@@ -64,6 +64,7 @@ public class ReviewDaoImpl {
 	 * Creates or updates an review
 	 * @param review the review to create or update
 	 * @return
+	 * @author steve.perkins
 	 */
 	public Review save(Review review) {
 		if(null == review.getId())

@@ -60,10 +60,22 @@ public class EditorDaoImpl {
 		return results;
 	}
 	
+	/**
+	 * Associates an existing resource with an existing editor
+	 * @param resourceId
+	 * @param editorId
+	 * @author steve.perkins
+	 */
 	public void addEditorToResource(Integer resourceId, Integer editorId) {
 		this.jdbcTemplate.update(ADD_EDITOR_TO_RESOURCE_SQL, resourceId, editorId, resourceId, editorId);
 	}
 	
+	/**
+	 * Removes an existing association between a resource and an editor
+	 * @param resourceId
+	 * @param editorId
+	 * @author steve.perkins
+	 */
 	public void deleteEditorFromResource(Integer resourceId, Integer editorId) {
 		this.jdbcTemplate.update(DELETE_EDITOR_FROM_RESOURCE_SQL, resourceId, editorId);
 	}
@@ -72,6 +84,7 @@ public class EditorDaoImpl {
 	 * Creates or updates an editor
 	 * @param editor the editor to create or update
 	 * @return
+	 * @author steve.perkins
 	 */
 	public Editor save(Editor editor) {
 		if(null == editor.getId())

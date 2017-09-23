@@ -90,6 +90,7 @@ public class ResourceDaoImpl {
 	 * Creates or updates an resource
 	 * @param resource the resource to create or update
 	 * @return
+	 * @author steve.perkins
 	 */
 	public Resource save(Resource resource) {
 		if(null == resource.getId())

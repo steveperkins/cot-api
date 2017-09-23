@@ -60,10 +60,22 @@ public class AuthorDaoImpl {
 		return results;
 	}
 	
+	/**
+	 * Associates an existing resource with an existing author
+	 * @param resourceId
+	 * @param authorId
+	 * @author steve.perkins
+	 */
 	public void addAuthorToResource(Integer resourceId, Integer authorId) {
 		this.jdbcTemplate.update(ADD_AUTHOR_TO_RESOURCE_SQL, resourceId, authorId, resourceId, authorId);
 	}
 	
+	/**
+	 * Removes an existing association between a resource and an author
+	 * @param resourceId
+	 * @param authorId
+	 * @author steve.perkins
+	 */
 	public void deleteAuthorFromResource(Integer resourceId, Integer authorId) {
 		this.jdbcTemplate.update(DELETE_AUTHOR_FROM_RESOURCE_SQL, resourceId, authorId);
 	}
@@ -72,6 +84,7 @@ public class AuthorDaoImpl {
 	 * Creates or updates an author
 	 * @param author the author to create or update
 	 * @return
+	 * @author steve.perkins
 	 */
 	public Author save(Author author) {
 		if(null == author.getId())

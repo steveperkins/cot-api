@@ -54,6 +54,7 @@ public class RepositoryDaoImpl {
 	 * Creates or updates an repository
 	 * @param repository the repository to create or update
 	 * @return
+	 * @author steve.perkins
 	 */
 	public Repository save(Repository repository) {
 		if(null == repository.getId())
