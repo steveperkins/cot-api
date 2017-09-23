@@ -32,14 +32,14 @@ public class LicenseService {
 	}
 	
 	/**
-	 * Creates or updates the given license's scalar values.
+	 * Create the given license
 	 * @param license the license to create or update
 	 * @return the updated license
 	 * @throws RequiredValueEmptyException if the provided license ID or description is missing or blank
 	 * @throws ValueTooLongException if the provided license ID or description is longer than its respective max length
 	 * @author steve.perkins
 	 */
-	public License save(License license) {
+	public License insert(License license) {
 		if(null == license)
 			return null;
 		
@@ -55,6 +55,33 @@ public class LicenseService {
 		if(license.getDescription().length() > DESCRIPTION_MAX_LENGTH)
 			throw new ValueTooLongException("Description exceeds max length (" + DESCRIPTION_MAX_LENGTH + ")");
 		
-		return licenseDao.save(license);
+		return licenseDao.insert(license);
+	}
+	
+	/**
+	 * Updates the given license
+	 * @param license the license to create or update
+	 * @return the updated license
+	 * @throws RequiredValueEmptyException if the provided license ID or description is missing or blank
+	 * @throws ValueTooLongException if the provided license ID or description is longer than its respective max length
+	 * @author steve.perkins
+	 */
+	public License update(License license) {
+		if(null == license)
+			return null;
+		
+		if(StringUtils.isBlank(license.getId()))
+			throw new RequiredValueEmptyException("License Code is required");
+		
+		if(StringUtils.isBlank(license.getDescription()))
+			throw new RequiredValueEmptyException("Description cannot be blank");
+		
+		if(license.getId().length() > ID_MAX_LENGTH)
+			throw new ValueTooLongException("License Code exceeds max length (" + ID_MAX_LENGTH + ")");
+		
+		if(license.getDescription().length() > DESCRIPTION_MAX_LENGTH)
+			throw new ValueTooLongException("Description exceeds max length (" + DESCRIPTION_MAX_LENGTH + ")");
+		
+		return licenseDao.update(license);
 	}
 }

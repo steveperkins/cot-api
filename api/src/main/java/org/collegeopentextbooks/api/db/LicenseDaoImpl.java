@@ -11,8 +11,6 @@ import org.collegeopentextbooks.api.model.License;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +21,7 @@ public class LicenseDaoImpl {
 	private static String GET_LICENSES_SQL = "SELECT l.* FROM license l";
 	private static String GET_LICENSES_BY_RESOURCE_ID_SQL = "SELECT l.* FROM license l INNER JOIN resource_license rl ON l.id=rl.license_id WHERE rl.resource_id=?";
 	private static String GET_LICENSE_BY_ID_SQL = "SELECT l.* FROM license l WHERE t.id=?";
-	private static String UPDATE_SQL = "UPDATE license SET id=:id, description=:description WHERE id=:id";
+	private static String UPDATE_SQL = "UPDATE license SET id=?, description=? WHERE id=?";
 	
 	private static String DELETE_LICENSE_FROM_RESOURCE_SQL = "DELETE FROM resource_license rl WHERE rl.resource_id=? AND rl.license_id=?";
 	private static String ADD_LICENSE_TO_RESOURCE_SQL = DELETE_LICENSE_FROM_RESOURCE_SQL + "; INSERT INTO resource_license(resource_id, license_id) VALUES(?, ?)";
@@ -84,19 +82,12 @@ public class LicenseDaoImpl {
 	}
 	
 	/**
-	 * Creates or updates a license
-	 * @param license the license to create or update
+	 * Creates a new license
+	 * @param license the license to create
 	 * @return
 	 * @author steve.perkins
 	 */
-	public License save(License license) {
-		if(null == license.getId())
-			return insert(license);
-		else
-			return update(license);
-	}
-	
-	protected License insert(License license) {
+	public License insert(License license) {
 		Map<String, Object> parameters = new HashMap<String, Object>(2);
         parameters.put("id", license.getId());
         parameters.put("description", license.getDescription());
@@ -104,9 +95,14 @@ public class LicenseDaoImpl {
         return license;
 	}
 	
-	protected License update(License license) {
-		SqlParameterSource parameters = new BeanPropertySqlParameterSource(license);
-		this.jdbcTemplate.update(UPDATE_SQL, parameters);
+	/**
+	 * Updates a license code or description
+	 * @param license the license to update
+	 * @return
+	 * @author steve.perkins
+	 */
+	public License update(License license) {
+		this.jdbcTemplate.update(UPDATE_SQL, new String[] { license.getId(), license.getDescription(), license.getId() });
 		return license;
 	}
 	

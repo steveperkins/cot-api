@@ -145,13 +145,13 @@ public class ParserApplication {
     	}
     	for(License license: resourceLicenses) {
     		if(!licenses.contains(license)) {
-    			license = licenseService.save(license);
+    			license = licenseService.insert(license);
     		}
     		resourceService.addLicenseToResource(resource, license.getId());
     	}
     	resource.setAuthors(authors);
     	resource.setEditors(editors);
-    	
+    	resource.setLicenses(resourceLicenses);
     	
     	
     	Tag tag = tagService.getByName("Literature");
@@ -173,6 +173,4 @@ public class ParserApplication {
     	review.setComments("I recommend this textbook as primary textbook for both associate and bachelor level programs. It began with some hypothetical text cases which were tough but it laid out a critical decision making process. The dialogues on Ethical Decision Making and Corporate Social Governance are more necessary than ever. I was looking to bring something into the classroom that focused on the here and this text provides that. I think introducing essential definitions a little earlier could be helpful.");
     	reviewService.save(review);
     }
-    
-	
 }
