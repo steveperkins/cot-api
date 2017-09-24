@@ -2,8 +2,8 @@ package org.collegeopentextbooks.api.controller;
 
 import java.util.List;
 
-import org.collegeopentextbooks.api.model.Review;
-import org.collegeopentextbooks.api.service.ReviewService;
+import org.collegeopentextbooks.api.model.License;
+import org.collegeopentextbooks.api.service.LicenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,23 +14,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(
-		path={ "/review", "/reviews" }, 
+		path={ "/license", "/licenses" }, 
 		consumes={ MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, 
 		produces={ MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-public class ApiReviewController {
+public class ApiLicenseController {
 
 	@Autowired
-	private ReviewService reviewService;
+	private LicenseService licenseService;
 	
 	@RequestMapping(method=RequestMethod.GET, value="")
-	@ResponseBody List<Review> getReviews() {
-		return reviewService.getReviews();
-	}
-	
-	@RequestMapping(method=RequestMethod.GET, value="{reviewId}")
-    @ResponseBody Review getReview(@PathVariable Integer reviewId) {
-        return reviewService.getReview(reviewId);
+    @ResponseBody List<License> getAllLicenses() {
+        return licenseService.getAll();
     }
 	
-	
+	@RequestMapping(method=RequestMethod.GET, value="{licenseCode}")
+    @ResponseBody License getLicenseById(@PathVariable String licenseCode) {
+		return licenseService.getById(licenseCode);
+    }
 }

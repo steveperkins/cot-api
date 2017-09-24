@@ -53,6 +53,7 @@ public class ReviewerDaoImpl {
 	 * Creates or updates a reviewer
 	 * @param reviewer the reviewer to create or update
 	 * @return
+	 * @author steve.perkins
 	 */
 	public Reviewer save(Reviewer reviewer) {
 		if(null == reviewer.getId())

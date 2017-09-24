@@ -44,7 +44,6 @@ dependencies {
     
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
     
-    
     // Requires Spring Security
     //compile("org.springframework.boot:spring-boot-starter-actuator")
     // Swagger2 for API documentation. Creates docs at http://<webroot>/swagger-ui.html.

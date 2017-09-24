@@ -73,10 +73,22 @@ public class TagDaoImpl {
 		return results.get(0);
 	}
 	
+	/**
+	 * Associates an existing resource with an existing tag
+	 * @param resourceId
+	 * @param tagId
+	 * @author steve.perkins
+	 */
 	public void addTagToResource(Integer resourceId, Integer tagId) {
         jdbcTemplate.update(ADD_TAG_TO_RESOURCE_SQL, resourceId, tagId, resourceId, tagId);
 	}
 	
+	/**
+	 * Removes an existing association between a resource and a tag
+	 * @param resourceId
+	 * @param tagId
+	 * @author steve.perkins
+	 */
 	public void deleteTagFromResource(Integer resourceId, Integer tagId) {
         jdbcTemplate.update(DELETE_TAG_FROM_RESOURCE_SQL, resourceId, tagId);
 	}
@@ -85,6 +97,7 @@ public class TagDaoImpl {
 	 * Creates or updates a tag
 	 * @param tag the tag to create or update
 	 * @return
+	 * @author steve.perkins
 	 */
 	public Tag save(Tag tag) {
 		if(null == tag.getId())

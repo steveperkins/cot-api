@@ -7,8 +7,12 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.collegeopentextbooks.api.db.rowmapper.ResourceRowMapper;
 import org.collegeopentextbooks.api.model.Resource;
+import org.collegeopentextbooks.api.model.SearchCriteria;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -18,14 +22,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ResourceDaoImpl {
-	
-	private static String GET_RESOURCES_SQL = "SELECT r.*, rep.id AS repository_id, rep.name AS repository_name, rep.url AS repository_url, rep.search_name AS repository_search_name, rep.created_date AS repository_created_date, rep.updated_date AS repository_updated_date,  o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS o.organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM resource r INNER JOIN repository rep ON r.repository_id=rep.id INNER JOIN organization o ON r.organization_id=o.id";
-	private static String GET_RESOURCE_BY_ID_SQL = "SELECT r.*, rep.id AS repository_id, rep.name AS repository_name, rep.url AS repository_url, rep.search_name AS repository_search_name, rep.created_date AS repository_created_date, rep.updated_date AS repository_updated_date,  o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS o.organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM resource r INNER JOIN repository rep ON r.repository_id=rep.id INNER JOIN organization o ON r.organization_id=o.id WHERE r.id=?";
-	private static String GET_RESOURCES_BY_REPOSITORY_ID_SQL = "SELECT r.*, rep.id AS repository_id, rep.name AS repository_name, rep.url AS repository_url, rep.search_name AS repository_search_name, rep.created_date AS repository_created_date, rep.updated_date AS repository_updated_date,  o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS o.organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM resource r INNER JOIN repository rep ON r.repository_id=rep.id INNER JOIN organization o ON r.organization_id=o.id WHERE rep.id=?";
-	private static String GET_RESOURCES_BY_TAG_ID_SQL = "SELECT r.*, rep.id AS repository_id, rep.name AS repository_name, rep.url AS repository_url, rep.search_name AS repository_search_name, rep.created_date AS repository_created_date, rep.updated_date AS repository_updated_date,  o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS o.organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM resource r INNER JOIN resource_tag rt ON r.id=rt.resource_id INNER JOIN repository rep ON r.repository_id=rep.id INNER JOIN organization o ON r.organization_id=o.id WHERE rt.tag_id=?";
-	private static String GET_RESOURCES_BY_AUTHOR_ID_SQL = "SELECT r.*, rep.id AS repository_id, rep.name AS repository_name, rep.url AS repository_url, rep.search_name AS repository_search_name, rep.created_date AS repository_created_date, rep.updated_date AS repository_updated_date,  o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS o.organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM resource r INNER JOIN resource_author ra ON r.id=ra.resource_id INNER JOIN repository rep ON r.repository_id=rep.id INNER JOIN organization o ON r.organization_id=o.id WHERE ra.author_id=?";
-	private static String GET_RESOURCES_BY_EDITOR_ID_SQL = "SELECT r.*, rep.id AS repository_id, rep.name AS repository_name, rep.url AS repository_url, rep.search_name AS repository_search_name, rep.created_date AS repository_created_date, rep.updated_date AS repository_updated_date,  o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS o.organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM resource r INNER JOIN resource_editor re ON r.id=re.resource_id INNER JOIN repository rep ON r.repository_id=rep.id INNER JOIN organization o ON r.organization_id=o.id WHERE re.editor_id=?";
+	private static final Logger logger = LoggerFactory.getLogger(ResourceDaoImpl.class);
+	private static String GET_RESOURCES_SQL = "SELECT r.*, rep.id AS repository_id, rep.name AS repository_name, rep.url AS repository_url, rep.search_name AS repository_search_name, rep.created_date AS repository_created_date, rep.updated_date AS repository_updated_date,  o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM resource r INNER JOIN repository rep ON r.repository_id=rep.id INNER JOIN organization o ON rep.organization_id=o.id";
+	private static String GET_RESOURCE_BY_ID_SQL = "SELECT r.*, rep.id AS repository_id, rep.name AS repository_name, rep.url AS repository_url, rep.search_name AS repository_search_name, rep.created_date AS repository_created_date, rep.updated_date AS repository_updated_date,  o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM resource r INNER JOIN repository rep ON r.repository_id=rep.id INNER JOIN organization o ON rep.organization_id=o.id WHERE r.id=?";
+	private static String GET_RESOURCES_BY_REPOSITORY_ID_SQL = "SELECT r.*, rep.id AS repository_id, rep.name AS repository_name, rep.url AS repository_url, rep.search_name AS repository_search_name, rep.created_date AS repository_created_date, rep.updated_date AS repository_updated_date,  o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM resource r INNER JOIN repository rep ON r.repository_id=rep.id INNER JOIN organization o ON rep.organization_id=o.id WHERE rep.id=?";
+	private static String GET_RESOURCES_BY_TAG_ID_SQL = "SELECT r.*, rep.id AS repository_id, rep.name AS repository_name, rep.url AS repository_url, rep.search_name AS repository_search_name, rep.created_date AS repository_created_date, rep.updated_date AS repository_updated_date,  o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM resource r INNER JOIN resource_tag rt ON r.id=rt.resource_id INNER JOIN repository rep ON r.repository_id=rep.id INNER JOIN organization o ON rep.organization_id=o.id WHERE rt.tag_id=?";
+	private static String GET_RESOURCES_BY_AUTHOR_ID_SQL = "SELECT r.*, rep.id AS repository_id, rep.name AS repository_name, rep.url AS repository_url, rep.search_name AS repository_search_name, rep.created_date AS repository_created_date, rep.updated_date AS repository_updated_date,  o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM resource r INNER JOIN resource_author ra ON r.id=ra.resource_id INNER JOIN repository rep ON r.repository_id=rep.id INNER JOIN organization o ON rep.organization_id=o.id WHERE ra.author_id=?";
+	private static String GET_RESOURCES_BY_EDITOR_ID_SQL = "SELECT r.*, rep.id AS repository_id, rep.name AS repository_name, rep.url AS repository_url, rep.search_name AS repository_search_name, rep.created_date AS repository_created_date, rep.updated_date AS repository_updated_date,  o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM resource r INNER JOIN resource_editor re ON r.id=re.resource_id INNER JOIN repository rep ON r.repository_id=rep.id INNER JOIN organization o ON rep.organization_id=o.id WHERE re.editor_id=?";
 	private static String UPDATE_SQL = "UPDATE resource SET title=:title, url=:url, license=:license, search_title=LOWER(:title), ancillaries_url=:ancillariesUrl, external_review_url=:externalReviewUrl WHERE id=:id";
+	
+	private static String SEARCH_SQL_SELECT = "SELECT r.*, rep.id AS repository_id, rep.name AS repository_name, rep.url AS repository_url, rep.search_name AS repository_search_name, rep.created_date AS repository_created_date, rep.updated_date AS repository_updated_date,  o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM resource r INNER JOIN repository rep ON r.repository_id=rep.id INNER JOIN organization o ON rep.organization_id=o.id";
 	
 	private JdbcTemplate jdbcTemplate;
 	private SimpleJdbcInsert insert;
@@ -86,10 +92,135 @@ public class ResourceDaoImpl {
 		return results;
 	}
 	
+	public List<Resource> search(SearchCriteria searchCriteria) {
+		List<String> conditions = new ArrayList<String>();
+		List<Object> arguments = new ArrayList<Object>();
+		
+		// Constrain to selected repositories
+		if(null != searchCriteria.getRepositoryIds() 
+				&& !searchCriteria.getRepositoryIds().isEmpty()) {
+			List<Integer> list = searchCriteria.getRepositoryIds();
+			String condition = "rep.id IN(";
+			for(int x = 0; x < list.size(); x++) {
+				if(x > 0) {
+					condition += ",";
+				}
+				condition += "?";
+				arguments.add(list.get(x));
+			}
+			condition += ")";
+			conditions.add(condition);
+		}
+		
+		// Constrain to selected authors
+		if(null != searchCriteria.getAuthorIds() 
+				&& !searchCriteria.getAuthorIds().isEmpty()) {
+			List<Integer> list = searchCriteria.getAuthorIds();
+			String condition = "(SELECT COUNT(resource_author.author_id) FROM resource_author WHERE resource_id=r.id AND author_id IN(";
+			
+			for(int x = 0; x < list.size(); x++) {
+				if(x > 0) {
+					condition += ",";
+				}
+				condition += "?";
+				arguments.add(list.get(x));
+			}
+			condition += ")) > 0";
+			conditions.add(condition);
+		}
+		
+		// Constrain to selected editors
+		if(null != searchCriteria.getEditorIds() 
+				&& !searchCriteria.getEditorIds().isEmpty()) {
+			List<Integer> list = searchCriteria.getEditorIds();
+			String condition = "(SELECT COUNT(resource_editor.editor_id) FROM resource_editor WHERE resource_id=r.id AND editor_id IN(";
+			
+			for(int x = 0; x < list.size(); x++) {
+				if(x > 0) {
+					condition += ",";
+				}
+				condition += "?";
+				arguments.add(list.get(x));
+			}
+			condition += ")) > 0";
+			conditions.add(condition);
+		}
+		
+		if(null != searchCriteria.getTagIds() 
+				&& !searchCriteria.getTagIds().isEmpty()) {
+			List<Integer> list = searchCriteria.getTagIds();
+			String condition = "(SELECT COUNT(resource_tag.tag_id) FROM resource_tag WHERE resource_id=r.id AND tag_id IN(";
+			
+			for(int x = 0; x < list.size(); x++) {
+				if(x > 0) {
+					condition += ",";
+				}
+				condition += "?";
+				arguments.add(list.get(x));
+			}
+			condition += ")) > 0";
+			conditions.add(condition);
+		}
+		
+		// Constrain to selected licenses
+		if(null != searchCriteria.getLicenseCodes() 
+				&& !searchCriteria.getLicenseCodes().isEmpty()) {
+			List<String> list = searchCriteria.getLicenseCodes();
+			String condition = "(SELECT COUNT(license_id) FROM resource_license WHERE resource_id=r.id AND license_id IN(";
+			for(int x = 0; x < list.size(); x++) {
+				// Ignore input that could be malicious
+				String licenseId = list.get(x);
+				if(StringUtils.isBlank(licenseId) 
+						|| licenseId.length() < LicenseDaoImpl.LICENSE_ID_MAX_SIZE) {
+					continue;
+				}
+				
+				if(x > 0) {
+					condition += ",";
+				}
+				condition += "?";
+				arguments.add(licenseId);
+			}
+			condition += ")) > 0";
+			conditions.add(condition);
+		}
+		
+		// TODO Test for SQL injection
+		if(StringUtils.isNotBlank(searchCriteria.getPartialTitle())
+				&& searchCriteria.getPartialTitle().length() > 3) {
+			conditions.add("r.search_title LIKE ?");
+			arguments.add("%" + searchCriteria.getPartialTitle().toLowerCase() + "%");
+		}
+		if(StringUtils.isNotBlank(searchCriteria.getPartialUrl())
+				&& searchCriteria.getPartialUrl().length() > 3) {
+			conditions.add("r.url LIKE ?");
+			arguments.add("%" + searchCriteria.getPartialUrl() + "%");
+		}
+		
+		StringBuilder criteria = new StringBuilder(SEARCH_SQL_SELECT + " WHERE ");
+		int count = 0;
+		for(String condition: conditions) {
+			if(count > 0)
+				criteria.append(" AND ");
+			
+			criteria.append(condition);
+			count++;
+		}
+		
+		String query = criteria.toString();
+		logger.info("Search query is: " + query);
+		List<Resource> results = jdbcTemplate.query(query, arguments.toArray(), rowMapper);
+		if(null == results) {
+			results = new ArrayList<Resource>();
+		}
+		return results;
+	}
+	
 	/**
 	 * Creates or updates an resource
 	 * @param resource the resource to create or update
 	 * @return
+	 * @author steve.perkins
 	 */
 	public Resource save(Resource resource) {
 		if(null == resource.getId())

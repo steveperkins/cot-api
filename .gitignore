@@ -25,3 +25,6 @@ api/bin
 api/.gradle/2.14/taskArtifacts/
 .metadata
 .metadata/**
+.recommenders
+RemoteSystemsTempFiles
+api/.settings/org.eclipse.jdt.ui.prefs

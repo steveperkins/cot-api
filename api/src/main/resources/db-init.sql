@@ -21,6 +21,9 @@ DROP TABLE IF EXISTS review CASCADE;
 DROP TABLE IF EXISTS review_category CASCADE;;
 DROP TABLE IF EXISTS chapter_review CASCADE;
 DROP TABLE IF EXISTS chapter_review_score CASCADE;
+DROP TABLE IF EXISTS license CASCADE;
+DROP TABLE IF EXISTS resource_license CASCADE;
+
 
 CREATE TABLE organization (
 	id serial PRIMARY KEY, 
@@ -49,7 +52,6 @@ CREATE TABLE resource (
     repository_id int NOT NULL REFERENCES repository(id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
     url VARCHAR(255) NOT NULL,
-    license VARCHAR(255) NULL,
     ancillaries_url VARCHAR(255) NULL,
     external_review_url VARCHAR(255) NULL,
     search_title VARCHAR(255) NOT NULL,
@@ -167,6 +169,19 @@ CREATE TABLE chapter_review_score (
     updated_date TIMESTAMP DEFAULT NULL
 );
 
+CREATE TABLE license (
+    id VARCHAR(255) PRIMARY KEY,
+    description VARCHAR(255) NOT NULL,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE resource_license (
+    resource_id int NOT NULL REFERENCES resource(id) ON DELETE CASCADE,
+    license_id VARCHAR(255) NOT NULL REFERENCES license(id) ON DELETE CASCADE,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(resource_id, license_id)
+);
+
 CREATE OR REPLACE FUNCTION set_dates_trigger_fn()
  RETURNS trigger AS $$
 BEGIN
@@ -268,7 +283,18 @@ CREATE TRIGGER set_created_date_trigger
 	FOR EACH ROW
 	EXECUTE PROCEDURE set_created_date_trigger_fn();
 
+DROP TRIGGER IF EXISTS set_created_date_trigger ON license;
+CREATE TRIGGER set_created_date_trigger
+	BEFORE INSERT ON license
+	FOR EACH ROW
+	EXECUTE PROCEDURE set_created_date_trigger_fn();
 
+DROP TRIGGER IF EXISTS set_created_date_trigger ON resource_license;
+CREATE TRIGGER set_created_date_trigger
+	BEFORE INSERT ON resource_license
+	FOR EACH ROW
+	EXECUTE PROCEDURE set_created_date_trigger_fn();
+	
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO api;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO api;
 
@@ -295,7 +321,8 @@ INSERT INTO tag(name, search_name, tag_type) VALUES
 ('Psychology', 'psychology', 'DISCIPLINE'),
 ('Science', 'science', 'DISCIPLINE'),
 ('Sociology', 'sociology', 'DISCIPLINE'),
-('Statistics and Probability', 'statistics and probability', 'DISCIPLINE');
+('Statistics and Probability', 'statistics and probability', 'DISCIPLINE')
+;
 
 
 
@@ -311,4 +338,16 @@ INSERT INTO review_category (name, description, review_type, sort_order)
 	('Modularity', '', 'CONTENT', 9),
 	('Content errors', '', 'CONTENT', 10),
 	('Reading level', '', 'CONTENT', 11),
-	('Cultural relevance', '', 'CONTENT', 12);
+	('Cultural relevance', '', 'CONTENT', 12)
+;
+
+	
+INSERT INTO license(id, description) VALUES
+	('BY', 'Open with Attribution'),
+	('CC', 'Creative Commons'),
+	('GFDL', 'GNU Free Documentation License'),
+	('GGPL', 'GNU General Public License'),
+	('NC', 'Non-Commercial'),
+	('PD', 'Public Domain'),
+	('SA', 'Share Alike')
+;

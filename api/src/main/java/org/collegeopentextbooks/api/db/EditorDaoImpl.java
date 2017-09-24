@@ -19,9 +19,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class EditorDaoImpl {
 	
-	private static String GET_EDITORS_SQL = "SELECT e.* FROM editor";
-	private static String GET_EDITOR_BY_ID_SQL = "SELECT e.* FROM editor WHERE e.id=?";
-	private static String GET_EDITORS_BY_RESOURCE_SQL = "SELECT a.* FROM resource_editor re INNER JOIN editor e ON re.editor_id=e.id WHERE re.resource_id=?";
+	private static String GET_EDITORS_SQL = "SELECT e.* FROM editor e";
+	private static String GET_EDITOR_BY_ID_SQL = "SELECT e.* FROM editor e WHERE e.id=?";
+	private static String GET_EDITORS_BY_RESOURCE_SQL = "SELECT e.* FROM resource_editor re INNER JOIN editor e ON re.editor_id=e.id WHERE re.resource_id=?";
 	private static String UPDATE_SQL = "UPDATE editor SET name=:name, search_name=LOWER(:name) WHERE id=:id";
 	
 	private static String DELETE_EDITOR_FROM_RESOURCE_SQL = "DELETE FROM resource_editor WHERE resource_id=? AND editor_id=?";
@@ -60,10 +60,22 @@ public class EditorDaoImpl {
 		return results;
 	}
 	
+	/**
+	 * Associates an existing resource with an existing editor
+	 * @param resourceId
+	 * @param editorId
+	 * @author steve.perkins
+	 */
 	public void addEditorToResource(Integer resourceId, Integer editorId) {
 		this.jdbcTemplate.update(ADD_EDITOR_TO_RESOURCE_SQL, resourceId, editorId, resourceId, editorId);
 	}
 	
+	/**
+	 * Removes an existing association between a resource and an editor
+	 * @param resourceId
+	 * @param editorId
+	 * @author steve.perkins
+	 */
 	public void deleteEditorFromResource(Integer resourceId, Integer editorId) {
 		this.jdbcTemplate.update(DELETE_EDITOR_FROM_RESOURCE_SQL, resourceId, editorId);
 	}
@@ -72,6 +84,7 @@ public class EditorDaoImpl {
 	 * Creates or updates an editor
 	 * @param editor the editor to create or update
 	 * @return
+	 * @author steve.perkins
 	 */
 	public Editor save(Editor editor) {
 		if(null == editor.getId())

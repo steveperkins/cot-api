@@ -2,13 +2,17 @@ package org.collegeopentextbooks.api.model;
 
 /**
  * A resource's author
- * @author Steve
+ * @author steve.perkins
  *
  */
 public class Author extends AbstractModelObject {
 	private String name;
 	private String searchName;
 	
+	public Author() {}
+	public Author(String name) {
+		this.setName(name);
+	}
 	public String getName() {
 		return name;
 	}

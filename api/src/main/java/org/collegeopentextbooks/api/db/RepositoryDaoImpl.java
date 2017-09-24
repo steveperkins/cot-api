@@ -19,8 +19,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class RepositoryDaoImpl {
 	
-	private static String GET_REPOSITORIES_SQL = "SELECT r.*, o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS o.organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM repository r INNER JOIN organization o ON r.organization_id=o.id";
-	private static String GET_REPOSITORY_BY_ID_SQL = "SELECT r.*, o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS o.organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM repository r INNER JOIN organization o ON r.organization_id=o.id WHERE r.id=?";
+	private static String GET_REPOSITORIES_SQL = "SELECT r.*, o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM repository r INNER JOIN organization o ON r.organization_id=o.id";
+	private static String GET_REPOSITORY_BY_ID_SQL = "SELECT r.*, o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM repository r INNER JOIN organization o ON r.organization_id=o.id WHERE r.id=?";
 	private static String UPDATE_SQL = "UPDATE repository SET name=:name, url=:url, organization_id=:organizationId, search_name=LOWER(:name) WHERE id=:id";
 	
 	private JdbcTemplate jdbcTemplate;
@@ -54,6 +54,7 @@ public class RepositoryDaoImpl {
 	 * Creates or updates an repository
 	 * @param repository the repository to create or update
 	 * @return
+	 * @author steve.perkins
 	 */
 	public Repository save(Repository repository) {
 		if(null == repository.getId())

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrganizationDaoImpl {
 	
-	private static String GET_ORGANIZATIONS_SQL = "SELECT o.* FROM organization";
+	private static String GET_ORGANIZATIONS_SQL = "SELECT o.* FROM organization o";
 	private static String GET_ORGANIZATION_BY_ID_SQL = "SELECT o.* FROM organization o WHERE o.id=?";
 	private static String UPDATE_SQL = "UPDATE organization SET name=:name, url=:url, logo_url=:logoUrl, search_name=LOWER(:name) WHERE id=:id";
 	
@@ -52,6 +52,7 @@ public class OrganizationDaoImpl {
 	 * Creates or updates an organization
 	 * @param organization the editor to create or update
 	 * @return
+	 * @author steve.perkins
 	 */
 	public Organization save(Organization organization) {
 		if(null == organization.getId())

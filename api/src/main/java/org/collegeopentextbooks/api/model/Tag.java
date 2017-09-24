@@ -2,7 +2,7 @@ package org.collegeopentextbooks.api.model;
 
 /**
  * A tag - arbitrary text used to categorize books and other materials
- * @author Steve
+ * @author steve.perkins
  *
  */
 public class Tag extends AbstractModelObject {

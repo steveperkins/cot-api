@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * A single textbook or other classroom resource
- * @author Steve
+ * @author steve.perkins
  *
  */
 public class Resource extends AbstractModelObject {
@@ -12,11 +12,12 @@ public class Resource extends AbstractModelObject {
 	private List<Author> authors;
 	private List<Editor> editors;
 	private List<Tag> tags;
+	private List<License> licenses;
 	private List<Review> reviews;
 	
 	private String title;
 	private String url;
-	private String license;
+	private License license;
 	private String ancillariesUrl;
 	private String externalReviewUrl;
 	private String searchTitle;
@@ -45,6 +46,12 @@ public class Resource extends AbstractModelObject {
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;
 	}
+	public List<License> getLicenses() {
+		return licenses;
+	}
+	public void setLicenses(List<License> licenses) {
+		this.licenses = licenses;
+	}
 	public List<Review> getReviews() {
 		return reviews;
 	}
@@ -65,10 +72,10 @@ public class Resource extends AbstractModelObject {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public String getLicense() {
+	public License getLicense() {
 		return license;
 	}
-	public void setLicense(String license) {
+	public void setLicense(License license) {
 		this.license = license;
 	}
 	public String getAncillariesUrl() {
