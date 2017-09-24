@@ -2,10 +2,9 @@ package org.collegeopentextbooks.api.controller;
 
 import java.util.List;
 
-import org.collegeopentextbooks.api.exception.ValueTooLongException;
 import org.collegeopentextbooks.api.model.Resource;
 import org.collegeopentextbooks.api.model.SearchCriteria;
-import org.collegeopentextbooks.api.service.TagService;
+import org.collegeopentextbooks.api.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,16 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiSearchController {
 
 	@Autowired
-	private TagService tagService;
-	
-	@RequestMapping(method=RequestMethod.GET, value="")
-    @ResponseBody List<Resource> searchTest() {
-        throw new ValueTooLongException("Wakka wakka waikiki!");
-    }
+	private ResourceService resourceService;
 	
 	@RequestMapping(method=RequestMethod.POST, value="")
 	@ResponseBody List<Resource> search(@RequestBody SearchCriteria searchCriteria) {
-		throw new ValueTooLongException("Wakka wakka waikiki!");
+		return resourceService.search(searchCriteria);
 	}
 	
 }

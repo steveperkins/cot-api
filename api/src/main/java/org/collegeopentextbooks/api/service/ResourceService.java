@@ -54,7 +54,7 @@ public class ResourceService {
 	 * @author steve.perkins
 	 */
 	public List<Resource> search(SearchCriteria searchCriteria) {
-		return resourceDao.search(searchCriteria);
+		return populate(resourceDao.search(searchCriteria));
 	}
 	
 	/**
@@ -93,11 +93,7 @@ public class ResourceService {
 	 * @author steve.perkins
 	 */
 	public List<Resource> getResourcesByTag(Integer tagId) {
-		List<Resource> resources = resourceDao.getByTagId(tagId);
-		for(Resource resource: resources) {
-			populate(resource);
-		}
-		return resources;
+		return populate(resourceDao.getByTagId(tagId));
 	}
 	
 	/**
@@ -107,11 +103,7 @@ public class ResourceService {
 	 * @author steve.perkins
 	 */
 	public List<Resource> getResourcesByAuthor(Integer authorId) {
-		List<Resource> resources = resourceDao.getByAuthorId(authorId);
-		for(Resource resource: resources) {
-			populate(resource);
-		}
-		return resources;
+		return populate(resourceDao.getByAuthorId(authorId));
 	}
 	
 	/**
@@ -121,11 +113,7 @@ public class ResourceService {
 	 * @author steve.perkins
 	 */
 	public List<Resource> getResourcesByEditor(Integer editorId) {
-		List<Resource> resources = resourceDao.getByAuthorId(editorId);
-		for(Resource resource: resources) {
-			populate(resource);
-		}
-		return resources;
+		return populate(resourceDao.getByAuthorId(editorId));
 	}
 	
 	/**
@@ -135,11 +123,7 @@ public class ResourceService {
 	 * @author steve.perkins
 	 */
 	public List<Resource> getResourcesByRepository(Integer repositoryId) {
-		List<Resource> resources = resourceDao.getByAuthorId(repositoryId);
-		for(Resource resource: resources) {
-			populate(resource);
-		}
-		return resources;
+		return populate(resourceDao.getByAuthorId(repositoryId));
 	}
 	
 	/**
@@ -304,6 +288,13 @@ public class ResourceService {
 		resource.setTags(tagDao.getTagsByResourceId(resource.getId()));
 		resource.setLicenses(licenseDao.getLicensesByResourceId(resource.getId()));
 		return resource;
+	}
+	
+	protected List<Resource> populate(List<Resource> resources) {
+		for(Resource resource: resources) {
+			populate(resource);
+		}
+		return resources;
 	}
 	
 }

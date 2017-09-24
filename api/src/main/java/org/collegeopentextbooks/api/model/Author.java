@@ -9,6 +9,10 @@ public class Author extends AbstractModelObject {
 	private String name;
 	private String searchName;
 	
+	public Author() {}
+	public Author(String name) {
+		this.setName(name);
+	}
 	public String getName() {
 		return name;
 	}

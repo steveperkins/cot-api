@@ -6,5 +6,8 @@ package org.collegeopentextbooks.api.model;
  *
  */
 public class Editor extends Author {
-	
+	public Editor() {}
+	public Editor(String name) {
+		super(name);
+	}
 }

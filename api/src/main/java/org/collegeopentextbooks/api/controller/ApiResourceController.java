@@ -1,5 +1,6 @@
 package org.collegeopentextbooks.api.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.collegeopentextbooks.api.model.Resource;
@@ -43,9 +44,13 @@ public class ApiResourceController {
         return resourceService.getResourcesByTag(tagId);
     }
 	
-	@RequestMapping(method=RequestMethod.GET, value="{resourceId}/reviews/{reviewType}")
+	@RequestMapping(method=RequestMethod.GET, value="{resourceId}/reviews/{reviewTypeString}")
     @ResponseBody List<Review> getReviews(@PathVariable Integer resourceId, 
-    		@PathVariable("reviewType") ReviewType reviewType) {
+    		@PathVariable String reviewTypeString) {
+		ReviewType reviewType = ReviewType.fromString(reviewTypeString);
+		if(null == reviewType)
+			return new ArrayList<Review>();
+		
         return reviewService.getReviews(resourceId, reviewType);
     }
 	

@@ -20,7 +20,7 @@ public class LicenseDaoImpl {
 	
 	private static String GET_LICENSES_SQL = "SELECT l.* FROM license l";
 	private static String GET_LICENSES_BY_RESOURCE_ID_SQL = "SELECT l.* FROM license l INNER JOIN resource_license rl ON l.id=rl.license_id WHERE rl.resource_id=?";
-	private static String GET_LICENSE_BY_ID_SQL = "SELECT l.* FROM license l WHERE t.id=?";
+	private static String GET_LICENSE_BY_ID_SQL = "SELECT l.* FROM license l WHERE l.id=?";
 	private static String UPDATE_SQL = "UPDATE license SET id=?, description=? WHERE id=?";
 	
 	private static String DELETE_LICENSE_FROM_RESOURCE_SQL = "DELETE FROM resource_license rl WHERE rl.resource_id=? AND rl.license_id=?";

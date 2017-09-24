@@ -19,8 +19,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthorDaoImpl {
 	
-	private static String GET_AUTHORS_SQL = "SELECT a.* FROM author";
-	private static String GET_AUTHOR_BY_ID_SQL = "SELECT a.* FROM author WHERE a.id=?";
+	private static String GET_AUTHORS_SQL = "SELECT a.* FROM author a";
+	private static String GET_AUTHOR_BY_ID_SQL = "SELECT a.* FROM author a WHERE a.id=?";
 	private static String GET_AUTHORS_BY_RESOURCE_SQL = "SELECT a.* FROM resource_author ra INNER JOIN author a ON ra.author_id=a.id WHERE ra.resource_id=?";
 	private static String UPDATE_SQL = "UPDATE author SET name=:name WHERE id=:id";
 	
