@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 		path={ "/resource", "/resources" }, 
 		consumes={ MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, 
 		produces={ MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-public class ApiResourceController {
+public class ApiResourcesController {
 
 	@Autowired
 	private ResourceService resourceService;
