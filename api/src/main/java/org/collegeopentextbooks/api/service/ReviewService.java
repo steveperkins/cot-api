@@ -2,34 +2,20 @@ package org.collegeopentextbooks.api.service;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-import org.collegeopentextbooks.api.db.ReviewDao;
 import org.collegeopentextbooks.api.exception.RequiredValueEmptyException;
 import org.collegeopentextbooks.api.exception.ValueTooLongException;
 import org.collegeopentextbooks.api.model.Review;
 import org.collegeopentextbooks.api.model.ReviewType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
-public class ReviewService {
+public interface ReviewService {
 
-	private static final Integer COMMENTS_MAX_LENGTH = 2000;
-	private static final Integer CHART_URL_MAX_LENGTH = 255;
-	
-	@Autowired
-	private ReviewDao reviewDao;
-	
-	
 	/**
 	 * Retrieves ALL reviews regardless of resource or review type
 	 * @return
 	 * @author steve.perkins
 	 */
-	public List<Review> getReviews() {
-		return reviewDao.getReviews();
-	}
-	
+	List<Review> getReviews();
+
 	/**
 	 * Retrieves all reviews for the given resource ID and review type
 	 * @param id the resource ID for which to search reviews
@@ -37,10 +23,7 @@ public class ReviewService {
 	 * @return
 	 * @author steve.perkins
 	 */
-	public List<Review> getReviews(Integer resourceId, ReviewType reviewType) {
-		List<Review> reviews = reviewDao.getReviews(resourceId, reviewType);
-		return reviews;
-	}
+	List<Review> getReviews(Integer resourceId, ReviewType reviewType);
 
 	/**
 	 * Retrieves a single review by review ID
@@ -48,11 +31,8 @@ public class ReviewService {
 	 * @return
 	 * @author steve.perkins
 	 */
-	public Review getReview(Integer reviewId) {
-		Review review = reviewDao.getById(reviewId);
-		return review;
-	}
-	
+	Review getReview(Integer reviewId);
+
 	/**
 	 * Creates or updates the given review's scalar values.
 	 * @param repository the review to create or update
@@ -61,21 +41,6 @@ public class ReviewService {
 	 * @throws ValueTooLongException if the provided comments or chart URL is longer than their respective max lengths
 	 * @author steve.perkins
 	 */
-	public Review save(Review review) {
-		if(null == review)
-			return null;
-		
-		if(StringUtils.isBlank(review.getComments()))
-			throw new RequiredValueEmptyException("Comments cannot be blank");
-		
-		if(review.getComments().length() > COMMENTS_MAX_LENGTH)
-			throw new ValueTooLongException("Comments exceed max length (" + COMMENTS_MAX_LENGTH + ")");
-		
-		if(StringUtils.isNotBlank(review.getChartUrl()) 
-				&& review.getChartUrl().length() > CHART_URL_MAX_LENGTH)
-			throw new ValueTooLongException("Chart URL exceeds max length (" + CHART_URL_MAX_LENGTH + ")");
-		
-		return reviewDao.save(review);
-	}
-	
+	Review save(Review review);
+
 }

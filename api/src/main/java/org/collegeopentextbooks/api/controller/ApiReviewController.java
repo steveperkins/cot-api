@@ -20,16 +20,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiReviewController {
 
 	@Autowired
-	private ReviewService reviewService;
+	private ReviewService reviewServiceImpl;
 	
 	@RequestMapping(method=RequestMethod.GET, value="")
 	@ResponseBody List<Review> getReviews() {
-		return reviewService.getReviews();
+		return reviewServiceImpl.getReviews();
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="{reviewId}")
     @ResponseBody Review getReview(@PathVariable Integer reviewId) {
-        return reviewService.getReview(reviewId);
+        return reviewServiceImpl.getReview(reviewId);
     }
 	
 	

@@ -20,15 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiLicenseController {
 
 	@Autowired
-	private LicenseService licenseService;
+	private LicenseService licenseServiceImpl;
 	
 	@RequestMapping(method=RequestMethod.GET, value="")
     @ResponseBody List<License> getAllLicenses() {
-        return licenseService.getAll();
+        return licenseServiceImpl.getAll();
     }
 	
 	@RequestMapping(method=RequestMethod.GET, value="{licenseCode}")
     @ResponseBody License getLicenseById(@PathVariable String licenseCode) {
-		return licenseService.getById(licenseCode);
+		return licenseServiceImpl.getById(licenseCode);
     }
 }

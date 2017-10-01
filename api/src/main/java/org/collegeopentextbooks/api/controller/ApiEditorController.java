@@ -20,16 +20,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiEditorController {
 
 	@Autowired
-	private EditorService editorService;
+	private EditorService editorServiceImpl;
 	
 	@RequestMapping(method=RequestMethod.GET, value="")
     @ResponseBody List<Editor> getEditors() {
-        return editorService.getEditors();
+        return editorServiceImpl.getEditors();
     }
 	
 	@RequestMapping(method=RequestMethod.GET, value="{editorId}")
     @ResponseBody Editor getEditor(@PathVariable Integer editorId) {
-        return editorService.getEditor(editorId);
+        return editorServiceImpl.getEditor(editorId);
     }
 	
 }

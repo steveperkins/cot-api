@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiTagController {
 
 	@Autowired
-	private TagService tagService;
+	private TagService tagServiceImpl;
 	
 	@RequestMapping(method=RequestMethod.GET, value="")
     @ResponseBody List<Tag> getAllTags() {
-        return tagService.getAll();
+        return tagServiceImpl.getAll();
     }
 	
 	@RequestMapping(method=RequestMethod.GET, value="{tagType}")
@@ -36,6 +36,6 @@ public class ApiTagController {
 			return new ArrayList<Tag>();
 		}
 		
-        return tagService.getByType(type);
+        return tagServiceImpl.getByType(type);
     }
 }

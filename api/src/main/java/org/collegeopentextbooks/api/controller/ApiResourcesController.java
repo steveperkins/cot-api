@@ -24,24 +24,24 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiResourcesController {
 
 	@Autowired
-	private ResourceService resourceService;
+	private ResourceService resourceServiceImpl;
 
 	@Autowired
-	private ReviewService reviewService;
+	private ReviewService reviewServiceImpl;
 	
 	@RequestMapping(method=RequestMethod.GET, value="")
     @ResponseBody List<Resource> getResources() {
-        return resourceService.getResources();
+        return resourceServiceImpl.getResources();
     }
 	
 	@RequestMapping(method=RequestMethod.GET, value="{resourceId}")
     @ResponseBody Resource getResource(@PathVariable Integer resourceId) {
-        return resourceService.getResource(resourceId);
+        return resourceServiceImpl.getResource(resourceId);
     }
 	
 	@RequestMapping(method=RequestMethod.GET, value="/tag/{tagId}")
     @ResponseBody List<Resource> getResourcesByTag(@PathVariable Integer tagId) {
-        return resourceService.getResourcesByTag(tagId);
+        return resourceServiceImpl.getResourcesByTag(tagId);
     }
 	
 	@RequestMapping(method=RequestMethod.GET, value="{resourceId}/reviews/{reviewTypeString}")
@@ -51,7 +51,7 @@ public class ApiResourcesController {
 		if(null == reviewType)
 			return new ArrayList<Review>();
 		
-        return reviewService.getReviews(resourceId, reviewType);
+        return reviewServiceImpl.getReviews(resourceId, reviewType);
     }
 	
 }

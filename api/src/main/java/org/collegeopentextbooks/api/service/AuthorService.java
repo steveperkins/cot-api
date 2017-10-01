@@ -2,43 +2,27 @@ package org.collegeopentextbooks.api.service;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-import org.collegeopentextbooks.api.db.AuthorDao;
 import org.collegeopentextbooks.api.exception.RequiredValueEmptyException;
 import org.collegeopentextbooks.api.exception.ValueTooLongException;
 import org.collegeopentextbooks.api.model.Author;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
-public class AuthorService {
-	
-	private static final Integer NAME_MAX_LENGTH = 255;
-	
-	@Autowired
-	private AuthorDao authorDao;
-	
+public interface AuthorService {
+
 	/**
 	 * Retrieves ALL authors
 	 * @return
 	 * @author steve.perkins
 	 */
-	public List<Author> getAuthors() {
-		List<Author> authors = authorDao.getAuthors();
-		return authors;
-	}
-	
+	List<Author> getAuthors();
+
 	/**
 	 * Retrieves an author by it's ID
 	 * @param authorId
 	 * @return
 	 * @author steve.perkins
 	 */
-	public Author getAuthor(Integer authorId) {
-		Author author = authorDao.getById(authorId);
-		return author;
-	}
-	
+	Author getAuthor(Integer authorId);
+
 	/**
 	 * Creates or updates the given author's scalar values.
 	 * @param repository the author to create or update
@@ -46,17 +30,6 @@ public class AuthorService {
 	 * @throws RequiredValueEmptyException if the provided name is missing or blank
 	 * @author steve.perkins
 	 */
-	public Author save(Author author) throws RequiredValueEmptyException, ValueTooLongException {
-		if(null == author)
-			return null;
+	Author save(Author author) throws RequiredValueEmptyException, ValueTooLongException;
 
-		if(StringUtils.isBlank(author.getName()))
-			throw new RequiredValueEmptyException("Name cannot be blank");
-		
-		if(author.getName().length() > NAME_MAX_LENGTH)
-			throw new ValueTooLongException("Name exceeds max length (" + NAME_MAX_LENGTH + ")");
-		
-		return authorDao.save(author);
-	}
-	
 }

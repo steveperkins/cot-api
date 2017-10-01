@@ -20,16 +20,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiRepositoryController {
 
 	@Autowired
-	private RepositoryService repositoryService;
+	private RepositoryService repositoryServiceImpl;
 	
 	@RequestMapping(method=RequestMethod.GET, value="")
     @ResponseBody List<Repository> getRepositories() {
-        return repositoryService.getRepositories();
+        return repositoryServiceImpl.getRepositories();
     }
 	
 	@RequestMapping(method=RequestMethod.GET, value="{repositoryId}")
     @ResponseBody Repository getRepository(@PathVariable Integer repositoryId) {
-        return repositoryService.getRepository(repositoryId);
+        return repositoryServiceImpl.getRepository(repositoryId);
     }
 	
 }

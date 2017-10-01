@@ -71,31 +71,31 @@ public class TestDataGenerator {
 	}
 	
     @Autowired
-    private ResourceService resourceService;
+    private ResourceService resourceServiceImpl;
     
     @Autowired
-    private RepositoryService repositoryService;
+    private RepositoryService repositoryServiceImpl;
     
     @Autowired
     private AuthorService authorService;
     
     @Autowired
-    private EditorService editorService;
+    private EditorService editorServiceImpl;
     
     @Autowired
-    private OrganizationService organizationService;
+    private OrganizationService organizationServiceImpl;
     
     @Autowired
-    private ReviewService reviewService;
+    private ReviewService reviewServiceImpl;
     
     @Autowired
-    private TagService tagService;
+    private TagService tagServiceImpl;
     
     @Autowired
-    private ReviewerService reviewerService;
+    private ReviewerService reviewerServiceImpl;
     
     @Autowired
-    private LicenseService licenseService;
+    private LicenseService licenseServiceImpl;
     
     public void start() {
     	addRepository1();
@@ -103,7 +103,7 @@ public class TestDataGenerator {
     }
     
     public void addRepository1() {
-    	List<License> licenses = licenseService.getAll();
+    	List<License> licenses = licenseServiceImpl.getAll();
     	
     	Organization organization = createOrganization("Muggle Myopia", "http://www.amazon.com", "http://www.amazon.com/muggles.png");
     	
@@ -123,23 +123,23 @@ public class TestDataGenerator {
     	resourceLicenses.add(new License("BY", "Attribution"));
     	
     	for(Author currentAuthor: authors) {
-    		resourceService.addAuthorToResource(resource, currentAuthor);
+    		resourceServiceImpl.addAuthorToResource(resource, currentAuthor);
     	}
     	for(Editor currentEditor: editors) {
-    		resourceService.addEditorToResource(resource, currentEditor);
+    		resourceServiceImpl.addEditorToResource(resource, currentEditor);
     	}
     	for(License license: resourceLicenses) {
     		if(!licenses.contains(license)) {
-    			license = licenseService.insert(license);
+    			license = licenseServiceImpl.insert(license);
     		}
-    		resourceService.addLicenseToResource(resource, license.getId());
+    		resourceServiceImpl.addLicenseToResource(resource, license.getId());
     	}
     	resource.setAuthors(authors);
     	resource.setEditors(editors);
     	resource.setLicenses(resourceLicenses);
     	
-    	Tag tag = tagService.getByName("Literature");
-    	resourceService.addTagToResource(resource, tag);
+    	Tag tag = tagServiceImpl.getByName("Literature");
+    	resourceServiceImpl.addTagToResource(resource, tag);
     	
     	Reviewer reviewer = createReviewer("Mike Pouraryan", "Adjunct Faculty", 
     			"I have had over 18 years experience in Operations, Finance & Adminstration for Small to Medium Size Businesses, start-ups and publicly held companies. I have also served as an Adjunct Professor for a number of years with a special focus on Management & Public Policy. I also serve as principal moderator for the \"Weekly Outsider\".", 
@@ -153,8 +153,8 @@ public class TestDataGenerator {
     	
     	Resource resource2 = createResource("Intrinsic Vocabulaire", "http://www.google.com/books/Intrinsic-Vocabulaire", "http://www.amazon.com/book-review", "http://www.collegeopentextbooks.org/ancillaries", repository);
     	Author author = createAuthor("Henry Liddicoat");
-    	resourceService.addAuthorToResource(resource2, author);
-    	resourceService.addLicenseToResource(resource, "CC");
+    	resourceServiceImpl.addAuthorToResource(resource2, author);
+    	resourceServiceImpl.addLicenseToResource(resource, "CC");
     }
     
     public void addRepository2() {
@@ -171,17 +171,17 @@ public class TestDataGenerator {
     	resourceLicenses.add(new License("CC", "Creative Commons"));
     	
     	for(Author currentAuthor: authors) {
-    		resourceService.addAuthorToResource(resource, currentAuthor);
+    		resourceServiceImpl.addAuthorToResource(resource, currentAuthor);
     	}
     	for(License license: resourceLicenses) {
-    		resourceService.addLicenseToResource(resource, license.getId());
+    		resourceServiceImpl.addLicenseToResource(resource, license.getId());
     	}
     	resource.setAuthors(authors);
     	resource.setLicenses(resourceLicenses);
     	
-    	resourceService.addTagToResource(resource, tagService.getByName("Law"));
-    	resourceService.addTagToResource(resource, tagService.getByName("Philosophy"));
-    	resourceService.addTagToResource(resource, tagService.getByName("Science"));
+    	resourceServiceImpl.addTagToResource(resource, tagServiceImpl.getByName("Law"));
+    	resourceServiceImpl.addTagToResource(resource, tagServiceImpl.getByName("Philosophy"));
+    	resourceServiceImpl.addTagToResource(resource, tagServiceImpl.getByName("Science"));
     }
     
     private Organization createOrganization(String name, String url, String logoUrl) {
@@ -189,7 +189,7 @@ public class TestDataGenerator {
     	organization.setName(name);
     	organization.setUrl(url);
     	organization.setLogoUrl(logoUrl);
-    	return organizationService.save(organization);
+    	return organizationServiceImpl.save(organization);
     }
 
     private Author createAuthor(String name) {
@@ -201,7 +201,7 @@ public class TestDataGenerator {
     private Editor createEditor(String name) {
     	Editor editor = new Editor();
     	editor.setName(name);
-    	return editorService.save(editor);
+    	return editorServiceImpl.save(editor);
     }
     
     private Repository createRepository(String name, Organization organization, String url) {
@@ -209,7 +209,7 @@ public class TestDataGenerator {
     	repository.setName(name);
     	repository.setUrl(url);
     	repository.setOrganization(organization);
-    	return repositoryService.save(repository);
+    	return repositoryServiceImpl.save(repository);
     }
     
     private Resource createResource(String title, String url, String externalReviewUrl, String ancillariesUrl, Repository repository) {
@@ -219,7 +219,7 @@ public class TestDataGenerator {
     	resource.setUrl(url);
     	resource.setExternalReviewUrl(externalReviewUrl);
     	resource.setAncillariesUrl(ancillariesUrl);
-    	return resourceService.save(resource);
+    	return resourceServiceImpl.save(resource);
     }
     
     private Reviewer createReviewer(String name, String title, String biography, Organization organization) {
@@ -228,7 +228,7 @@ public class TestDataGenerator {
     	reviewer.setTitle(title);
     	reviewer.setOrganization(organization);
     	reviewer.setBiography(biography);
-    	return reviewerService.save(reviewer);
+    	return reviewerServiceImpl.save(reviewer);
     }
     
     private Review createReview(ReviewType reviewType, Double score, String chartUrl, String comments, Resource resource, Reviewer reviewer) {
@@ -239,6 +239,6 @@ public class TestDataGenerator {
     	review.setScore(score);
     	review.setChartUrl(chartUrl);
     	review.setComments(comments);
-    	return reviewService.save(review);
+    	return reviewServiceImpl.save(review);
     }
 }

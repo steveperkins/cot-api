@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiSearchController {
 
 	@Autowired
-	private ResourceService resourceService;
+	private ResourceService resourceServiceImpl;
 	
 	@RequestMapping(method=RequestMethod.POST, value="")
 	@ResponseBody List<Resource> search(@RequestBody SearchCriteria searchCriteria) {
-		return resourceService.search(searchCriteria);
+		return resourceServiceImpl.search(searchCriteria);
 	}
 	
 }
