@@ -20,11 +20,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class TagDaoImpl {
 	
+	private static String GET_TAG_SQL = "SELECT t.* FROM tag t WHERE id=?";
+	private static String GET_TAGS_BY_PARENT_SQL = "SELECT t.* FROM tag t WHERE parent_tag_id=?";
 	private static String GET_TAGS_SQL = "SELECT t.* FROM tag t";
 	private static String GET_TAGS_BY_TYPE_SQL = "SELECT t.* FROM tag t WHERE t.tag_type=?";
 	private static String GET_TAGS_BY_RESOURCE_ID_SQL = "SELECT t.* FROM tag t INNER JOIN resource_tag rt ON t.id=rt.tag_id WHERE rt.resource_id=?";
 	private static String GET_TAGS_BY_NAME_SQL = "SELECT t.* FROM tag t WHERE t.search_name=?";
-	private static String UPDATE_SQL = "UPDATE tag SET name=:name, search_name=LOWER(:name) WHERE id=:id";
+	private static String UPDATE_SQL = "UPDATE tag SET name=:name, search_name=LOWER(:name), parent_tag_id=:parentTagId WHERE id=:id";
 	
 	private static String ADD_TAG_TO_RESOURCE_SQL = "DELETE FROM resource_tag rt WHERE rt.resource_id=? AND rt.tag_id=?; INSERT INTO resource_tag(resource_id, tag_id) VALUES(?, ?)";
 	private static String DELETE_TAG_FROM_RESOURCE_SQL = "DELETE FROM resource_tag rt WHERE rt.resource_id=? AND rt.tag_id=?";
@@ -41,10 +43,36 @@ public class TagDaoImpl {
 			                .usingGeneratedKeyColumns("id");
 	}
 	
+	public Tag getTag(Integer tagId) {
+		Tag tag = jdbcTemplate.queryForObject(GET_TAG_SQL, new Integer[] { tagId }, rowMapper);
+		List<Tag> children = getTagsByParent(tag.getId());
+		if(!children.isEmpty())
+			tag.setChildren(children);
+		return tag;
+	}
+	
 	public List<Tag> getTags() {
 		List<Tag> results = jdbcTemplate.query(GET_TAGS_SQL, rowMapper);
 		if(null == results) {
 			results = new ArrayList<Tag>();
+		}
+		for(Tag tag: results) {
+			List<Tag> children = getTagsByParent(tag.getId());
+			if(!children.isEmpty())
+				tag.setChildren(children);
+		}
+		return results;
+	}
+	
+	public List<Tag> getTagsByParent(Integer parentTagId) {
+		List<Tag> results = jdbcTemplate.query(GET_TAGS_BY_PARENT_SQL, new Integer[] { parentTagId }, rowMapper);
+		if(null == results) {
+			results = new ArrayList<Tag>();
+		}
+		for(Tag tag: results) {
+			List<Tag> children = getTagsByParent(tag.getId());
+			if(!children.isEmpty())
+				tag.setChildren(children);
 		}
 		return results;
 	}
@@ -54,6 +82,11 @@ public class TagDaoImpl {
 		if(null == results) {
 			results = new ArrayList<Tag>();
 		}
+		for(Tag tag: results) {
+			List<Tag> children = getTagsByParent(tag.getId());
+			if(!children.isEmpty())
+				tag.setChildren(children);
+		}
 		return results;
 	}
 	
@@ -61,6 +94,11 @@ public class TagDaoImpl {
 		List<Tag> results = jdbcTemplate.query(GET_TAGS_BY_RESOURCE_ID_SQL, new Integer[] { resourceId }, rowMapper);
 		if(null == results) {
 			results = new ArrayList<Tag>();
+		}
+		for(Tag tag: results) {
+			List<Tag> children = getTagsByParent(tag.getId());
+			if(!children.isEmpty())
+				tag.setChildren(children);
 		}
 		return results;
 	}
@@ -70,7 +108,11 @@ public class TagDaoImpl {
 		if(null == results || results.size() < 1) {
 			return null;
 		}
-		return results.get(0);
+		Tag tag = results.get(0);
+		List<Tag> children = getTagsByParent(tag.getId());
+		if(!children.isEmpty())
+			tag.setChildren(children);
+		return tag;
 	}
 	
 	/**
@@ -110,9 +152,10 @@ public class TagDaoImpl {
 		if(null == tag.getTagType())
 			tag.setTagType(TagType.GENERAL);
 		
-		Map<String, Object> parameters = new HashMap<String, Object>(3);
+		Map<String, Object> parameters = new HashMap<String, Object>(4);
         parameters.put("name", tag.getName());
         parameters.put("tag_type", tag.getTagType());
+        parameters.put("parent_tag_id", tag.getParentTagId());
         parameters.put("search_name", tag.getSearchName());
         Number newId = this.insert.executeAndReturnKey(parameters);
         tag.setId(newId.intValue());
