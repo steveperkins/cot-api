@@ -95,11 +95,13 @@ CREATE TABLE tag (
     id serial PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     tag_type VARCHAR(255) NOT NULL DEFAULT 'GENERAL',
+    parent_tag_id int NULL,
     search_name VARCHAR(255) NOT NULL,
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-CREATE INDEX idx_tag_search_name ON tag(search_name);
+CREATE INDEX idx_tag_parent_tag_id ON tag(parent_tag_id);
 CREATE INDEX idx_tag_tag_type ON tag(tag_type);
+CREATE INDEX idx_tag_search_name ON tag(search_name);
 
 CREATE TABLE resource_tag (
     resource_id int NOT NULL REFERENCES resource(id) ON DELETE CASCADE,
@@ -300,31 +302,38 @@ GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO api;
 
 INSERT INTO tag(name, search_name, tag_type) VALUES
 ('Featured', 'featured', 'GENERAL'),
-('Anthropology and Archeology', 'anthropology and archeology', 'DISCIPLINE'),
-('Biology and Genetics', 'biology and genetics', 'DISCIPLINE'),
+('Applied Sciences', 'applied sciences', 'DISCIPLINE'),
 ('Business', 'business', 'DISCIPLINE'),
-('Chemistry', 'chemistry', 'DISCIPLINE'),
-('Computer Science', 'computer science', 'DISCIPLINE'),
-('Economics', 'economics', 'DISCIPLINE'),
-('Engineering and Electronics', 'engineering and electronics', 'DISCIPLINE'),
-('English and Composition', 'english and composition', 'DISCIPLINE'),
-('Fine Arts', 'fine arts', 'DISCIPLINE'),
-('Health and Nursing', 'health and nursing', 'DISCIPLINE'),
-('History', 'history', 'DISCIPLINE'),
-('Languages and Communications', 'languages and communications', 'DISCIPLINE'),
-('Law', 'law', 'DISCIPLINE'),
-('Literature', 'literature', 'DISCIPLINE'),
-('Mathematics', 'mathematics', 'DISCIPLINE'),
-('Philosophy', 'philosophy', 'DISCIPLINE'),
-('Physics', 'physics', 'DISCIPLINE'),
-('Political Science', 'political science', 'DISCIPLINE'),
-('Psychology', 'psychology', 'DISCIPLINE'),
-('Science', 'science', 'DISCIPLINE'),
-('Sociology', 'sociology', 'DISCIPLINE'),
-('Statistics and Probability', 'statistics and probability', 'DISCIPLINE')
+('Humanities', 'humanities', 'DISCIPLINE'),
+('Natural Sciences', 'natural sciences', 'DISCIPLINE'),
+('Social Sciences', 'social sciences', 'DISCIPLINE');
+
+INSERT INTO tag(name, search_name, tag_type, parent_tag_id) VALUES
+('Computer and Information Science', 'computer and information science', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Applied Sciences')),
+('Engineering and Electronics', 'engineering and electronics', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Applied Sciences')),
+('Health and Nursing', 'health and nursing', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Applied Sciences')),
+('Accounting and Finance', 'accounting and finance', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Business')),
+('General Business', 'general business', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Business')),
+('Education', 'education', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Humanities')),
+('English and Composition', 'english and composition', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Humanities')),
+('Fine Arts', 'fine arts', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Humanities')),
+('History', 'history', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Humanities')),
+('Languages and Communication', 'languages and communication', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Humanities')),
+('Literature', 'literature', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Humanities')),
+('Philosophy', 'philosophy', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Humanities')),
+('Biology and Genetics', 'biology and genetics', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Natural Sciences')),
+('Chemistry', 'chemistry', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Natural Sciences')),
+('General Sciences', 'general sciences', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Natural Sciences')),
+('Mathematics', 'mathematics', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Natural Sciences')),
+('Physics', 'physics', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Natural Sciences')),
+('Statistics and Probability', 'statistics and probability', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Natural Sciences')),
+('Anthropology and Archaeology', 'anthropology and archaeology', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Social Sciences')),
+('Economics', 'economics', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Social Sciences')),
+('Law', 'law', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Social Sciences')),
+('Political Science', 'political science', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Social Sciences')),
+('Psychology', 'psychology', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Social Sciences')),
+('Sociology', 'sociology', 'DISCIPLINE', (SELECT id FROM tag WHERE name='Social Sciences'))
 ;
-
-
 
 INSERT INTO review_category (name, description, review_type, sort_order)
 	VALUES('Clarity and comprehensibility', '', 'CONTENT', 1),
