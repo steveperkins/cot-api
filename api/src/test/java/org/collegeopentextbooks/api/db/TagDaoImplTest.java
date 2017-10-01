@@ -18,7 +18,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 public class TagDaoImplTest {
 
 	@Autowired
-	TagDaoImpl dao;
+	TagDao dao;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {

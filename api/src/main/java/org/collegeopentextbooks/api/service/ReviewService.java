@@ -3,7 +3,7 @@ package org.collegeopentextbooks.api.service;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.collegeopentextbooks.api.db.ReviewDaoImpl;
+import org.collegeopentextbooks.api.db.ReviewDao;
 import org.collegeopentextbooks.api.exception.RequiredValueEmptyException;
 import org.collegeopentextbooks.api.exception.ValueTooLongException;
 import org.collegeopentextbooks.api.model.Review;
@@ -18,7 +18,7 @@ public class ReviewService {
 	private static final Integer CHART_URL_MAX_LENGTH = 255;
 	
 	@Autowired
-	private ReviewDaoImpl reviewDao;
+	private ReviewDao reviewDao;
 	
 	
 	/**

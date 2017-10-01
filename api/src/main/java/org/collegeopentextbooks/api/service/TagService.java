@@ -3,7 +3,7 @@ package org.collegeopentextbooks.api.service;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.collegeopentextbooks.api.db.TagDaoImpl;
+import org.collegeopentextbooks.api.db.TagDao;
 import org.collegeopentextbooks.api.exception.RequiredValueEmptyException;
 import org.collegeopentextbooks.api.exception.ValueTooLongException;
 import org.collegeopentextbooks.api.model.Tag;
@@ -17,7 +17,7 @@ public class TagService {
 	private static final Integer NAME_MAX_LENGTH = 255;
 	
 	@Autowired
-	private TagDaoImpl tagDao;
+	private TagDao tagDao;
 	
 	public List<Tag> getAll() {
 		return tagDao.getTags();

@@ -3,7 +3,7 @@ package org.collegeopentextbooks.api.service;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.collegeopentextbooks.api.db.EditorDaoImpl;
+import org.collegeopentextbooks.api.db.EditorDao;
 import org.collegeopentextbooks.api.exception.RequiredValueEmptyException;
 import org.collegeopentextbooks.api.exception.ValueTooLongException;
 import org.collegeopentextbooks.api.model.Editor;
@@ -16,7 +16,7 @@ public class EditorService {
 	private static final Integer NAME_MAX_LENGTH = 255;
 	
 	@Autowired
-	private EditorDaoImpl editorDao;
+	private EditorDao editorDao;
 	
 	/**
 	 * Retrieves ALL editors

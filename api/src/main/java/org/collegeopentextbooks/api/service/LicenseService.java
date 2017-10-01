@@ -3,7 +3,7 @@ package org.collegeopentextbooks.api.service;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.collegeopentextbooks.api.db.LicenseDaoImpl;
+import org.collegeopentextbooks.api.db.LicenseDao;
 import org.collegeopentextbooks.api.exception.RequiredValueEmptyException;
 import org.collegeopentextbooks.api.exception.ValueTooLongException;
 import org.collegeopentextbooks.api.model.License;
@@ -17,7 +17,7 @@ public class LicenseService {
 	private static final Integer DESCRIPTION_MAX_LENGTH = 255;
 	
 	@Autowired
-	private LicenseDaoImpl licenseDao;
+	private LicenseDao licenseDao;
 	
 	public List<License> getAll() {
 		return licenseDao.getLicenses();

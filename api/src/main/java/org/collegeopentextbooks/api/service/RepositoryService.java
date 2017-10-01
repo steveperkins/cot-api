@@ -3,7 +3,7 @@ package org.collegeopentextbooks.api.service;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.collegeopentextbooks.api.db.RepositoryDaoImpl;
+import org.collegeopentextbooks.api.db.RepositoryDao;
 import org.collegeopentextbooks.api.exception.RequiredValueEmptyException;
 import org.collegeopentextbooks.api.exception.ValueTooLongException;
 import org.collegeopentextbooks.api.model.Repository;
@@ -17,7 +17,7 @@ public class RepositoryService {
 	private static final Integer URL_MAX_LENGTH = 255;
 	
 	@Autowired
-	private RepositoryDaoImpl repositoryDao;
+	private RepositoryDao repositoryDao;
 	
 	/**
 	 * Retrieves ALL repositories

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.collegeopentextbooks.api.db.AuthorDaoImpl;
-import org.collegeopentextbooks.api.db.EditorDaoImpl;
-import org.collegeopentextbooks.api.db.LicenseDaoImpl;
-import org.collegeopentextbooks.api.db.ResourceDaoImpl;
-import org.collegeopentextbooks.api.db.TagDaoImpl;
+import org.collegeopentextbooks.api.db.AuthorDao;
+import org.collegeopentextbooks.api.db.EditorDao;
+import org.collegeopentextbooks.api.db.LicenseDao;
+import org.collegeopentextbooks.api.db.ResourceDao;
+import org.collegeopentextbooks.api.db.TagDao;
 import org.collegeopentextbooks.api.exception.InvalidAuthorException;
 import org.collegeopentextbooks.api.exception.InvalidEditorException;
 import org.collegeopentextbooks.api.exception.InvalidResourceException;
@@ -33,19 +33,19 @@ public class ResourceService {
 	private static final Integer LICENSE_ID_MAX_LENGTH = 2;
 	
 	@Autowired
-	private ResourceDaoImpl resourceDao;
+	private ResourceDao resourceDao;
 	
 	@Autowired
-	private TagDaoImpl tagDao;
+	private TagDao tagDao;
 	
 	@Autowired
-	private AuthorDaoImpl authorDao;
+	private AuthorDao authorDao;
 	
 	@Autowired
-	private EditorDaoImpl editorDao;
+	private EditorDao editorDao;
 	
 	@Autowired
-	private LicenseDaoImpl licenseDao;
+	private LicenseDao licenseDao;
 	
 	/**
 	 * Finds resources using the given criteria

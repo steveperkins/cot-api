@@ -3,7 +3,7 @@ package org.collegeopentextbooks.api.service;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.collegeopentextbooks.api.db.AuthorDaoImpl;
+import org.collegeopentextbooks.api.db.AuthorDao;
 import org.collegeopentextbooks.api.exception.RequiredValueEmptyException;
 import org.collegeopentextbooks.api.exception.ValueTooLongException;
 import org.collegeopentextbooks.api.model.Author;
@@ -16,7 +16,7 @@ public class AuthorService {
 	private static final Integer NAME_MAX_LENGTH = 255;
 	
 	@Autowired
-	private AuthorDaoImpl authorDao;
+	private AuthorDao authorDao;
 	
 	/**
 	 * Retrieves ALL authors
