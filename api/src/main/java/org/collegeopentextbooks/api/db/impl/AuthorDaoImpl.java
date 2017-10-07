@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 
 import org.collegeopentextbooks.api.db.AuthorDao;
 import org.collegeopentextbooks.api.model.Author;
+import org.collegeopentextbooks.api.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,12 +17,14 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 @Component
 public class AuthorDaoImpl implements AuthorDao {
 	
 	private static String GET_AUTHORS_SQL = "SELECT a.* FROM author a";
 	private static String GET_AUTHOR_BY_ID_SQL = "SELECT a.* FROM author a WHERE a.id=?";
+	private static String GET_AUTHOR_BY_SEARCH_TERM_SQL = "SELECT a.* FROM author a WHERE a.search_name=?";
 	private static String GET_AUTHORS_BY_RESOURCE_SQL = "SELECT a.* FROM resource_author ra INNER JOIN author a ON ra.author_id=a.id WHERE ra.resource_id=?";
 	private static String UPDATE_SQL = "UPDATE author SET name=:name WHERE id=:id";
 	
@@ -57,7 +60,16 @@ public class AuthorDaoImpl implements AuthorDao {
 	 */
 	@Override
 	public Author getById(Integer authorId) {
-		Author author= jdbcTemplate.queryForObject(GET_AUTHOR_BY_ID_SQL, new Integer[] { authorId }, rowMapper);
+		Author author = jdbcTemplate.queryForObject(GET_AUTHOR_BY_ID_SQL, new Integer[] { authorId }, rowMapper);
+		return author;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.collegeopentextbooks.api.db.impl.AuthorDao#getBySearchTerm(java.lang.String)
+	 */
+	@Override
+	public Author getBySearchTerm(String name) {
+		Author author = jdbcTemplate.queryForObject(GET_AUTHOR_BY_SEARCH_TERM_SQL, new String[] { name.toLowerCase() }, rowMapper);
 		return author;
 	}
 	
@@ -90,6 +102,40 @@ public class AuthorDaoImpl implements AuthorDao {
 	}
 	
 	/* (non-Javadoc)
+	 * @see org.collegeopentextbooks.api.db.impl.AuthorDao#merge(org.collegeopentextbooks.api.model.Resource, java.util.List<Author>)
+	 */
+	@Override
+	public List<Author> merge(Resource resource, List<Author> authors) {
+		List<Author> finalAuthors = new ArrayList<Author>();
+		if(!CollectionUtils.isEmpty(authors)) {
+			for(Author author: authors) {
+				Author dbAuthor = getBySearchTerm(author.getSearchName());
+				if(null == dbAuthor) {
+					dbAuthor = save(author);
+				}
+				// Author is now guaranteed to have an ID
+				finalAuthors.add(dbAuthor);
+			}
+			
+			// Determine which authors have been added to this resource
+			List<Author> newAuthors = new ArrayList<Author>(authors);
+			newAuthors.removeAll(resource.getAuthors());
+			for(Author author: newAuthors) {
+				addAuthorToResource(resource.getId(), author.getId());
+			}
+			
+			// Determine which authors have been removed
+			resource.getAuthors().removeAll(finalAuthors);
+			// Disassociate the removed authors from this resource
+			for(Author author: resource.getAuthors()) {
+				deleteAuthorFromResource(resource.getId(), author.getId());
+			}
+		}
+		resource.setAuthors(finalAuthors);
+		return resource.getAuthors();
+	}
+	
+	/* (non-Javadoc)
 	 * @see org.collegeopentextbooks.api.db.impl.AuthorDao#save(org.collegeopentextbooks.api.model.Author)
 	 */
 	@Override
@@ -114,5 +160,5 @@ public class AuthorDaoImpl implements AuthorDao {
 		this.jdbcTemplate.update(UPDATE_SQL, parameters);
 		return author;
 	}
-	
+
 }

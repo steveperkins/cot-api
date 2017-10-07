@@ -17,10 +17,10 @@ public class Resource extends AbstractModelObject {
 	
 	private String title;
 	private String url;
-	private License license;
 	private String ancillariesUrl;
 	private String externalReviewUrl;
 	private String searchTitle;
+	private String externalId;
 	
 	public Repository getRepository() {
 		return repository;
@@ -72,12 +72,6 @@ public class Resource extends AbstractModelObject {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public License getLicense() {
-		return license;
-	}
-	public void setLicense(License license) {
-		this.license = license;
-	}
 	public String getAncillariesUrl() {
 		return ancillariesUrl;
 	}
@@ -95,6 +89,17 @@ public class Resource extends AbstractModelObject {
 	}
 	public void setSearchTitle(String searchTitle) {
 		this.searchTitle = searchTitle;
+	}
+	/**
+	 * Retrieves the repository-specific identifier for this resource
+	 * @return
+	 * @author steve.perkins
+	 */
+	public String getExternalId() {
+		return externalId;
+	}
+	public void setExternalId(String externalId) {
+		this.externalId = externalId;
 	}
 
 }

@@ -257,5 +257,39 @@ public class ResourceServiceImpl implements ResourceService {
 		}
 		return resources;
 	}
+
+	@Override
+	public Resource importAndMerge(Resource resource) {
+		if(null == resource)
+			return null;
+		
+		Resource dbResource = null;
+		// First try to find this resource by its external (repository-specific) ID
+		if(StringUtils.isNotBlank(resource.getExternalId())) {
+			dbResource = resourceDao.getByExternalId(resource.getExternalId());
+		}
+		// Then by its title
+		if(null == dbResource) {
+			dbResource = resourceDao.getBySearchTerm(resource.getSearchTitle());
+		}
+		// If we still haven't found it, create a new record
+		if(null == dbResource) {
+			dbResource = save(resource);
+		} else {
+			// Save the scalar properties of the resource
+			dbResource.setAncillariesUrl(resource.getAncillariesUrl());
+			dbResource.setExternalId(resource.getExternalId());
+			dbResource.setExternalReviewUrl(resource.getExternalReviewUrl());
+			dbResource.setTitle(resource.getTitle());
+			dbResource.setUrl(resource.getUrl());
+			dbResource = save(dbResource);
+		}
+		dbResource.setAuthors(authorDao.merge(dbResource, resource.getAuthors()));
+		dbResource.setEditors(editorDao.merge(dbResource, resource.getEditors()));
+		dbResource.setLicenses(licenseDao.merge(dbResource, resource.getLicenses()));
+		// TODO Merge tags?
+		
+		return populate(dbResource);
+	}
 	
 }

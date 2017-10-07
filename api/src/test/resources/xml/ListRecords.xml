@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+	<responseDate>2017-10-07T14:05:21Z</responseDate>
+	<request verb="ListRecords" metadataPrefix="oai_dc">https://florida.theorangegrove.org/og/oai</request>
+	<ListRecords>
+		<record>
+			<header>
+				<identifier>tle:eb927f50-0728-4c0c-b127-9d6beae7d9fb:84c90413-70e2-30e2-948f-a654d751f94f:1</identifier>
+				<datestamp>2017-10-06T20:41:48Z</datestamp>
+				<setSpec>84c90413-70e2-30e2-948f-a654d751f94f</setSpec>
+			</header>
+			<metadata>
+				<oai_dc:dc xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/            http://www.openarchives.org/OAI/2.0/oai_dc.xsd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/">
+					<dc:identifier>http://florida.theorangegrove.org/og/items/eb927f50-0728-4c0c-b127-9d6beae7d9fb/1/</dc:identifier>
+					<dc:title>The Hound of the Baskervilles: Annotated with Reading Strategies</dc:title>
+					<dc:description>A. Conan Doyle's entire classic "The Hound of the Baskervilles" with the addition of over 90 reading strategy experiences from over 55 areas to help readers with BEFORE, DURING, and AFTER reading strategies that students can practice and learn with.</dc:description>
+					<dc:creator>Cavanaugh, Terence</dc:creator>
+					<dc:subject>reading, strategies, strategy, reading strategy, reading strategies, classics, sherlock, holmes</dc:subject>
+					<dc:date/>
+					<dc:rights/>
+				</oai_dc:dc>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>tle:c2f3f69a-71b0-4acf-a1e0-0ce895e4281f:ad207417-0012-489a-8d15-cddbffe453bd:1</identifier>
+				<datestamp>2017-09-21T21:29:57Z</datestamp>
+				<setSpec>ad207417-0012-489a-8d15-cddbffe453bd</setSpec>
+			</header>
+			<metadata>
+				<oai_dc:dc xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/            http://www.openarchives.org/OAI/2.0/oai_dc.xsd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/">
+					<dc:identifier>http://florida.theorangegrove.org/og/items/c2f3f69a-71b0-4acf-a1e0-0ce895e4281f/1/</dc:identifier>
+					<dc:title>MGF 1106 and MGF 1107: Mathematics for Liberal Arts</dc:title>
+					<dc:description>&lt;p&gt;This is a collection of textbook materials assembled for MGF 1106 and MGF 1107 at Tallahassee Community College.  All content is from Creative Commons licensed sources.  Topics included are sets, Venn diagrams, statistics, measures of central tendency, measures of dispersion, measurement, metric system, conversion of units, geometry, length, area, volume,  similar triangles, logic, Euler diagrams, logical statements, negations, truth tables, logical arguments, probability, permutations, combinations, odds, voting methods, apportionment, finance, annuities, percent increase, percent decrease, income tax, FICA tax, numeration systems, base 2, Roman numerals, Egyptian numerals, graph theory, Euler paths, Euler circuits, Hamilton paths, Hamilton circuits, trees.&lt;/p&gt;
+					</dc:description>
+					<dc:creator>Rex Abert, David Lippman</dc:creator>
+					<dc:subject>mathematics, sets, Venn diagrams, statistics, measures of central tendency, measures of dispersion, measurement, metric system, conversion of units, geometry, length, area, volume,  similar triangles, logic, Euler diagrams, logical statements, negations, truth tables, logical arguments, probability, permutations, combinations, odds, voting methods, apportionment, finance, annuities, percent increase, percent decrease, income tax, FICA tax, numeration systems, base 2, Roman numerals, Egyptian numerals, graph theory, Euler paths, Euler circuits, Hamilton paths, Hamilton circuits, trees</dc:subject>
+					<dc:date/>
+					<dc:rights/>
+				</oai_dc:dc>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>tle:69a2934f-f09c-d8be-3df3-a714d64d0137:779795a7-e183-4c2d-8302-000c16a69023:1</identifier>
+				<datestamp>2017-09-18T20:12:24Z</datestamp>
+				<setSpec>779795a7-e183-4c2d-8302-000c16a69023</setSpec>
+			</header>
+			<metadata>
+				<oai_dc:dc xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/            http://www.openarchives.org/OAI/2.0/oai_dc.xsd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/">
+					<dc:identifier>http://florida.theorangegrove.org/og/items/69a2934f-f09c-d8be-3df3-a714d64d0137/1/</dc:identifier>
+					<dc:title>The Novels of Fernando del Paso</dc:title>
+					<dc:description>"Provides the reader with a clear understanding of art in general, and prose fiction in particular, in Mexico and the Western world in our century. [The author's] commentaries on the modern and the postmodern are insightful, refreshing, and informative. . . . An indispensable companion to any serious study of contemporary Spanish American literature."--Alfonso Gonz lez, California State University, Los Angeles</dc:description>
+					<dc:creator>University Press of Florida</dc:creator>
+					<dc:creator>Fiddian, Robin W.</dc:creator>
+					<dc:subject>fernando del paso, mexican literature, mexican authors, literary criticism, OGT+ Isbn: 9781616101152</dc:subject>
+					<dc:date/>
+					<dc:rights>Copyright 2000 by Robin W. Fiddian. This work is licensed under a modified Creative Commons Attribution-Noncommercial-No Derivative Works 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/. You are free to electronically copy, distribute, and transmit this work if you attribute authorship. However, all printing rights are reserved by the University Press of Florida (http://www.upf.com). Please contact UPF for information about how to obtain copies of the work for print distribution. You must attribute the work in the manner specified by the author or licensor (but not in any way that suggests that they endorse you or your use of the work). For any reuse or distribution, you must make clear to others the license terms of this work. Any of the above conditions can be waived if you get permission from the University Press of Florida. Nothing in this license impairs or restricts the author's moral rights.</dc:rights>
+				</oai_dc:dc>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>tle:74070d83-c827-3e7b-f392-496f0babae1f:779795a7-e183-4c2d-8302-000c16a69023:1</identifier>
+				<datestamp>2017-09-18T20:01:07Z</datestamp>
+				<setSpec>779795a7-e183-4c2d-8302-000c16a69023</setSpec>
+			</header>
+			<metadata>
+				<oai_dc:dc xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/            http://www.openarchives.org/OAI/2.0/oai_dc.xsd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/">
+					<dc:identifier>http://florida.theorangegrove.org/og/items/74070d83-c827-3e7b-f392-496f0babae1f/1/</dc:identifier>
+					<dc:title>Lives Full of Struggle and Triumph: Southern Women, Their Institutions, and Their Communities</dc:title>
+					<dc:description>Spanning the sweep of southern women's history from colonial times to the late 20th century, this collection represents the best scholarship on the lives and experiences of black and white southern women</dc:description>
+					<dc:creator>Clayton, Bruce L. </dc:creator>
+					<dc:creator>Salmond, John A. </dc:creator>
+					<dc:creator>University Press of Florida</dc:creator>
+					<dc:subject>southern history, United States, women studies, Ogt+ ISBN: 9781616101114
+					</dc:subject>
+					<dc:date/>
+					<dc:rights>Copyright 2003 by Bruce L. Clayton and John A. Salmond. This work is licensed under a modified Creative Commons Attribution-Noncommercial-No Derivative Works 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/. You are free to electronically copy, distribute, and transmit this work if you attribute authorship. However, all printing rights are reserved by the University Press of Florida (http://www.upf.com). Please contact UPF for information about how to obtain copies of the work for print distribution. You must attribute the work in the manner specified by the author or licensor (but not in any way that suggests that they endorse you or your use of the work). For any reuse or distribution, you must make clear to others the license terms of this work. Any of the above conditions can be waived if you get permission from the University Press of Florida. Nothing in this license impairs or restricts the author's moral rights.</dc:rights>
+				</oai_dc:dc>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>tle:ee7b426c-6377-7c8f-37aa-fa7a76ef28ad:779795a7-e183-4c2d-8302-000c16a69023:1</identifier>
+				<datestamp>2017-09-15T19:16:06Z</datestamp>
+				<setSpec>779795a7-e183-4c2d-8302-000c16a69023</setSpec>
+			</header>
+			<metadata>
+				<oai_dc:dc xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/            http://www.openarchives.org/OAI/2.0/oai_dc.xsd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/">
+					<dc:identifier>http://florida.theorangegrove.org/og/items/ee7b426c-6377-7c8f-37aa-fa7a76ef28ad/1/</dc:identifier>
+					<dc:title>CK-12 Biology I - Honors Workbook</dc:title>
+					<dc:description>The CK-12 Biology Workbook complements the CK-12 Biology FlexBook® textbook and includes six worksheets per lesson. Each worksheet contains one of the following types of questions: multiple choice, T/F, vocabulary, critical reading, and critical writing. </dc:description>
+					<dc:creator>Douglas Wilkin</dc:creator>
+					<dc:subject>CK-12, Biology</dc:subject>
+					<dc:date>2011</dc:date>
+					<dc:rights>Attribution-NonCommercial-ShareAlike
+CC BY-NC-SA
+
+This license lets others remix, tweak, and build upon your work non-commercially, as long as they credit you and license their new creations under the identical terms.</dc:rights>
+				</oai_dc:dc>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>tle:3af6dec2-2eee-bace-7e11-3b9e83df7096:779795a7-e183-4c2d-8302-000c16a69023:1</identifier>
+				<datestamp>2017-09-15T19:12:13Z</datestamp>
+				<setSpec>779795a7-e183-4c2d-8302-000c16a69023</setSpec>
+			</header>
+			<metadata>
+				<oai_dc:dc xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/            http://www.openarchives.org/OAI/2.0/oai_dc.xsd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/">
+					<dc:identifier>http://florida.theorangegrove.org/og/items/3af6dec2-2eee-bace-7e11-3b9e83df7096/1/</dc:identifier>
+					<dc:title>Chapter 1: An Introduction to Analyzing Statistical Data</dc:title>
+					<dc:description>classifying variables, measures of central tendency, and measures of spread</dc:description>
+					<dc:creator>CK-12 Foundation</dc:creator>
+					<dc:subject>Categorical variable, Chebyshev's Theorem, mathmatics</dc:subject>
+					<dc:date>2009</dc:date>
+					<dc:rights>Attribution-NonCommercial-ShareAlike
+CC BY-NC-SA
+
+This license lets others remix, tweak, and build upon your work non-commercially, as long as they credit you and license their new creations under the identical terms.</dc:rights>
+				</oai_dc:dc>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>tle:98a73429-b5e0-d1b7-8dcb-70940409d56e:779795a7-e183-4c2d-8302-000c16a69023:1</identifier>
+				<datestamp>2017-09-15T18:57:41Z</datestamp>
+				<setSpec>779795a7-e183-4c2d-8302-000c16a69023</setSpec>
+			</header>
+			<metadata>
+				<oai_dc:dc xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/            http://www.openarchives.org/OAI/2.0/oai_dc.xsd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/">
+					<dc:identifier>http://florida.theorangegrove.org/og/items/98a73429-b5e0-d1b7-8dcb-70940409d56e/1/</dc:identifier>
+					<dc:title>Discrete Random Variables: Introduction∗</dc:title>
+					<dc:description> Probability, random variable notation, probability problems involving discrete random distributions. </dc:description>
+					<dc:creator>Illowsky, Barbara</dc:creator>
+					<dc:creator>Dean, Susan</dc:creator>
+					<dc:creator>Connexions, Rice University, Houston, Texas</dc:creator>
+					<dc:subject>discrete random variables, mean, standard deviation, Common Discrete Probability Distribution Functions, binomial, summary of functions</dc:subject>
+					<dc:date/>
+					<dc:rights>Creative Commons Attribution License (CC-BY 2.0).  Under terms of this license, you are free: 1) to share — to copy, distribute and transmit the work ; 2) to remix — to adapt the work; under the following conditions: 1) Attribution. You must attribute the work in the manner specified by the author or licensor (but not in any way that suggests that they endorse you or your use of the work).  For any reuse or distribution, you must make clear to others the license terms of this work. The best way to do this is with a link to the license web page at: http://creativecommons.org/licenses/by/2.0/  
+Any of the above conditions can be waived if you get permission from the copyright holder. Nothing in this license impairs or restricts the author's moral rights.
+If you reuse this work, in order to comply with the attribution requirements of the license, you must include: 1)  the authors' names, 2) title of the work, and 3) the Connexions URL where the work can be found (http://cnx.org/content/col10522/latest/).
+If you derive a copy of this content using a Connexions account and publish your version, proper attribution of the original work will be automatically done for you.</dc:rights>
+				</oai_dc:dc>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>tle:fc445611-932e-7999-4416-579da38b2550:779795a7-e183-4c2d-8302-000c16a69023:1</identifier>
+				<datestamp>2017-09-15T18:42:28Z</datestamp>
+				<setSpec>779795a7-e183-4c2d-8302-000c16a69023</setSpec>
+			</header>
+			<metadata>
+				<oai_dc:dc xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/            http://www.openarchives.org/OAI/2.0/oai_dc.xsd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/">
+					<dc:identifier>http://florida.theorangegrove.org/og/items/fc445611-932e-7999-4416-579da38b2550/1/</dc:identifier>
+					<dc:title>USA Elections in Brief</dc:title>
+					<dc:description>This book discusses the nature of the modern American electoral process and how it works at the federal, state, and local levels. The process, complicated and sometimes confusing, has evolved to ensure universal suffrage to all men and women who are U.S. citizens 18 years of age or older.
+					</dc:description>
+					<dc:creator>Olson, Guy</dc:creator>
+					<dc:creator>Clack, George</dc:creator>
+					<dc:creator>United States Department of State</dc:creator>
+					<dc:subject>United States politics, United States elections, American elections, electoral politics</dc:subject>
+					<dc:date/>
+					<dc:rights>Published in the public domain by the United States Department of State. A number of the excerpts and illustrations appearing in this volume are copyrighted. These may not be reprinted without the permission of the copyright
+holder.</dc:rights>
+				</oai_dc:dc>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>tle:eb06a670-f21c-5779-e521-5a216550e20b:779795a7-e183-4c2d-8302-000c16a69023:1</identifier>
+				<datestamp>2017-09-15T15:44:18Z</datestamp>
+				<setSpec>779795a7-e183-4c2d-8302-000c16a69023</setSpec>
+			</header>
+			<metadata>
+				<oai_dc:dc xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/            http://www.openarchives.org/OAI/2.0/oai_dc.xsd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/">
+					<dc:identifier>http://florida.theorangegrove.org/og/items/eb06a670-f21c-5779-e521-5a216550e20b/1/</dc:identifier>
+					<dc:title>Images of the Woman Reader in Victorian British and American Fiction</dc:title>
+					<dc:description>At the same time that reading became a mark of gentility and a means to promote family unity, intellectual pursuits for the nineteenth-century woman were to be gained only in context of traditional domesticity. George Cruikshank’s “My Wife Is a Woman of Mind” (1847) demonstrates this point (fig. 1). Typical of midcentury political cartoons, Cruikshank’s caricature from The Comic Almanack, a predecessor of Punch, rekindles the Victorian controversy over women’s rights for education.1 Cruikshank’s “woman of mind” wears thick, dark glasses, symbolically designating her a thinker. This was a time when the popular pseudoscience of phrenology held sway; her hairstyle exposes a high forehead and two pronounced intellectual bumps: “ideality,” the faculty to conceive ideals; and “causality,” the ability to trace an effect to its cause. Her forehead marks the intelligence and curiosity of a woman who has seemingly traded her femininity and domesticity—as well as her eyesight—for knowledge. Potent objective signifiers, the volumes that line the bookcases and surround the table where she is writing reveal her active engagement in print culture and her easy access to books. </dc:description>
+					<dc:creator>University Press of Florida</dc:creator>
+					<dc:creator>Golden, Catherine J. </dc:creator>
+					<dc:subject>womens studies, victorian, literature, women, 19th century literature, 20th century literature, OGT+ Isbn: 9781616101190</dc:subject>
+					<dc:date/>
+					<dc:rights>Copyright 2003 by Catherine J. Golden. This work is licensed under a modified Creative Commons Attribution-Noncommercial-No Derivative Works 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/. You are free to electronically copy, distribute, and transmit this work if you attribute authorship. However, all printing rights are reserved by the University Press of Florida (http://www.upf.com). Please contact UPF for information about how to obtain copies of the work for print distribution. You must attribute the work in the manner specified by the author or licensor (but not in any way that suggests that they endorse you or your use of the work). For any reuse or distribution, you must make clear to others the license terms of this work. Any of the above conditions can be waived if you get permission from the University Press of Florida. Nothing in this license impairs or restricts the author's moral rights.</dc:rights>
+				</oai_dc:dc>
+			</metadata>
+		</record>
+		<record>
+			<header>
+				<identifier>tle:96f50262-258e-d423-4872-692c58208fa6:779795a7-e183-4c2d-8302-000c16a69023:1</identifier>
+				<datestamp>2017-09-15T15:28:21Z</datestamp>
+				<setSpec>779795a7-e183-4c2d-8302-000c16a69023</setSpec>
+			</header>
+			<metadata>
+				<oai_dc:dc xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/            http://www.openarchives.org/OAI/2.0/oai_dc.xsd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/">
+					<dc:identifier>http://florida.theorangegrove.org/og/items/96f50262-258e-d423-4872-692c58208fa6/1/</dc:identifier>
+					<dc:title>Human Biology - Breathing</dc:title>
+					<dc:description>The Breathing Student Edition book is one of ten volumes making up the Human Biology curriculum, an interdisciplinary and inquiry-based approach to the study of life science</dc:description>
+					<dc:creator>The Program in Human Biology, Stanford University</dc:creator>
+					<dc:subject>CK-12 Foundation</dc:subject>
+					<dc:date>2011</dc:date>
+					<dc:rights>Donated to CK-12 Foundation under the Creative Commons Attibution-NonCommercial-ShareAlike (CC-BY-NC-SA) license. This license allows others to use, distribute, and create derivative works based on that content.</dc:rights>
+				</oai_dc:dc>
+			</metadata>
+		</record>
+	</ListRecords>
+</OAI-PMH>

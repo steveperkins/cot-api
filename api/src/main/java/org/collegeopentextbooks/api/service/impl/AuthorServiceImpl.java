@@ -53,5 +53,5 @@ public class AuthorServiceImpl implements AuthorService {
 		
 		return authorDao.save(author);
 	}
-	
+
 }

@@ -24,6 +24,7 @@ public class ResourceRowMapper extends AbstractRowMapper<Resource> {
 		resource.setTitle(rs.getString("title"));
 		resource.setSearchTitle(rs.getString("search_title"));
 		resource.setUrl(rs.getString("url"));
+		resource.setExternalId(rs.getString("external_id"));
 		
 		Repository repository = new Repository();
 		repository.setId(rs.getInt("repository_id"));

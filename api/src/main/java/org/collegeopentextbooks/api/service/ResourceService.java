@@ -133,5 +133,13 @@ public interface ResourceService {
 	 * @author steve.perkins
 	 */
 	Resource save(Resource resource);
+	
+	/**
+	 * Inspects each object attached to <code>resource</code>, attempts to find a matching object already in the database, and merges them together if so. If no match is found for a given object, a new object is created and associated with <code>resource</code>.
+	 * @param resource
+	 * @return the persisted resource
+	 * @author steve.perkins
+	 */
+	Resource importAndMerge(Resource resource);
 
 }

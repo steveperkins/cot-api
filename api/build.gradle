@@ -50,6 +50,9 @@ dependencies {
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.7.0'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.7.0'
     
+    // For OAI-PMH (Equella) integrations
+    compile group: 'se.kb', name: 'oai4j', version: '0.6b1'
+    
     // For interaction with the OpenStax metadata spreadsheet
     compile 'com.google.apis:google-api-services-sheets:v4-rev483-1.22.0'
     

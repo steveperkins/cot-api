@@ -9,11 +9,13 @@ import javax.sql.DataSource;
 
 import org.collegeopentextbooks.api.db.LicenseDao;
 import org.collegeopentextbooks.api.model.License;
+import org.collegeopentextbooks.api.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 @Component
 public class LicenseDaoImpl implements LicenseDao {
@@ -90,6 +92,32 @@ public class LicenseDaoImpl implements LicenseDao {
 	}
 	
 	/* (non-Javadoc)
+	 * @see org.collegeopentextbooks.api.db.LicenseDao#merge(org.collegeopentextbooks.api.model.Resource, java.util.List)
+	 */
+	@Override
+	public List<License> merge(Resource resource, List<License> licenses) {
+		if(!CollectionUtils.isEmpty(resource.getLicenses())) {
+			List<License> deletedLicenses = new ArrayList<License>(resource.getLicenses());
+			deletedLicenses.removeAll(licenses);
+
+			List<License> newLicenses = new ArrayList<License>(licenses);
+			newLicenses.removeAll(resource.getLicenses());
+			
+			for(License license: deletedLicenses) {
+				deleteLicenseFromResource(resource.getId(), license.getId());
+			}
+			
+			for(License license: newLicenses) {
+				addLicenseToResource(resource.getId(), license.getId());
+			}
+			
+			resource.setLicenses(licenses);
+			return resource.getLicenses();
+		}
+		return new ArrayList<License>();
+	}
+	
+	/* (non-Javadoc)
 	 * @see org.collegeopentextbooks.api.db.LicenseDao#insert(org.collegeopentextbooks.api.model.License)
 	 */
 	@Override
@@ -109,5 +137,5 @@ public class LicenseDaoImpl implements LicenseDao {
 		this.jdbcTemplate.update(UPDATE_SQL, new String[] { license.getId(), license.getDescription(), license.getId() });
 		return license;
 	}
-	
+
 }

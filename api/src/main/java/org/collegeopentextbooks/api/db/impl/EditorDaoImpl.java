@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 
 import org.collegeopentextbooks.api.db.EditorDao;
 import org.collegeopentextbooks.api.model.Editor;
+import org.collegeopentextbooks.api.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,12 +17,14 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 @Component
 public class EditorDaoImpl implements EditorDao {
 	
 	private static String GET_EDITORS_SQL = "SELECT e.* FROM editor e";
 	private static String GET_EDITOR_BY_ID_SQL = "SELECT e.* FROM editor e WHERE e.id=?";
+	private static String GET_EDITOR_BY_SEARCH_TERM_SQL = "SELECT e.* FROM editor e WHERE e.search_name=?";
 	private static String GET_EDITORS_BY_RESOURCE_SQL = "SELECT e.* FROM resource_editor re INNER JOIN editor e ON re.editor_id=e.id WHERE re.resource_id=?";
 	private static String UPDATE_SQL = "UPDATE editor SET name=:name, search_name=LOWER(:name) WHERE id=:id";
 	
@@ -62,6 +65,15 @@ public class EditorDaoImpl implements EditorDao {
 	}
 	
 	/* (non-Javadoc)
+	 * @see org.collegeopentextbooks.api.db.impl.EditorDao#getBySearchTerm(java.lang.String)
+	 */
+	@Override
+	public Editor getBySearchTerm(String name) {
+		Editor editor = jdbcTemplate.queryForObject(GET_EDITOR_BY_SEARCH_TERM_SQL, new String[] { name.toLowerCase() }, rowMapper);
+		return editor;
+	}
+	
+	/* (non-Javadoc)
 	 * @see org.collegeopentextbooks.api.db.EditorDao#getEditorsByResourceId(int)
 	 */
 	@Override
@@ -87,6 +99,40 @@ public class EditorDaoImpl implements EditorDao {
 	@Override
 	public void deleteEditorFromResource(Integer resourceId, Integer editorId) {
 		this.jdbcTemplate.update(DELETE_EDITOR_FROM_RESOURCE_SQL, resourceId, editorId);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.collegeopentextbooks.api.db.impl.EditorDao#merge(org.collegeopentextbooks.api.model.Resource, java.util.List<Editor>)
+	 */
+	@Override
+	public List<Editor> merge(Resource resource, List<Editor> editors) {
+		List<Editor> finalEditors = new ArrayList<Editor>();
+		if(!CollectionUtils.isEmpty(editors)) {
+			for(Editor editor: editors) {
+				Editor dbEditor = getBySearchTerm(editor.getSearchName());
+				if(null == dbEditor) {
+					dbEditor = save(editor);
+				}
+				// Editor is now guaranteed to have an ID
+				finalEditors.add(dbEditor);
+			}
+			
+			// Determine which editors have been added to this resource
+			List<Editor> newEditors = new ArrayList<Editor>(editors);
+			newEditors.removeAll(resource.getEditors());
+			for(Editor editor: newEditors) {
+				addEditorToResource(resource.getId(), editor.getId());
+			}
+			
+			// Determine which editors have been removed
+			resource.getEditors().removeAll(finalEditors);
+			// Disassociate the removed editors from this resource
+			for(Editor editor: resource.getEditors()) {
+				deleteEditorFromResource(resource.getId(), editor.getId());
+			}
+		}
+		resource.setEditors(finalEditors);
+		return resource.getEditors();
 	}
 	
 	/* (non-Javadoc)

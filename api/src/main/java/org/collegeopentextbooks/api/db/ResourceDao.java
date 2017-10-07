@@ -10,6 +10,8 @@ public interface ResourceDao {
 	List<Resource> getResources();
 
 	Resource getById(int resourceId);
+	
+	Resource getBySearchTerm(String searchTerm);
 
 	List<Resource> getByRepositoryId(int repositoryId);
 
@@ -20,7 +22,7 @@ public interface ResourceDao {
 	List<Resource> getByEditorId(int editorId);
 
 	List<Resource> search(SearchCriteria searchCriteria);
-
+	
 	/**
 	 * Creates or updates an resource
 	 * @param resource the resource to create or update
@@ -28,5 +30,13 @@ public interface ResourceDao {
 	 * @author steve.perkins
 	 */
 	Resource save(Resource resource);
+
+	/**
+	 * Retrieves a resource by its external, repository-specific external ID
+	 * @param externalId
+	 * @return
+	 * @author steve.perkins
+	 */
+	Resource getByExternalId(String externalId);
 
 }

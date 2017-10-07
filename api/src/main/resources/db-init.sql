@@ -55,6 +55,7 @@ CREATE TABLE resource (
     ancillaries_url VARCHAR(255) NULL,
     external_review_url VARCHAR(255) NULL,
     search_title VARCHAR(255) NOT NULL,
+    external_id VARCHAR(255) NULL,
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_date TIMESTAMP DEFAULT NULL
 );
@@ -358,5 +359,13 @@ INSERT INTO license(id, description) VALUES
 	('GGPL', 'GNU General Public License'),
 	('NC', 'Non-Commercial'),
 	('PD', 'Public Domain'),
-	('SA', 'Share Alike')
+	('SA', 'Share Alike'),
+	('CC0', 'Public Domain'),
+	('ND', 'No Derivatives')
 ;
+
+INSERT INTO organization(name, url, logo_url, search_name, created_date) VALUES
+('Florida Virtual Campus', 'https://www.floridashines.org/orange-grove', 'https://www.floridashines.org/floridaShines.org-theme/images/flvc.png', 'florida virtual campus', CURRENT_TIMESTAMP);
+
+INSERT INTO repository(organization_id, name, url, search_name, created_date) VALUES
+((SELECT id FROM organization WHERE search_name='florida virtual campus'), 'Orange Grove', 'https://florida.theorangegrove.org/og/oai', 'orange grove', CURRENT_TIMESTAMP);
