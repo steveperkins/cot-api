@@ -39,6 +39,15 @@ public class RepositoryServiceImpl implements RepositoryService {
 	}
 	
 	/* (non-Javadoc)
+	 * @see org.collegeopentextbooks.api.service.RepositoryService#getRepository(java.lang.String)
+	 */
+	@Override
+	public Repository getRepository(String repositoryName) {
+		Repository repository = repositoryDao.getByName(repositoryName);
+		return repository;
+	}
+	
+	/* (non-Javadoc)
 	 * @see org.collegeopentextbooks.api.service.RepositoryService#save(org.collegeopentextbooks.api.model.Repository)
 	 */
 	@Override
@@ -56,6 +65,10 @@ public class RepositoryServiceImpl implements RepositoryService {
 				&& repository.getUrl().length() > URL_MAX_LENGTH)
 			throw new ValueTooLongException("URL exceeds max length (" + URL_MAX_LENGTH + ")");
 		
+		Repository existingRepository = repositoryDao.getByName(repository.getName());
+		if(null != existingRepository) {
+			repository.setId(existingRepository.getId());
+		}
 		return repositoryDao.save(repository);
 	}
 	

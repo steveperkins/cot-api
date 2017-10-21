@@ -13,8 +13,6 @@ import org.collegeopentextbooks.api.model.TagType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +25,7 @@ public class TagDaoImpl implements TagDao {
 	private static String GET_TAGS_BY_TYPE_SQL = "SELECT t.* FROM tag t WHERE t.tag_type=?";
 	private static String GET_TAGS_BY_RESOURCE_ID_SQL = "SELECT t.* FROM tag t INNER JOIN resource_tag rt ON t.id=rt.tag_id WHERE rt.resource_id=?";
 	private static String GET_TAGS_BY_NAME_SQL = "SELECT t.* FROM tag t WHERE t.search_name=?";
-	private static String UPDATE_SQL = "UPDATE tag SET name=:name, search_name=LOWER(:name), parent_tag_id=:parentTagId WHERE id=:id";
+	private static String UPDATE_SQL = "UPDATE tag SET name=?, search_name=LOWER(?), parent_tag_id=? WHERE id=?";
 	
 	private static String ADD_TAG_TO_RESOURCE_SQL = "DELETE FROM resource_tag rt WHERE rt.resource_id=? AND rt.tag_id=?; INSERT INTO resource_tag(resource_id, tag_id) VALUES(?, ?)";
 	private static String DELETE_TAG_FROM_RESOURCE_SQL = "DELETE FROM resource_tag rt WHERE rt.resource_id=? AND rt.tag_id=?";
@@ -185,8 +183,7 @@ public class TagDaoImpl implements TagDao {
 		if(null == tag.getTagType())
 			tag.setTagType(TagType.GENERAL);
 		
-		SqlParameterSource parameters = new BeanPropertySqlParameterSource(tag);
-		this.jdbcTemplate.update(UPDATE_SQL, parameters);
+		this.jdbcTemplate.update(UPDATE_SQL, tag.getName(), tag.getName(), tag.getParentTagId(), tag.getId());
 		return tag;
 	}
 	

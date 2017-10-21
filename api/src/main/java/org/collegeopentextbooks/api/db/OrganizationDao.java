@@ -10,6 +10,8 @@ public interface OrganizationDao {
 
 	Organization getById(int organizationId);
 
+	Organization getByName(String name);
+	
 	/**
 	 * Creates or updates an organization
 	 * @param organization the editor to create or update

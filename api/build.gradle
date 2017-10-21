@@ -50,6 +50,9 @@ dependencies {
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.7.0'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.7.0'
     
+    // For parsing COT HTML files
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.10.3'
+    
     // For OAI-PMH (Equella) integrations
     compile group: 'se.kb', name: 'oai4j', version: '0.6b1'
     

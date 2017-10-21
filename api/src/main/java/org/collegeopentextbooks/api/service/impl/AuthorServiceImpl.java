@@ -51,6 +51,10 @@ public class AuthorServiceImpl implements AuthorService {
 		if(author.getName().length() > NAME_MAX_LENGTH)
 			throw new ValueTooLongException("Name exceeds max length (" + NAME_MAX_LENGTH + ")");
 		
+		Author existingAuthor = authorDao.getBySearchTerm(author.getName());
+		if(null != existingAuthor) {
+			author.setId(existingAuthor.getId());
+		}
 		return authorDao.save(author);
 	}
 

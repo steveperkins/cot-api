@@ -40,6 +40,15 @@ public class OrganizationServiceImpl implements OrganizationService {
 	}
 	
 	/* (non-Javadoc)
+	 * @see org.collegeopentextbooks.api.service.OrganizationService#getOrganization(java.lang.String)
+	 */
+	@Override
+	public Organization getOrganization(String organizationName) {
+		Organization organization = organizationDao.getByName(organizationName);
+		return organization;
+	}
+	
+	/* (non-Javadoc)
 	 * @see org.collegeopentextbooks.api.service.OrganizationService#save(org.collegeopentextbooks.api.model.Organization)
 	 */
 	@Override

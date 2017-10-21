@@ -357,11 +357,13 @@ INSERT INTO license(id, description) VALUES
 	('CC', 'Creative Commons'),
 	('GFDL', 'GNU Free Documentation License'),
 	('GGPL', 'GNU General Public License'),
+	('OPL', 'Open Public License'),
 	('NC', 'Non-Commercial'),
 	('PD', 'Public Domain'),
 	('SA', 'Share Alike'),
 	('CC0', 'Public Domain'),
-	('ND', 'No Derivatives')
+	('ND', 'No Derivatives'),
+	('CL', 'Custom License')
 ;
 
 INSERT INTO organization(name, url, logo_url, search_name, created_date) VALUES

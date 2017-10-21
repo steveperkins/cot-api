@@ -9,6 +9,8 @@ public interface RepositoryDao {
 	List<Repository> getRepositories();
 
 	Repository getById(int repositoryId);
+	
+	Repository getByName(String repositoryName);
 
 	/**
 	 * Creates or updates an repository

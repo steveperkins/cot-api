@@ -16,12 +16,20 @@ public interface RepositoryService {
 	List<Repository> getRepositories();
 
 	/**
-	 * Retrieves a repository by it's ID
+	 * Retrieves a repository by its ID
 	 * @param resourceId
 	 * @return
 	 * @author steve.perkins
 	 */
 	Repository getRepository(Integer resourceId);
+	
+	/**
+	 * Retrieves a repository by its name
+	 * @param repositoryName
+	 * @return
+	 * @author steve.perkins
+	 */
+	Repository getRepository(String repositoryName);
 
 	/**
 	 * Creates or updates the given repository's scalar values.

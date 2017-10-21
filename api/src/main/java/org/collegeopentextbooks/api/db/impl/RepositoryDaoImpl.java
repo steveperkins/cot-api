@@ -22,6 +22,7 @@ public class RepositoryDaoImpl implements RepositoryDao {
 	
 	private static String GET_REPOSITORIES_SQL = "SELECT r.*, o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM repository r INNER JOIN organization o ON r.organization_id=o.id";
 	private static String GET_REPOSITORY_BY_ID_SQL = "SELECT r.*, o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM repository r INNER JOIN organization o ON r.organization_id=o.id WHERE r.id=?";
+	private static String GET_REPOSITORY_BY_NAME_SQL = "SELECT r.*, o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM repository r INNER JOIN organization o ON r.organization_id=o.id WHERE r.search_name=?";
 	private static String UPDATE_SQL = "UPDATE repository SET name=:name, url=:url, organization_id=:organizationId, search_name=LOWER(:name) WHERE id=:id";
 	
 	private JdbcTemplate jdbcTemplate;
@@ -57,6 +58,18 @@ public class RepositoryDaoImpl implements RepositoryDao {
 	public Repository getById(int repositoryId) {
 		Repository result = jdbcTemplate.queryForObject(GET_REPOSITORY_BY_ID_SQL, new Integer[] { repositoryId }, rowMapper);
 		return result;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.collegeopentextbooks.api.db.RepositoryDao#getByName(String)
+	 */
+	@Override
+	public Repository getByName(String repositoryName) {
+		List<Repository> results = jdbcTemplate.query(GET_REPOSITORY_BY_NAME_SQL, new String[] { repositoryName.toLowerCase() }, rowMapper);
+		if(null != results&& !results.isEmpty()) {
+			return results.get(0);
+		}
+		return null;
 	}
 	
 	/* (non-Javadoc)

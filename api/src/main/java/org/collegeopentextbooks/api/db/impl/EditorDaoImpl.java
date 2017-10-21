@@ -13,8 +13,6 @@ import org.collegeopentextbooks.api.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -26,7 +24,7 @@ public class EditorDaoImpl implements EditorDao {
 	private static String GET_EDITOR_BY_ID_SQL = "SELECT e.* FROM editor e WHERE e.id=?";
 	private static String GET_EDITOR_BY_SEARCH_TERM_SQL = "SELECT e.* FROM editor e WHERE e.search_name=?";
 	private static String GET_EDITORS_BY_RESOURCE_SQL = "SELECT e.* FROM resource_editor re INNER JOIN editor e ON re.editor_id=e.id WHERE re.resource_id=?";
-	private static String UPDATE_SQL = "UPDATE editor SET name=:name, search_name=LOWER(:name) WHERE id=:id";
+	private static String UPDATE_SQL = "UPDATE editor SET name=?, search_name=LOWER(?) WHERE id=?";
 	
 	private static String DELETE_EDITOR_FROM_RESOURCE_SQL = "DELETE FROM resource_editor WHERE resource_id=? AND editor_id=?";
 	private static String ADD_EDITOR_TO_RESOURCE_SQL = DELETE_EDITOR_FROM_RESOURCE_SQL + "; INSERT INTO resource_editor(resource_id, editor_id) VALUES(?, ?)";
@@ -69,8 +67,11 @@ public class EditorDaoImpl implements EditorDao {
 	 */
 	@Override
 	public Editor getBySearchTerm(String name) {
-		Editor editor = jdbcTemplate.queryForObject(GET_EDITOR_BY_SEARCH_TERM_SQL, new String[] { name.toLowerCase() }, rowMapper);
-		return editor;
+		List<Editor> editors = jdbcTemplate.query(GET_EDITOR_BY_SEARCH_TERM_SQL, new String[] { name.toLowerCase() }, rowMapper);
+		if(null != editors && !editors.isEmpty()) {
+			return editors.get(0);
+		}
+		return null;
 	}
 	
 	/* (non-Javadoc)
@@ -156,8 +157,7 @@ public class EditorDaoImpl implements EditorDao {
 	}
 	
 	protected Editor update(Editor editor) {
-		SqlParameterSource parameters = new BeanPropertySqlParameterSource(editor);
-		this.jdbcTemplate.update(UPDATE_SQL, parameters);
+		this.jdbcTemplate.update(UPDATE_SQL, editor.getName(), editor.getSearchName(), editor.getId());
 		return editor;
 	}
 	

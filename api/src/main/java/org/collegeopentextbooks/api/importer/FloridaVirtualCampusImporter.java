@@ -47,17 +47,16 @@ public class FloridaVirtualCampusImporter extends OaiHarvestImporter {
 		if(index >= 0) {
 			// Public domain, which trumps other licenses
 			licenses.add(new License("CC"));
-			licenses.add(new License("CC0"));
+			licenses.add(new License("PD"));
 			return licenses;
 		}
 		
-		index = text.indexOf("CC BY");
+		index = text.indexOf("CC ");
 		if(index >= 0) {
 			licenses.add(new License("CC"));
-			licenses.add(new License("BY"));
 			
 			// Look for any further CC sublicenses
-			text = text.substring(index + 6);
+			text = text.substring(index + 3);
 			index = text.indexOf(" ");
 			if(index > 1) {
 				text = text.substring(0, index);

@@ -17,8 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +31,7 @@ public class ResourceDaoImpl implements ResourceDao {
 	private static String GET_RESOURCES_BY_TAG_ID_SQL = "SELECT r.*, rep.id AS repository_id, rep.name AS repository_name, rep.url AS repository_url, rep.search_name AS repository_search_name, rep.created_date AS repository_created_date, rep.updated_date AS repository_updated_date,  o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM resource r INNER JOIN resource_tag rt ON r.id=rt.resource_id INNER JOIN repository rep ON r.repository_id=rep.id INNER JOIN organization o ON rep.organization_id=o.id WHERE rt.tag_id=?";
 	private static String GET_RESOURCES_BY_AUTHOR_ID_SQL = "SELECT r.*, rep.id AS repository_id, rep.name AS repository_name, rep.url AS repository_url, rep.search_name AS repository_search_name, rep.created_date AS repository_created_date, rep.updated_date AS repository_updated_date,  o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM resource r INNER JOIN resource_author ra ON r.id=ra.resource_id INNER JOIN repository rep ON r.repository_id=rep.id INNER JOIN organization o ON rep.organization_id=o.id WHERE ra.author_id=?";
 	private static String GET_RESOURCES_BY_EDITOR_ID_SQL = "SELECT r.*, rep.id AS repository_id, rep.name AS repository_name, rep.url AS repository_url, rep.search_name AS repository_search_name, rep.created_date AS repository_created_date, rep.updated_date AS repository_updated_date,  o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM resource r INNER JOIN resource_editor re ON r.id=re.resource_id INNER JOIN repository rep ON r.repository_id=rep.id INNER JOIN organization o ON rep.organization_id=o.id WHERE re.editor_id=?";
-	private static String UPDATE_SQL = "UPDATE resource SET title=:title, url=:url, search_title=LOWER(:title), ancillaries_url=:ancillariesUrl, external_review_url=:externalReviewUrl, external_id=:externalId WHERE id=:id";
+	private static String UPDATE_SQL = "UPDATE resource SET title=?, url=?, search_title=?, ancillaries_url=?, external_review_url=?, external_id=? WHERE id=?";
 	
 	private static String SEARCH_SQL_SELECT = "SELECT r.*, rep.id AS repository_id, rep.name AS repository_name, rep.url AS repository_url, rep.search_name AS repository_search_name, rep.created_date AS repository_created_date, rep.updated_date AS repository_updated_date,  o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM resource r INNER JOIN repository rep ON r.repository_id=rep.id INNER JOIN organization o ON rep.organization_id=o.id";
 	
@@ -86,8 +84,11 @@ public class ResourceDaoImpl implements ResourceDao {
 	 */
 	@Override
 	public Resource getBySearchTerm(String searchTerm) {
-		Resource result = jdbcTemplate.queryForObject(GET_RESOURCE_BY_SEARCH_TITLE_SQL, new String[] { searchTerm.toLowerCase() }, rowMapper);
-		return result;
+		List<Resource> results = jdbcTemplate.query(GET_RESOURCE_BY_SEARCH_TITLE_SQL, new String[] { searchTerm.toLowerCase() }, rowMapper);
+		if(null != results&& !results.isEmpty()) {
+			return results.get(0);
+		}
+		return null;
 	}
 	
 	/* (non-Javadoc)
@@ -293,8 +294,7 @@ public class ResourceDaoImpl implements ResourceDao {
 	}
 	
 	protected Resource update(Resource resource) {
-		SqlParameterSource parameters = new BeanPropertySqlParameterSource(resource);
-		this.jdbcTemplate.update(UPDATE_SQL, parameters);
+		this.jdbcTemplate.update(UPDATE_SQL, resource.getTitle(), resource.getUrl(), resource.getSearchTitle(), resource.getAncillariesUrl(), resource.getExternalReviewUrl(), resource.getExternalId(), resource.getId());
 		return resource;
 	}
 

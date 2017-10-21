@@ -22,6 +22,7 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	
 	private static String GET_ORGANIZATIONS_SQL = "SELECT o.* FROM organization o";
 	private static String GET_ORGANIZATION_BY_ID_SQL = "SELECT o.* FROM organization o WHERE o.id=?";
+	private static String GET_ORGANIZATION_BY_NAME_SQL = "SELECT o.* FROM organization o WHERE o.search_name=?";
 	private static String UPDATE_SQL = "UPDATE organization SET name=:name, url=:url, logo_url=:logoUrl, search_name=LOWER(:name) WHERE id=:id";
 	
 	private JdbcTemplate jdbcTemplate;
@@ -55,6 +56,18 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	public Organization getById(int organizationId) {
 		Organization organization = jdbcTemplate.queryForObject(GET_ORGANIZATION_BY_ID_SQL, new Integer[] { organizationId }, rowMapper);
 		return organization;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.collegeopentextbooks.api.db.OrganizationDao#getByName(String)
+	 */
+	@Override
+	public Organization getByName(String name) {
+		List<Organization> organizations = jdbcTemplate.query(GET_ORGANIZATION_BY_NAME_SQL, new String[] { name.toLowerCase() }, rowMapper);
+		if(null != organizations && !organizations.isEmpty()) {
+			return organizations.get(0);
+		}
+		return null;
 	}
 	
 	/* (non-Javadoc)

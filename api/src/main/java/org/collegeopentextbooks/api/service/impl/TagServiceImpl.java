@@ -69,6 +69,10 @@ public class TagServiceImpl implements TagService {
 		if(tag.getName().length() > NAME_MAX_LENGTH)
 			throw new ValueTooLongException("Name exceeds max length (" + NAME_MAX_LENGTH + ")");
 		
+		Tag existingTag = tagDao.getTagByName(tag.getName());
+		if(null != existingTag) {
+			tag.setId(existingTag.getId());
+		}
 		return tagDao.save(tag);
 	}
 }

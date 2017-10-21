@@ -1,6 +1,5 @@
 package org.collegeopentextbooks.api.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -31,7 +30,7 @@ public class ResourceServiceImpl implements ResourceService {
 	private static final Integer URL_MAX_LENGTH = 255;
 	private static final Integer ANCILLARIES_URL_MAX_LENGTH = 255;
 	private static final Integer EXTERNAL_REVIEW_URL_MAX_LENGTH = 255;
-	private static final Integer LICENSE_ID_MAX_LENGTH = 2;
+	private static final Integer LICENSE_ID_MAX_LENGTH = 4;
 	
 	@Autowired
 	private ResourceDao resourceDao;
@@ -126,10 +125,6 @@ public class ResourceServiceImpl implements ResourceService {
 		
 		authorDao.addAuthorToResource(resource.getId(), author.getId());
 		
-		if(null == resource.getAuthors())
-			resource.setAuthors(new ArrayList<Author>());
-		
-		resource.getAuthors().add(author);
 		return resource;
 	}
 	
@@ -145,10 +140,6 @@ public class ResourceServiceImpl implements ResourceService {
 		
 		editorDao.addEditorToResource(resource.getId(), editor.getId());
 		
-		if(null == resource.getEditors())
-			resource.setEditors(new ArrayList<Editor>());
-		
-		resource.getEditors().add(editor);
 		return resource;
 	}
 	
@@ -164,10 +155,6 @@ public class ResourceServiceImpl implements ResourceService {
 		
 		tagDao.addTagToResource(resource.getId(), tag.getId());
 		
-		if(null == resource.getTags())
-			resource.setTags(new ArrayList<Tag>());
-		
-		resource.getTags().add(tag);
 		return resource;
 	}
 	
@@ -231,6 +218,10 @@ public class ResourceServiceImpl implements ResourceService {
 				&& resource.getExternalReviewUrl().length() > EXTERNAL_REVIEW_URL_MAX_LENGTH)
 			throw new ValueTooLongException("External Review URL exceeds max length (" + EXTERNAL_REVIEW_URL_MAX_LENGTH + ")");
 		
+		Resource existingResource = resourceDao.getBySearchTerm(resource.getTitle());
+		if(null != existingResource) {
+			resource.setId(existingResource.getId());
+		}
 		return resourceDao.save(resource);
 	}
 	

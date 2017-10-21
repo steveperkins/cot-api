@@ -22,6 +22,14 @@ public interface OrganizationService {
 	 * @author steve.perkins
 	 */
 	Organization getRepository(Integer organizationId);
+	
+	/**
+	 * Retrieves an organization by it's name
+	 * @param organizationName
+	 * @return
+	 * @author steve.perkins
+	 */
+	Organization getOrganization(String organizationName);
 
 	/**
 	 * Creates or updates the given organization's scalar values.
