@@ -1,0 +1,89 @@
+/*
+Colors:
+rgb(244, 182, 73)	Brightest yellow
+rgb(218, 151, 73)	Tan
+rgb(138, 80, 49)	Brown
+rgb(214, 73, 36)	Emphasis orange
+rgb(89, 30, 32)		Emphasis maroon
+*/
+
+
+
+header.masthead {
+  background: url('../img/header.jpg') no-repeat center center scroll;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+  border-bottom: 6px solid rgb(89, 30, 32);
+}
+
+header.masthead .display-3 {
+	vertical-align: middle;
+}
+
+section .container .row div {
+	position: relative;
+	right: 0;
+}
+.section-description {
+	background: rgb(138, 80, 49);
+    color: white;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    text-shadow: 1px 1px 1px #9a5403;
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-shadow: -0.2rem 0 0 0.2rem rgba(138, 80, 49, .5);
+    border-right: 2px solid #6b422c;
+}
+
+section > div > div.row {
+	position: relative;
+}
+div.action {
+	border-right: 6px solid rgb(138, 80, 49);
+	border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.action-results {
+	margin-top: 20px;
+	height: 200px;
+  	overflow-y: scroll;
+  	display: none;
+}
+.action-results-count {
+    width: 75px;
+    height: 75px;
+    margin-left: 40px;
+    background: rgb(244, 182, 73);
+    color: white;
+    border-radius: 50px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 2.7;
+    text-shadow: 1px 3px 1px #da9749;
+    box-shadow: 0 0 0 0.2rem rgba(244, 182, 73, .5);
+}
+
+result {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+resourcetitle {
+	color: rgb(214, 73, 36);
+}
+
+authorname {
+	color: rgb(89, 30, 32);
+}
+license {
+	padding: 2px;
+	margin-left: 5px;
+	color: white;
+	background: rgb(89, 30, 32);
+	font-size: 11px;
+}

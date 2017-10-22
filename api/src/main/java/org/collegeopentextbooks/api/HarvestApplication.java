@@ -1,9 +1,16 @@
 package org.collegeopentextbooks.api;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.collegeopentextbooks.api.importer.CotHtmlImporter;
+import org.collegeopentextbooks.api.importer.ExampleImporter;
 import org.collegeopentextbooks.api.importer.FloridaVirtualCampusImporter;
+import org.collegeopentextbooks.api.importer.Importer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -51,9 +58,23 @@ public class HarvestApplication {
 	
     
 	@Autowired
+	private ExampleImporter exampleImporter;
+	
+	@Autowired
+	private CotHtmlImporter cotHtmlImporter;
+	
+	@Autowired
 	private FloridaVirtualCampusImporter floridaVirtualCampusImporter;
 	
     public void start() {
-    	floridaVirtualCampusImporter.run();
+    	cotHtmlImporter.setInputFolder(new File("F:/consultingprojects/collegeopentextbooks/listings_html"));
+    	List<Importer> importers = new ArrayList<>();
+    	importers.add(cotHtmlImporter);
+//    	importers.add(floridaVirtualCampusImporter);
+//    	importers.add(exampleImporter);
+    	
+    	for(Importer importer: importers) {
+    		importer.run();
+    	}
     }
 }
