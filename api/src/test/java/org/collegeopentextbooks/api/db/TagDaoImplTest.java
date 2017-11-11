@@ -12,9 +12,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = { Application.class} )
-@WebMvcTest
+//@RunWith(SpringRunner.class)
+//@ContextConfiguration(classes = { Application.class} )
+//@WebMvcTest
 public class TagDaoImplTest {
 
 	@Autowired
@@ -29,7 +29,7 @@ public class TagDaoImplTest {
 		Tag tag = new Tag();
 		tag.setName("Zippy tag");
 		tag.setTagType(TagType.GENERAL);
-		dao.save(tag);
+//		dao.save(tag);
 //		fail("Not yet implemented");
 	}
 

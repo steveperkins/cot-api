@@ -68,3 +68,9 @@ dependencies {
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '1.5.7.RELEASE'
     
 }
+springBoot {
+  mainClass = 'org.collegeopentextbooks.api.Application'
+}
+bootRepackage {
+    mainClass = 'org.collegeopentextbooks.api.Application'
+}
