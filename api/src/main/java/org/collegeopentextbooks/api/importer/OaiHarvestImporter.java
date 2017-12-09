@@ -1,12 +1,14 @@
 package org.collegeopentextbooks.api.importer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.collegeopentextbooks.api.model.Author;
 import org.collegeopentextbooks.api.model.License;
 import org.collegeopentextbooks.api.model.Resource;
+import org.collegeopentextbooks.api.model.Tag;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.springframework.util.CollectionUtils;
@@ -20,7 +22,6 @@ import se.kb.oai.pmh.RecordsList;
 public abstract class OaiHarvestImporter implements Importer {
 
 	protected String baseUrl;
-	protected Integer repositoryId;
 	protected List<String> collectionIds = new ArrayList<String>();
 			
 	@Override
@@ -39,7 +40,16 @@ public abstract class OaiHarvestImporter implements Importer {
 						
 						Element metadata = record.getMetadata();
 						String xml = metadata.asXML();
+						System.out.println();
+						System.out.println("Current XML:");
+						System.out.println(xml);
+						
 						resource.setTitle(parseTitle(xml));
+						if(StringUtils.isBlank(resource.getTitle())) {
+							// No name means no way to reference this resource, so we'll skip it
+							System.out.println("Skipping resource ID " + resource.getExternalId() + " because it has no title attribute");
+							continue;
+						}
 						
 						resource.setAuthors(parseAuthors(xml));
 						
@@ -53,18 +63,32 @@ public abstract class OaiHarvestImporter implements Importer {
 						
 						resource.setUrl(parseContentUrl(xml));
 						
+						// Attempt to figure out what disciplines this work belongs to by doing keyword analysis
+						String subject = parseSubject(xml);
+						if(null == subject) {
+							// Subject was not provided. Try to use Description field to get keywords instead.
+							subject = parseDescription(xml);
+						}
+						if(null != subject) {
+							// The subject appears to always be a comma-separated list of values
+							List<String> keywords = Arrays.asList(subject.split(","));
+							resource.setTags(analyzeDisciplines(keywords));
+						}
+						
+						resource = save(resource);
+						
 						System.out.println("Title: " + resource.getTitle());
 						System.out.println("Identifier: " +  resource.getExternalId());
 						System.out.println("Content URL: " + resource.getUrl());
 						System.out.println("Authors: " + resource.getAuthors().size());
 						System.out.println("License: " + license);
-						System.out.print("Licenses: ");
-						for(License l: resource.getLicenses()) {
-							System.out.print(l.getId() + " ");
+						if(null != resource.getLicenses()) {
+							System.out.print("Licenses: ");
+							for(License l: resource.getLicenses()) {
+								System.out.print(l.getId() + " ");
+							}
 						}
 						System.out.println();
-						System.out.println("XML:");
-						System.out.println(metadata.asXML());
 					}
 					if(null != recordsList.getResumptionToken()) {
 						recordsList = server.listRecords(recordsList.getResumptionToken());
@@ -92,6 +116,14 @@ public abstract class OaiHarvestImporter implements Importer {
 	 * @author steve.perkins
 	 */
 	protected abstract Resource save(Resource resource);
+	
+	/**
+	 * Uses a list of keywords to determine what discipline tags should be applied to this resource
+	 * @param keywords
+	 * @return
+	 * @author steve.perkins
+	 */
+	protected abstract List<Tag> analyzeDisciplines(List<String> keywords);
 	
 	
 	/**
@@ -136,29 +168,15 @@ public abstract class OaiHarvestImporter implements Importer {
 	}*/
 	
 	protected String parseContentUrl(String xml) {
-		String marker = "<dc:identifier>";
-		String url = xml.substring(xml.indexOf(marker) + marker.length());
-		url = url.substring(0, url.indexOf("</dc:identifier>"));
-		return url;
+		return parseTag("identifier", xml);
 	}
 	
 	protected String parseTitle(String xml) {
-		String marker = "<dc:title>";
-		String title = xml.substring(xml.indexOf(marker) + marker.length());
-		title = title.substring(0, title.indexOf("</dc:title>"));
-		return title;
+		return parseTag("title", xml);
 	}
 	
 	protected String parseLicense(String xml) {
-		// Check for empty element
-		if(xml.indexOf("<dc:rights/>") >= 0 || xml.indexOf("<dc:rights />") >= 0) {
-			return null;
-		}
-		
-		String marker = "<dc:rights>";
-		String url = xml.substring(xml.indexOf(marker) + marker.length());
-		url = url.substring(0, url.indexOf("</dc:rights>"));
-		return url;
+		return parseTag("rights", xml);
 	}
 	
 	protected List<Author> parseAuthors(String xml) {
@@ -176,6 +194,31 @@ public abstract class OaiHarvestImporter implements Importer {
 			authors.add(author);
 		}
 		return authors;
+	}
+	
+	protected String parseSubject(String xml) {
+		return parseTag("subject", xml);
+	}
+	
+	protected String parseDescription(String xml) {
+		return parseTag("description", xml);
+	}
+	
+	protected String parseTag(String tagName, String xml) {
+		// Check for empty element
+		if(xml.indexOf("<dc:" + tagName + "/>") >= 0 || xml.indexOf("<dc:" + tagName + " />") >= 0) {
+			return null;
+		}
+		
+		// Check for missing element
+		String marker = "<dc:" + tagName + ">";
+		int index = xml.indexOf(marker);
+		if(index < 0)
+			return null;
+		
+		String value = xml.substring(index + marker.length());
+		value = value.substring(0, value.indexOf("</dc:" + tagName + ">"));
+		return value;
 	}
 
 }

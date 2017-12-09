@@ -5,6 +5,7 @@ import java.util.List;
 import org.collegeopentextbooks.api.exception.RequiredValueEmptyException;
 import org.collegeopentextbooks.api.exception.ValueTooLongException;
 import org.collegeopentextbooks.api.model.License;
+import org.collegeopentextbooks.api.model.Resource;
 
 public interface LicenseService {
 
@@ -33,5 +34,9 @@ public interface LicenseService {
 	 * @author steve.perkins
 	 */
 	License update(License license);
+	
+	void addLicenseToResource(Resource resource, String licenseId);
+	
+	void deleteLicenseFromResource(Resource resource, String licenseId);
 
 }

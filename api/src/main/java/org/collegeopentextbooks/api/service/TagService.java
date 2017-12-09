@@ -1,9 +1,11 @@
 package org.collegeopentextbooks.api.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.collegeopentextbooks.api.exception.RequiredValueEmptyException;
 import org.collegeopentextbooks.api.exception.ValueTooLongException;
+import org.collegeopentextbooks.api.model.Resource;
 import org.collegeopentextbooks.api.model.Tag;
 import org.collegeopentextbooks.api.model.TagType;
 
@@ -16,7 +18,16 @@ public interface TagService {
 	List<Tag> getByResource(Integer resourceId);
 
 	Tag getByName(String name);
-
+	
+	/**
+	 * Retrieves the tags associated with the given resource
+	 * @param resource
+	 * @return
+	 * @author steve.perkins
+	 */
+	List<Tag> getTags(Resource resource);
+	
+	Map<Tag, List<String>> getAllKeywords();
 	/**
 	 * Creates or updates the given tag's scalar values.
 	 * @param tag the tag to create or update
@@ -26,5 +37,7 @@ public interface TagService {
 	 * @author steve.perkins
 	 */
 	Tag save(Tag tag);
+	
+	void addTagToResource(Resource resource, Tag tag);
 
 }

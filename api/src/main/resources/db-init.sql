@@ -185,6 +185,14 @@ CREATE TABLE resource_license (
     PRIMARY KEY(resource_id, license_id)
 );
 
+CREATE TABLE tag_keyword (
+    tag_id int NOT NULL REFERENCES tag(id) ON DELETE CASCADE,
+    keyword VARCHAR(255) NOT NULL,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_tag_keyword ON tag_keyword(keyword);
+
 CREATE OR REPLACE FUNCTION set_dates_trigger_fn()
  RETURNS trigger AS $$
 BEGIN
@@ -365,6 +373,54 @@ INSERT INTO license(id, description) VALUES
 	('ND', 'No Derivatives'),
 	('CL', 'Custom License')
 ;
+
+INSERT INTO tag_keyword(tag_id, keyword) VALUES
+-- general math
+((SELECT id FROM tag WHERE name='mathematics'), 'graphs'),
+((SELECT id FROM tag WHERE name='mathematics'), 'inequalities'),
+((SELECT id FROM tag WHERE name='mathematics'), 'factoring'),
+((SELECT id FROM tag WHERE name='mathematics'), 'real numbers'),
+((SELECT id FROM tag WHERE name='mathematics'), 'equations'),
+((SELECT id FROM tag WHERE name='mathematics'), 'conversion of units'),
+((SELECT id FROM tag WHERE name='mathematics'), 'geometry'),
+((SELECT id FROM tag WHERE name='mathematics'), 'similar triangles'),
+((SELECT id FROM tag WHERE name='mathematics'), 'euler diagrams'),
+((SELECT id FROM tag WHERE name='mathematics'), 'euler paths'),
+((SELECT id FROM tag WHERE name='mathematics'), 'euler circuits'),
+((SELECT id FROM tag WHERE name='mathematics'), 'hamilton paths'),
+((SELECT id FROM tag WHERE name='mathematics'), 'hamilton circuits'),
+((SELECT id FROM tag WHERE name='mathematics'), 'logical statements'),
+((SELECT id FROM tag WHERE name='mathematics'), 'negations'),
+((SELECT id FROM tag WHERE name='mathematics'), 'numeration systems'),
+((SELECT id FROM tag WHERE name='mathematics'), 'base 2'),
+((SELECT id FROM tag WHERE name='mathematics'), 'roman numerals'),
+((SELECT id FROM tag WHERE name='mathematics'), 'egyptian numerals'),
+
+-- statistics
+((SELECT id FROM tag WHERE name='statistics and probability'), 'conditional probability'),
+((SELECT id FROM tag WHERE name='statistics and probability'), 'standard distribution'),
+((SELECT id FROM tag WHERE name='statistics and probability'), 'central tendency'),
+((SELECT id FROM tag WHERE name='statistics and probability'), 'statistics'),
+((SELECT id FROM tag WHERE name='statistics and probability'), 'probability'),
+((SELECT id FROM tag WHERE name='statistics and probability'), 'odds'),
+((SELECT id FROM tag WHERE name='statistics and probability'), 'discrete'),
+((SELECT id FROM tag WHERE name='statistics and probability'), 'discrete random variables'),
+((SELECT id FROM tag WHERE name='statistics and probability'), 'standard deviation'),
+((SELECT id FROM tag WHERE name='statistics and probability'), 'common discrete probability distribution functions'),
+((SELECT id FROM tag WHERE name='statistics and probability'), 'binomial'),
+((SELECT id FROM tag WHERE name='statistics and probability'), 'summary of functions'),
+
+-- literature
+((SELECT id FROM tag WHERE name='literature'), 'literature'),
+((SELECT id FROM tag WHERE name='literature'), 'literary'),
+((SELECT id FROM tag WHERE name='literature'), 'fernando del paso'),
+((SELECT id FROM tag WHERE name='literature'), 'mexican literature'),
+((SELECT id FROM tag WHERE name='literature'), 'mexican authors'),
+((SELECT id FROM tag WHERE name='literature'), 'literary criticism'),
+((SELECT id FROM tag WHERE name='literature'), 'sherlock');
+
+-- biology
+((SELECT id FROM tag WHERE name='biology and genetics'), 'biology');
 
 INSERT INTO organization(name, url, logo_url, search_name, created_date) VALUES
 ('Florida Virtual Campus', 'https://www.floridashines.org/orange-grove', 'https://www.floridashines.org/floridaShines.org-theme/images/flvc.png', 'florida virtual campus', CURRENT_TIMESTAMP);

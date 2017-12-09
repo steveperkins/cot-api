@@ -8,8 +8,10 @@ import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.collegeopentextbooks.api.importer.CotHtmlImporter;
+import org.collegeopentextbooks.api.importer.FloridaVirtualCampusImporter;
 import org.collegeopentextbooks.api.importer.Importer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -65,19 +67,19 @@ public class HarvestApplication {
 //	@Autowired
 //	private ExampleImporter exampleImporter;
 //	
-//	@Autowired
-//	private FloridaVirtualCampusImporter floridaVirtualCampusImporter;
-	
 	@Autowired
-	private CotHtmlImporter cotHtmlImporter;
+	private Importer floridaVirtualCampusImporter;
+	
+//	@Autowired
+//	private CotHtmlImporter cotHtmlImporter;
 	
 	private String inputFolder;
 	
     public void start() {
-    	cotHtmlImporter.setInputFolder(new File(inputFolder));
+//    	cotHtmlImporter.setInputFolder(new File(inputFolder));
     	List<Importer> importers = new ArrayList<>();
-    	importers.add(cotHtmlImporter);
-//    	importers.add(floridaVirtualCampusImporter);
+//    	importers.add(cotHtmlImporter);
+    	importers.add(floridaVirtualCampusImporter);
 //    	importers.add(exampleImporter);
     	
     	for(Importer importer: importers) {

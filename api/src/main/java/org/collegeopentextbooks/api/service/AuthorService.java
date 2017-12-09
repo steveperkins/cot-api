@@ -5,6 +5,7 @@ import java.util.List;
 import org.collegeopentextbooks.api.exception.RequiredValueEmptyException;
 import org.collegeopentextbooks.api.exception.ValueTooLongException;
 import org.collegeopentextbooks.api.model.Author;
+import org.collegeopentextbooks.api.model.Resource;
 
 public interface AuthorService {
 
@@ -22,6 +23,14 @@ public interface AuthorService {
 	 * @author steve.perkins
 	 */
 	Author getAuthor(Integer authorId);
+	
+	/**
+	 * Retrieves the authors associated with the given resource
+	 * @param resource
+	 * @return
+	 * @author steve.perkins
+	 */
+	List<Author> getAuthors(Resource resource);
 
 	/**
 	 * Creates or updates the given author's scalar values.
@@ -31,5 +40,7 @@ public interface AuthorService {
 	 * @author steve.perkins
 	 */
 	Author save(Author author) throws RequiredValueEmptyException, ValueTooLongException;
+
+	void addAuthorToResource(Resource resource, Author author);
 
 }

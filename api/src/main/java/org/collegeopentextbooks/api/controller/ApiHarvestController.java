@@ -1,10 +1,10 @@
 package org.collegeopentextbooks.api.controller;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.collegeopentextbooks.api.importer.CotHtmlImporter;
+import org.collegeopentextbooks.api.importer.FloridaVirtualCampusImporter;
 import org.collegeopentextbooks.api.importer.Importer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,18 +27,19 @@ public class ApiHarvestController {
 //	@Autowired
 //	private ExampleImporter exampleImporter;
 //	
-//	@Autowired
-//	private FloridaVirtualCampusImporter floridaVirtualCampusImporter;
-	
 	@Autowired
-	private CotHtmlImporter cotHtmlImporter;
+	private FloridaVirtualCampusImporter floridaVirtualCampusImporter;
+	
+//	@Autowired
+//	private CotHtmlImporter cotHtmlImporter;
 	
 	@RequestMapping(method=RequestMethod.GET, value="start")
     @ResponseBody String startHarvesting() {
-		cotHtmlImporter.setInputFolder(new File(inputFolder));
+		// We really only need to import the HTML repository once
+//		cotHtmlImporter.setInputFolder(new File(inputFolder));
     	List<Importer> importers = new ArrayList<>();
-    	importers.add(cotHtmlImporter);
-//    	importers.add(floridaVirtualCampusImporter);
+//    	importers.add(cotHtmlImporter);
+    	importers.add(floridaVirtualCampusImporter);
 //    	importers.add(exampleImporter);
     	
     	for(Importer importer: importers) {

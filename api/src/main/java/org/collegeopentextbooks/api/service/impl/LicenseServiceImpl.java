@@ -7,6 +7,7 @@ import org.collegeopentextbooks.api.db.LicenseDao;
 import org.collegeopentextbooks.api.exception.RequiredValueEmptyException;
 import org.collegeopentextbooks.api.exception.ValueTooLongException;
 import org.collegeopentextbooks.api.model.License;
+import org.collegeopentextbooks.api.model.Resource;
 import org.collegeopentextbooks.api.service.LicenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,5 +89,15 @@ public class LicenseServiceImpl implements LicenseService {
 			throw new ValueTooLongException("Description exceeds max length (" + DESCRIPTION_MAX_LENGTH + ")");
 		
 		return licenseDao.update(license);
+	}
+
+	@Override
+	public void addLicenseToResource(Resource resource, String licenseId) {
+		licenseDao.addLicenseToResource(resource.getId(), licenseId);
+	}
+
+	@Override
+	public void deleteLicenseFromResource(Resource resource, String licenseId) {
+		licenseDao.deleteLicenseFromResource(resource.getId(), licenseId);
 	}
 }

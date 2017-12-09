@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.collegeopentextbooks.api.db.TagDao;
+import org.collegeopentextbooks.api.db.rowmapper.StringRowMapper;
+import org.collegeopentextbooks.api.model.Resource;
 import org.collegeopentextbooks.api.model.Tag;
 import org.collegeopentextbooks.api.model.TagType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 @Component
 public class TagDaoImpl implements TagDao {
@@ -25,6 +28,7 @@ public class TagDaoImpl implements TagDao {
 	private static String GET_TAGS_BY_TYPE_SQL = "SELECT t.* FROM tag t WHERE t.tag_type=?";
 	private static String GET_TAGS_BY_RESOURCE_ID_SQL = "SELECT t.* FROM tag t INNER JOIN resource_tag rt ON t.id=rt.tag_id WHERE rt.resource_id=?";
 	private static String GET_TAGS_BY_NAME_SQL = "SELECT t.* FROM tag t WHERE t.search_name=?";
+	private static String GET_KEYWORDS_BY_TAG_SQL = "SELECT tk.* FROM tag_keyword tk WHERE tk.tag_id=?";
 	private static String UPDATE_SQL = "UPDATE tag SET name=?, search_name=LOWER(?), parent_tag_id=? WHERE id=?";
 	
 	private static String ADD_TAG_TO_RESOURCE_SQL = "DELETE FROM resource_tag rt WHERE rt.resource_id=? AND rt.tag_id=?; INSERT INTO resource_tag(resource_id, tag_id) VALUES(?, ?)";
@@ -138,6 +142,19 @@ public class TagDaoImpl implements TagDao {
 		return tag;
 	}
 	
+	public Map<Tag, List<String>> getAllKeywords() {
+		Map<Tag, List<String>> keywordMap = new HashMap<>();
+		List<Tag> results = jdbcTemplate.query(GET_TAGS_SQL, rowMapper);
+		if(null == results) {
+			results = new ArrayList<Tag>();
+		}
+		for(Tag result : results) {
+			List<String> keywords = jdbcTemplate.query(GET_KEYWORDS_BY_TAG_SQL, new Integer[] { result.getId() }, new StringRowMapper("keyword"));
+			keywordMap.put(result, keywords);
+		}
+		return keywordMap;
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.collegeopentextbooks.api.db.TagDao#addTagToResource(java.lang.Integer, java.lang.Integer)
 	 */
@@ -152,6 +169,37 @@ public class TagDaoImpl implements TagDao {
 	@Override
 	public void deleteTagFromResource(Integer resourceId, Integer tagId) {
         jdbcTemplate.update(DELETE_TAG_FROM_RESOURCE_SQL, resourceId, tagId);
+	}
+	
+	@Override
+	public List<Tag> merge(Resource resource, List<Tag> tags) {
+		List<Tag> finalTags = new ArrayList<Tag>();
+		if(!CollectionUtils.isEmpty(tags)) {
+			for(Tag tag: tags) {
+				Tag dbTag = getTagByName(tag.getName());
+				if(null == dbTag) {
+					dbTag = save(tag);
+				}
+				// dbTag is now guaranteed to have an ID
+				finalTags.add(dbTag);
+			}
+			
+			// Determine which tags have been added to this resource
+			List<Tag> newTags = new ArrayList<Tag>(tags);
+			newTags.removeAll(resource.getTags());
+			for(Tag tag: newTags) {
+				addTagToResource(resource.getId(), tag.getId());
+			}
+			
+			// Determine which tags have been removed
+			resource.getTags().removeAll(finalTags);
+			// Disassociate the removed tags from this resource
+			for(Tag tag: resource.getTags()) {
+				deleteTagFromResource(resource.getId(), tag.getId());
+			}
+		}
+		resource.setTags(finalTags);
+		return resource.getTags();
 	}
 	
 	/* (non-Javadoc)
@@ -186,5 +234,5 @@ public class TagDaoImpl implements TagDao {
 		this.jdbcTemplate.update(UPDATE_SQL, tag.getName(), tag.getName(), tag.getParentTagId(), tag.getId());
 		return tag;
 	}
-	
+
 }

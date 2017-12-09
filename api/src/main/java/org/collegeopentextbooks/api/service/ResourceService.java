@@ -115,16 +115,6 @@ public interface ResourceService {
 	void addLicenseToResource(Resource resource, String licenseId);
 
 	/**
-	 * Removes an existing association between a resource and a license
-	 * @param resourceId
-	 * @param licenseId
-	 * @throws RequiredValueEmptyException if the provided resource ID or license ID is missing or blank
-	 * @throws ValueTooLongException if the provided license ID is longer than its max length
-	 * @author steve.perkins
-	 */
-	void deleteLicenseFromResource(Integer resourceId, String licenseId);
-
-	/**
 	 * Creates or updates the given resource's scalar values.
 	 * @param repository the resource to create or update
 	 * @return the updated resource. If this is a create operation, the new object's ID is populated on both the returned object and the given object.

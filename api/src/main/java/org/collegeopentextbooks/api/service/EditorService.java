@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.collegeopentextbooks.api.exception.RequiredValueEmptyException;
 import org.collegeopentextbooks.api.model.Editor;
+import org.collegeopentextbooks.api.model.Resource;
 
 public interface EditorService {
 
@@ -21,6 +22,14 @@ public interface EditorService {
 	 * @author steve.perkins
 	 */
 	Editor getEditor(Integer editorId);
+	
+	/**
+	 * Retrieves the editors associated with the given resource
+	 * @param resource
+	 * @return
+	 * @author steve.perkins
+	 */
+	List<Editor> getEditors(Resource resource);
 
 	/**
 	 * Creates or updates the given editor's scalar values.
@@ -30,5 +39,7 @@ public interface EditorService {
 	 * @author steve.perkins
 	 */
 	Editor save(Editor editor);
+	
+	void addEditorToResource(Resource resource, Editor editor);
 
 }

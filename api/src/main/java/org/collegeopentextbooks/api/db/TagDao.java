@@ -1,7 +1,9 @@
 package org.collegeopentextbooks.api.db;
 
 import java.util.List;
+import java.util.Map;
 
+import org.collegeopentextbooks.api.model.Resource;
 import org.collegeopentextbooks.api.model.Tag;
 import org.collegeopentextbooks.api.model.TagType;
 
@@ -18,6 +20,8 @@ public interface TagDao {
 	List<Tag> getTagsByResourceId(Integer resourceId);
 
 	Tag getTagByName(String name);
+	
+	Map<Tag, List<String>> getAllKeywords();
 
 	/**
 	 * Associates an existing resource with an existing tag
@@ -42,5 +46,7 @@ public interface TagDao {
 	 * @author steve.perkins
 	 */
 	Tag save(Tag tag);
+	
+	List<Tag> merge(Resource resource, List<Tag> tags);
 
 }

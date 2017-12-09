@@ -1,5 +1,6 @@
 function CotClient() {
-	CotClient.ROOT_URL = "http://localhost:8080";
+//	CotClient.ROOT_URL = "http://localhost:8080";
+	CotClient.ROOT_URL = "http://52.11.188.162";
 }
 
 /**

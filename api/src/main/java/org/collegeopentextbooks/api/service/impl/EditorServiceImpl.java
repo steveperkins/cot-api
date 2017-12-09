@@ -6,8 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.collegeopentextbooks.api.db.EditorDao;
 import org.collegeopentextbooks.api.exception.RequiredValueEmptyException;
 import org.collegeopentextbooks.api.exception.ValueTooLongException;
-import org.collegeopentextbooks.api.model.Author;
 import org.collegeopentextbooks.api.model.Editor;
+import org.collegeopentextbooks.api.model.Resource;
 import org.collegeopentextbooks.api.service.EditorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,11 +52,20 @@ public class EditorServiceImpl implements EditorService {
 		if(editor.getName().length() > NAME_MAX_LENGTH)
 			throw new ValueTooLongException("Name exceeds max length (" + NAME_MAX_LENGTH + ")");
 		
-		Editor existingEditor= editorDao.getBySearchTerm(editor.getName());
+		Editor existingEditor = editorDao.getBySearchTerm(editor.getName());
 		if(null != existingEditor) {
 			editor.setId(existingEditor.getId());
 		}
 		return editorDao.save(editor);
+	}
+	
+	public void addEditorToResource(Resource resource, Editor editor) {
+		editorDao.addEditorToResource(resource.getId(), editor.getId());
+	}
+
+	@Override
+	public List<Editor> getEditors(Resource resource) {
+		return editorDao.getEditorsByResourceId(resource.getId());
 	}
 	
 }

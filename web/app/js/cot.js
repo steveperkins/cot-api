@@ -56,7 +56,7 @@ $( document ).ready(function() {
 	
 	var btnSearchByAuthor = $("#btnSearchByAuthor");
 	btnSearchByAuthor.click(function() {
-		apiClient.search({ authorIds: [10] })
+		apiClient.search({ authorIds: [383] })
 		.done(function(data) {
 			btnSearchByAuthor.siblings(".action-results-count").text(data.length);
 			var actionResults = btnSearchByAuthor.siblings(".action-results");
