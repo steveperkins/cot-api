@@ -58,7 +58,7 @@ public class ExampleImporter implements Importer {
     
     @Override
     public void run() {
-    	List<License> licenses = licenseServiceImpl.getAll();
+    	List<String> licenses = licenseServiceImpl.getAll();
     	
     	Organization organization = new Organization();
     	organization.setName("Muggle Myopia");
@@ -88,13 +88,10 @@ public class ExampleImporter implements Importer {
     	resource.setRepository(repository);
     	resource.setTitle("Muggles in the Wild");
     	resource.setUrl("http://www.google.com/books/Muggles-in-the-Wild");
-    	resource.setExternalReviewUrl("http://www.amazon.com/book-review");
+    	resource.setCotReviewUrl("http://www.amazon.com/book-review");
     	resource.setAncillariesUrl("http://www.collegeopentextbooks.org/ancillaries");
+    	resource.setLicense(new License("CC BY"));
     	resourceServiceImpl.save(resource);
-    	
-    	List<License> resourceLicenses = new ArrayList<License>();
-    	resourceLicenses.add(new License("CC", "Creative Commons"));
-    	resourceLicenses.add(new License("BY", "Attribution"));
     	
     	for(Author currentAuthor: authors) {
     		resourceServiceImpl.addAuthorToResource(resource, currentAuthor);
@@ -102,16 +99,8 @@ public class ExampleImporter implements Importer {
     	for(Editor currentEditor: editors) {
     		resourceServiceImpl.addEditorToResource(resource, currentEditor);
     	}
-    	for(License license: resourceLicenses) {
-    		if(!licenses.contains(license)) {
-    			license = licenseServiceImpl.insert(license);
-    		}
-    		resourceServiceImpl.addLicenseToResource(resource, license.getId());
-    	}
     	resource.setAuthors(authors);
     	resource.setEditors(editors);
-    	resource.setLicenses(resourceLicenses);
-    	
     	
     	Tag tag = tagServiceImpl.getByName("Literature");
     	resourceServiceImpl.addTagToResource(resource, tag);

@@ -1,36 +1,43 @@
 package org.collegeopentextbooks.api.model;
 
 public class License {
-	private String id;
-	private String description;
+	private String name;
+	private String url;
+	private String searchName;
 	
 	public License() {}
 	public License(String id) {
 		this(id, null);
 	}
-	public License(String id, String description) {
-		this.id = id;
-		this.description = description;
+	public License(String name, String url) {
+		this.name = name;
+		this.url = url;
 	}
-	public String getId() {
-		return id;
+	public String getName() {
+		return name;
 	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	public String getSearchName() {
+		return searchName;
+	}
+	public void setSearchName(String searchName) {
+		this.searchName = searchName;
+	}
 	@Override
 	public boolean equals(Object obj) {
 		if(!(obj instanceof License))
 			return false;
 		
-		return (null == obj && null == id) || this.id.equals(((License)obj).id);
+		return (null == obj && null == name) || this.name.equals(((License)obj).name);
 	}
 	
 }

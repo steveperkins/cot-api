@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS editor CASCADE;
 DROP TABLE IF EXISTS resource_author CASCADE;
 DROP TABLE IF EXISTS author CASCADE;
 DROP TABLE IF EXISTS resource_tag CASCADE;
+DROP TABLE IF EXISTS tag_keyword CASCADE;
 DROP TABLE IF EXISTS tag CASCADE;
 DROP TABLE IF EXISTS sub_tag;
 DROP TABLE IF EXISTS organization CASCADE;
@@ -21,8 +22,6 @@ DROP TABLE IF EXISTS review CASCADE;
 DROP TABLE IF EXISTS review_category CASCADE;;
 DROP TABLE IF EXISTS chapter_review CASCADE;
 DROP TABLE IF EXISTS chapter_review_score CASCADE;
-DROP TABLE IF EXISTS license CASCADE;
-DROP TABLE IF EXISTS resource_license CASCADE;
 
 
 CREATE TABLE organization (
@@ -53,13 +52,17 @@ CREATE TABLE resource (
     title VARCHAR(255) NOT NULL,
     url VARCHAR(255) NOT NULL,
     ancillaries_url VARCHAR(255) NULL,
-    external_review_url VARCHAR(255) NULL,
+    cot_review_url VARCHAR(255) NULL,
+    license_name VARCHAR(255) NULL,
+    license_url VARCHAR(255) NULL,
+    search_license VARCHAR(255) NULL,
     search_title VARCHAR(255) NOT NULL,
     external_id VARCHAR(255) NULL,
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_date TIMESTAMP DEFAULT NULL
 );
 CREATE INDEX idx_resource_search_title ON resource(search_title);
+CREATE INDEX idx_resource_search_license ON resource(license_name);
 
 CREATE TABLE author (
     id serial PRIMARY KEY,
@@ -172,19 +175,6 @@ CREATE TABLE chapter_review_score (
     updated_date TIMESTAMP DEFAULT NULL
 );
 
-CREATE TABLE license (
-    id VARCHAR(255) PRIMARY KEY,
-    description VARCHAR(255) NOT NULL,
-    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE resource_license (
-    resource_id int NOT NULL REFERENCES resource(id) ON DELETE CASCADE,
-    license_id VARCHAR(255) NOT NULL REFERENCES license(id) ON DELETE CASCADE,
-    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY(resource_id, license_id)
-);
-
 CREATE TABLE tag_keyword (
     tag_id int NOT NULL REFERENCES tag(id) ON DELETE CASCADE,
     keyword VARCHAR(255) NOT NULL,
@@ -294,18 +284,6 @@ CREATE TRIGGER set_created_date_trigger
 	FOR EACH ROW
 	EXECUTE PROCEDURE set_created_date_trigger_fn();
 
-DROP TRIGGER IF EXISTS set_created_date_trigger ON license;
-CREATE TRIGGER set_created_date_trigger
-	BEFORE INSERT ON license
-	FOR EACH ROW
-	EXECUTE PROCEDURE set_created_date_trigger_fn();
-
-DROP TRIGGER IF EXISTS set_created_date_trigger ON resource_license;
-CREATE TRIGGER set_created_date_trigger
-	BEFORE INSERT ON resource_license
-	FOR EACH ROW
-	EXECUTE PROCEDURE set_created_date_trigger_fn();
-	
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO api;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO api;
 
@@ -359,68 +337,53 @@ INSERT INTO review_category (name, description, review_type, sort_order)
 	('Cultural relevance', '', 'CONTENT', 12)
 ;
 
-	
-INSERT INTO license(id, description) VALUES
-	('BY', 'Open with Attribution'),
-	('CC', 'Creative Commons'),
-	('GFDL', 'GNU Free Documentation License'),
-	('GGPL', 'GNU General Public License'),
-	('OPL', 'Open Public License'),
-	('NC', 'Non-Commercial'),
-	('PD', 'Public Domain'),
-	('SA', 'Share Alike'),
-	('CC0', 'Public Domain'),
-	('ND', 'No Derivatives'),
-	('CL', 'Custom License')
-;
-
 INSERT INTO tag_keyword(tag_id, keyword) VALUES
 -- general math
-((SELECT id FROM tag WHERE name='mathematics'), 'graphs'),
-((SELECT id FROM tag WHERE name='mathematics'), 'inequalities'),
-((SELECT id FROM tag WHERE name='mathematics'), 'factoring'),
-((SELECT id FROM tag WHERE name='mathematics'), 'real numbers'),
-((SELECT id FROM tag WHERE name='mathematics'), 'equations'),
-((SELECT id FROM tag WHERE name='mathematics'), 'conversion of units'),
-((SELECT id FROM tag WHERE name='mathematics'), 'geometry'),
-((SELECT id FROM tag WHERE name='mathematics'), 'similar triangles'),
-((SELECT id FROM tag WHERE name='mathematics'), 'euler diagrams'),
-((SELECT id FROM tag WHERE name='mathematics'), 'euler paths'),
-((SELECT id FROM tag WHERE name='mathematics'), 'euler circuits'),
-((SELECT id FROM tag WHERE name='mathematics'), 'hamilton paths'),
-((SELECT id FROM tag WHERE name='mathematics'), 'hamilton circuits'),
-((SELECT id FROM tag WHERE name='mathematics'), 'logical statements'),
-((SELECT id FROM tag WHERE name='mathematics'), 'negations'),
-((SELECT id FROM tag WHERE name='mathematics'), 'numeration systems'),
-((SELECT id FROM tag WHERE name='mathematics'), 'base 2'),
-((SELECT id FROM tag WHERE name='mathematics'), 'roman numerals'),
-((SELECT id FROM tag WHERE name='mathematics'), 'egyptian numerals'),
+((SELECT id FROM tag WHERE search_name='mathematics'), 'graphs'),
+((SELECT id FROM tag WHERE search_name='mathematics'), 'inequalities'),
+((SELECT id FROM tag WHERE search_name='mathematics'), 'factoring'),
+((SELECT id FROM tag WHERE search_name='mathematics'), 'real numbers'),
+((SELECT id FROM tag WHERE search_name='mathematics'), 'equations'),
+((SELECT id FROM tag WHERE search_name='mathematics'), 'conversion of units'),
+((SELECT id FROM tag WHERE search_name='mathematics'), 'geometry'),
+((SELECT id FROM tag WHERE search_name='mathematics'), 'similar triangles'),
+((SELECT id FROM tag WHERE search_name='mathematics'), 'euler diagrams'),
+((SELECT id FROM tag WHERE search_name='mathematics'), 'euler paths'),
+((SELECT id FROM tag WHERE search_name='mathematics'), 'euler circuits'),
+((SELECT id FROM tag WHERE search_name='mathematics'), 'hamilton paths'),
+((SELECT id FROM tag WHERE search_name='mathematics'), 'hamilton circuits'),
+((SELECT id FROM tag WHERE search_name='mathematics'), 'logical statements'),
+((SELECT id FROM tag WHERE search_name='mathematics'), 'negations'),
+((SELECT id FROM tag WHERE search_name='mathematics'), 'numeration systems'),
+((SELECT id FROM tag WHERE search_name='mathematics'), 'base 2'),
+((SELECT id FROM tag WHERE search_name='mathematics'), 'roman numerals'),
+((SELECT id FROM tag WHERE search_name='mathematics'), 'egyptian numerals'),
 
 -- statistics
-((SELECT id FROM tag WHERE name='statistics and probability'), 'conditional probability'),
-((SELECT id FROM tag WHERE name='statistics and probability'), 'standard distribution'),
-((SELECT id FROM tag WHERE name='statistics and probability'), 'central tendency'),
-((SELECT id FROM tag WHERE name='statistics and probability'), 'statistics'),
-((SELECT id FROM tag WHERE name='statistics and probability'), 'probability'),
-((SELECT id FROM tag WHERE name='statistics and probability'), 'odds'),
-((SELECT id FROM tag WHERE name='statistics and probability'), 'discrete'),
-((SELECT id FROM tag WHERE name='statistics and probability'), 'discrete random variables'),
-((SELECT id FROM tag WHERE name='statistics and probability'), 'standard deviation'),
-((SELECT id FROM tag WHERE name='statistics and probability'), 'common discrete probability distribution functions'),
-((SELECT id FROM tag WHERE name='statistics and probability'), 'binomial'),
-((SELECT id FROM tag WHERE name='statistics and probability'), 'summary of functions'),
+((SELECT id FROM tag WHERE search_name='statistics and probability'), 'conditional probability'),
+((SELECT id FROM tag WHERE search_name='statistics and probability'), 'standard distribution'),
+((SELECT id FROM tag WHERE search_name='statistics and probability'), 'central tendency'),
+((SELECT id FROM tag WHERE search_name='statistics and probability'), 'statistics'),
+((SELECT id FROM tag WHERE search_name='statistics and probability'), 'probability'),
+((SELECT id FROM tag WHERE search_name='statistics and probability'), 'odds'),
+((SELECT id FROM tag WHERE search_name='statistics and probability'), 'discrete'),
+((SELECT id FROM tag WHERE search_name='statistics and probability'), 'discrete random variables'),
+((SELECT id FROM tag WHERE search_name='statistics and probability'), 'standard deviation'),
+((SELECT id FROM tag WHERE search_name='statistics and probability'), 'common discrete probability distribution functions'),
+((SELECT id FROM tag WHERE search_name='statistics and probability'), 'binomial'),
+((SELECT id FROM tag WHERE search_name='statistics and probability'), 'summary of functions'),
 
 -- literature
-((SELECT id FROM tag WHERE name='literature'), 'literature'),
-((SELECT id FROM tag WHERE name='literature'), 'literary'),
-((SELECT id FROM tag WHERE name='literature'), 'fernando del paso'),
-((SELECT id FROM tag WHERE name='literature'), 'mexican literature'),
-((SELECT id FROM tag WHERE name='literature'), 'mexican authors'),
-((SELECT id FROM tag WHERE name='literature'), 'literary criticism'),
-((SELECT id FROM tag WHERE name='literature'), 'sherlock');
+((SELECT id FROM tag WHERE search_name='literature'), 'literature'),
+((SELECT id FROM tag WHERE search_name='literature'), 'literary'),
+((SELECT id FROM tag WHERE search_name='literature'), 'fernando del paso'),
+((SELECT id FROM tag WHERE search_name='literature'), 'mexican literature'),
+((SELECT id FROM tag WHERE search_name='literature'), 'mexican authors'),
+((SELECT id FROM tag WHERE search_name='literature'), 'literary criticism'),
+((SELECT id FROM tag WHERE search_name='literature'), 'sherlock'),
 
 -- biology
-((SELECT id FROM tag WHERE name='biology and genetics'), 'biology');
+((SELECT id FROM tag WHERE search_name='biology and genetics'), 'biology');
 
 INSERT INTO organization(name, url, logo_url, search_name, created_date) VALUES
 ('Florida Virtual Campus', 'https://www.floridashines.org/orange-grove', 'https://www.floridashines.org/floridaShines.org-theme/images/flvc.png', 'florida virtual campus', CURRENT_TIMESTAMP);

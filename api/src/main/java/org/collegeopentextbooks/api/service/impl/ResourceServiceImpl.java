@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.collegeopentextbooks.api.db.AuthorDao;
 import org.collegeopentextbooks.api.db.EditorDao;
-import org.collegeopentextbooks.api.db.LicenseDao;
 import org.collegeopentextbooks.api.db.ResourceDao;
 import org.collegeopentextbooks.api.db.TagDao;
 import org.collegeopentextbooks.api.exception.InvalidAuthorException;
@@ -17,13 +16,11 @@ import org.collegeopentextbooks.api.exception.RequiredValueEmptyException;
 import org.collegeopentextbooks.api.exception.ValueTooLongException;
 import org.collegeopentextbooks.api.model.Author;
 import org.collegeopentextbooks.api.model.Editor;
-import org.collegeopentextbooks.api.model.License;
 import org.collegeopentextbooks.api.model.Resource;
 import org.collegeopentextbooks.api.model.SearchCriteria;
 import org.collegeopentextbooks.api.model.Tag;
 import org.collegeopentextbooks.api.service.AuthorService;
 import org.collegeopentextbooks.api.service.EditorService;
-import org.collegeopentextbooks.api.service.LicenseService;
 import org.collegeopentextbooks.api.service.ResourceService;
 import org.collegeopentextbooks.api.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +32,8 @@ public class ResourceServiceImpl implements ResourceService {
 	private static final Integer TITLE_MAX_LENGTH = 255;
 	private static final Integer URL_MAX_LENGTH = 255;
 	private static final Integer ANCILLARIES_URL_MAX_LENGTH = 255;
-	private static final Integer EXTERNAL_REVIEW_URL_MAX_LENGTH = 255;
-	private static final Integer LICENSE_ID_MAX_LENGTH = 4;
+	private static final Integer REVIEW_URL_MAX_LENGTH = 255;
+	private static final Integer LICENSE_MAX_LENGTH = 255;
 	
 	@Autowired
 	private ResourceDao resourceDao;
@@ -50,18 +47,12 @@ public class ResourceServiceImpl implements ResourceService {
 	@Autowired
 	private EditorService editorService;
 	
-	@Autowired
-	private LicenseService licenseService;
-	
-	// In order to preserve the API's ease-of-use for consumers, we have to inject both the services and DAOs
+	// In order to preserve the API's ease-of-use for consumers, we have to inject both these services and DAOs
 	@Autowired
 	private AuthorDao authorDao;
 	
 	@Autowired
 	private EditorDao editorDao;
-	
-	@Autowired
-	private LicenseDao licenseDao;
 	
 	@Autowired
 	private TagDao tagDao;
@@ -179,44 +170,6 @@ public class ResourceServiceImpl implements ResourceService {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.collegeopentextbooks.api.service.ResourceService#addLicenseToResource(org.collegeopentextbooks.api.model.Resource, java.lang.String)
-	 */
-	@Override
-	public void addLicenseToResource(Resource resource, String licenseId) {
-		if(null == resource || null == resource.getId())
-			throw new RequiredValueEmptyException("Resource ID is required");
-		
-		if(StringUtils.isBlank(licenseId))
-			throw new RequiredValueEmptyException("License Code cannot be blank");
-			
-		if(licenseId.length() > LICENSE_ID_MAX_LENGTH)
-			throw new ValueTooLongException("License Code exceeds max length (" + LICENSE_ID_MAX_LENGTH + ")");
-		
-		licenseService.addLicenseToResource(resource, licenseId);
-	}
-	
-	/**
-	 * Removes an existing association between a resource and a license
-	 * @param resourceId
-	 * @param licenseId
-	 * @throws RequiredValueEmptyException if the provided resource ID or license ID is missing or blank
-	 * @throws ValueTooLongException if the provided license ID is longer than its max length
-	 * @author steve.perkins
-	 */
-	public void deleteLicenseFromResource(Resource resource, String licenseId) {
-		if(null == resource || null == resource.getId())
-			throw new RequiredValueEmptyException("Resource ID is required");
-		
-		if(StringUtils.isBlank(licenseId))
-			throw new RequiredValueEmptyException("License Code cannot be blank");
-		
-		if(licenseId.length() > LICENSE_ID_MAX_LENGTH)
-			throw new ValueTooLongException("License Code exceeds max length (" + LICENSE_ID_MAX_LENGTH + ")");
-		
-		licenseService.deleteLicenseFromResource(resource, licenseId);
-	}
-	
-	/* (non-Javadoc)
 	 * @see org.collegeopentextbooks.api.service.ResourceService#save(org.collegeopentextbooks.api.model.Resource)
 	 */
 	@Override
@@ -238,9 +191,12 @@ public class ResourceServiceImpl implements ResourceService {
 				&& resource.getAncillariesUrl().length() > ANCILLARIES_URL_MAX_LENGTH)
 			throw new ValueTooLongException("Ancillaries URL exceeds max length (" + ANCILLARIES_URL_MAX_LENGTH + ")");
 		
-		if(StringUtils.isNotBlank(resource.getExternalReviewUrl()) 
-				&& resource.getExternalReviewUrl().length() > EXTERNAL_REVIEW_URL_MAX_LENGTH)
-			throw new ValueTooLongException("External Review URL exceeds max length (" + EXTERNAL_REVIEW_URL_MAX_LENGTH + ")");
+		if(StringUtils.isNotBlank(resource.getCotReviewUrl()) 
+				&& resource.getCotReviewUrl().length() > REVIEW_URL_MAX_LENGTH)
+			throw new ValueTooLongException("Custom Review URL exceeds max length (" + REVIEW_URL_MAX_LENGTH + ")");
+		
+		if(null != resource.getLicense() && StringUtils.isNotBlank(resource.getLicense().getName()) && resource.getLicense().getName().length() > LICENSE_MAX_LENGTH)
+			resource.getLicense().setName(resource.getLicense().getName().substring(0, LICENSE_MAX_LENGTH - 1));
 		
 		Resource existingResource = resourceDao.getBySearchTerm(resource.getTitle());
 		if(null != existingResource) {
@@ -260,11 +216,6 @@ public class ResourceServiceImpl implements ResourceService {
 			for(Editor editor: resource.getEditors()) {
 				editorService.save(editor);
 				addEditorToResource(resource, editor);
-			}
-		}
-		if(null != resource.getLicenses()) {
-			for(License license: resource.getLicenses()) {
-				addLicenseToResource(resource, license.getId());
 			}
 		}
 		
@@ -292,7 +243,6 @@ public class ResourceServiceImpl implements ResourceService {
 		resource.setAuthors(authorService.getAuthors(resource));
 		resource.setEditors(editorService.getEditors(resource));
 		resource.setTags(tagService.getTags(resource));
-		resource.setLicenses(licenseService.getByResource(resource.getId()));
 		return resource;
 	}
 	
@@ -324,14 +274,13 @@ public class ResourceServiceImpl implements ResourceService {
 			// Save the scalar properties of the resource
 			dbResource.setAncillariesUrl(resource.getAncillariesUrl());
 			dbResource.setExternalId(resource.getExternalId());
-			dbResource.setExternalReviewUrl(resource.getExternalReviewUrl());
+			dbResource.setCotReviewUrl(resource.getCotReviewUrl());
 			dbResource.setTitle(resource.getTitle());
 			dbResource.setUrl(resource.getUrl());
 			dbResource = save(dbResource);
 		}
 		dbResource.setAuthors(authorDao.merge(dbResource, resource.getAuthors()));
 		dbResource.setEditors(editorDao.merge(dbResource, resource.getEditors()));
-		dbResource.setLicenses(licenseDao.merge(dbResource, resource.getLicenses()));
 		dbResource.setTags(tagDao.merge(dbResource, resource.getTags()));
 		
 		return populate(dbResource);

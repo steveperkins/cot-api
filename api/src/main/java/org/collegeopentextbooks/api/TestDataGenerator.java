@@ -103,7 +103,7 @@ public class TestDataGenerator {
     }
     
     public void addRepository1() {
-    	List<License> licenses = licenseServiceImpl.getAll();
+    	List<String> licenses = licenseServiceImpl.getAll();
     	
     	Organization organization = createOrganization("Muggle Myopia", "http://www.amazon.com", "http://www.amazon.com/muggles.png");
     	
@@ -118,25 +118,14 @@ public class TestDataGenerator {
     	
     	Resource resource = createResource("Muggles in the Wild", "http://www.google.com/books/Muggles-in-the-Wild", "http://www.amazon.com/book-review", "http://www.collegeopentextbooks.org/ancillaries", repository);
     	
-    	List<License> resourceLicenses = new ArrayList<License>();
-    	resourceLicenses.add(new License("CC", "Creative Commons"));
-    	resourceLicenses.add(new License("BY", "Attribution"));
-    	
     	for(Author currentAuthor: authors) {
     		resourceServiceImpl.addAuthorToResource(resource, currentAuthor);
     	}
     	for(Editor currentEditor: editors) {
     		resourceServiceImpl.addEditorToResource(resource, currentEditor);
     	}
-    	for(License license: resourceLicenses) {
-    		if(!licenses.contains(license)) {
-    			license = licenseServiceImpl.insert(license);
-    		}
-    		resourceServiceImpl.addLicenseToResource(resource, license.getId());
-    	}
     	resource.setAuthors(authors);
     	resource.setEditors(editors);
-    	resource.setLicenses(resourceLicenses);
     	
     	Tag tag = tagServiceImpl.getByName("Literature");
     	resourceServiceImpl.addTagToResource(resource, tag);
@@ -154,7 +143,6 @@ public class TestDataGenerator {
     	Resource resource2 = createResource("Intrinsic Vocabulaire", "http://www.google.com/books/Intrinsic-Vocabulaire", "http://www.amazon.com/book-review", "http://www.collegeopentextbooks.org/ancillaries", repository);
     	Author author = createAuthor("Henry Liddicoat");
     	resourceServiceImpl.addAuthorToResource(resource2, author);
-    	resourceServiceImpl.addLicenseToResource(resource, "CC");
     }
     
     public void addRepository2() {
@@ -173,11 +161,7 @@ public class TestDataGenerator {
     	for(Author currentAuthor: authors) {
     		resourceServiceImpl.addAuthorToResource(resource, currentAuthor);
     	}
-    	for(License license: resourceLicenses) {
-    		resourceServiceImpl.addLicenseToResource(resource, license.getId());
-    	}
     	resource.setAuthors(authors);
-    	resource.setLicenses(resourceLicenses);
     	
     	resourceServiceImpl.addTagToResource(resource, tagServiceImpl.getByName("Law"));
     	resourceServiceImpl.addTagToResource(resource, tagServiceImpl.getByName("Philosophy"));
@@ -217,8 +201,9 @@ public class TestDataGenerator {
     	resource.setRepository(repository);
     	resource.setTitle(title);
     	resource.setUrl(url);
-    	resource.setExternalReviewUrl(externalReviewUrl);
+    	resource.setCotReviewUrl(externalReviewUrl);
     	resource.setAncillariesUrl(ancillariesUrl);
+    	resource.setLicense(new License("CC BY"));
     	return resourceServiceImpl.save(resource);
     }
     

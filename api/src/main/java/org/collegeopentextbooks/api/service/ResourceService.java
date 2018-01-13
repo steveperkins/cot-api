@@ -105,16 +105,6 @@ public interface ResourceService {
 	Resource addTagToResource(Resource resource, Tag tag) throws InvalidResourceException, InvalidTagException;
 
 	/**
-	 * Adds an association between a resource and a license
-	 * @param resource
-	 * @param licenseId
-	 * @throws RequiredValueEmptyException if the provided resource ID or license ID is missing or blank
-	 * @throws ValueTooLongException if the provided license ID is longer than its max length
-	 * @author steve.perkins
-	 */
-	void addLicenseToResource(Resource resource, String licenseId);
-
-	/**
 	 * Creates or updates the given resource's scalar values.
 	 * @param repository the resource to create or update
 	 * @return the updated resource. If this is a create operation, the new object's ID is populated on both the returned object and the given object.

@@ -12,13 +12,13 @@ public class Resource extends AbstractModelObject {
 	private List<Author> authors;
 	private List<Editor> editors;
 	private List<Tag> tags;
-	private List<License> licenses;
+	private License license;
 	private List<Review> reviews;
 	
 	private String title;
 	private String url;
 	private String ancillariesUrl;
-	private String externalReviewUrl;
+	private String cotRevieUrl;
 	private String searchTitle;
 	private String externalId;
 	
@@ -46,11 +46,11 @@ public class Resource extends AbstractModelObject {
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;
 	}
-	public List<License> getLicenses() {
-		return licenses;
+	public License getLicense() {
+		return license;
 	}
-	public void setLicenses(List<License> licenses) {
-		this.licenses = licenses;
+	public void setLicense(License license) {
+		this.license = license;
 	}
 	public List<Review> getReviews() {
 		return reviews;
@@ -78,11 +78,11 @@ public class Resource extends AbstractModelObject {
 	public void setAncillariesUrl(String ancillariesUrl) {
 		this.ancillariesUrl = ancillariesUrl;
 	}
-	public String getExternalReviewUrl() {
-		return externalReviewUrl;
+	public String getCotReviewUrl() {
+		return cotRevieUrl;
 	}
-	public void setExternalReviewUrl(String externalReviewUrl) {
-		this.externalReviewUrl = externalReviewUrl;
+	public void setCotReviewUrl(String cotReviewUrl) {
+		this.cotRevieUrl = cotReviewUrl;
 	}
 	public String getSearchTitle() {
 		return searchTitle;
@@ -101,5 +101,4 @@ public class Resource extends AbstractModelObject {
 	public void setExternalId(String externalId) {
 		this.externalId = externalId;
 	}
-
 }

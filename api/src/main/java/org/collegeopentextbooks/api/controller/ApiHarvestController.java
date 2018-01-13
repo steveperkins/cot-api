@@ -1,5 +1,6 @@
 package org.collegeopentextbooks.api.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,13 +31,13 @@ public class ApiHarvestController {
 	@Autowired
 	private FloridaVirtualCampusImporter floridaVirtualCampusImporter;
 	
-//	@Autowired
-//	private CotHtmlImporter cotHtmlImporter;
+	@Autowired
+	private CotHtmlImporter cotHtmlImporter;
 	
 	@RequestMapping(method=RequestMethod.GET, value="start")
     @ResponseBody String startHarvesting() {
 		// We really only need to import the HTML repository once
-//		cotHtmlImporter.setInputFolder(new File(inputFolder));
+		cotHtmlImporter.setInputFolder(new File(inputFolder));
     	List<Importer> importers = new ArrayList<>();
 //    	importers.add(cotHtmlImporter);
     	importers.add(floridaVirtualCampusImporter);

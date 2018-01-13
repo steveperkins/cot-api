@@ -100,7 +100,7 @@ public class CotHtmlParser {
 				 - Custom License with custom URL
 				 */ 
 				Element licenseLink = links.get(1);
-				resource.setLicenses(parseLicenses(licenseLink));
+				resource.setLicense(parseLicenses(licenseLink));
 				
 				// If there is a third link, it is either the ancillaries or a review
 				if(links.size() > 2) {
@@ -109,7 +109,7 @@ public class CotHtmlParser {
 					if("Ancillaries".equals(text)) {
 						resource.setAncillariesUrl(thirdLink.attr("href"));
 					} else if("Review".equals(text)) {
-						resource.setExternalReviewUrl(thirdLink.attr("href"));
+						resource.setCotReviewUrl(thirdLink.attr("href"));
 					}
 					
 					// Likewise, if there is a fourth link it is the opposite of the 3rd link
@@ -119,7 +119,7 @@ public class CotHtmlParser {
 						if("Ancillaries".equals(text)) {
 							resource.setAncillariesUrl(fourthLink.attr("href"));
 						} else if("Review".equals(text)) {
-							resource.setExternalReviewUrl(fourthLink.attr("href"));
+							resource.setCotReviewUrl(fourthLink.attr("href"));
 						}
 					}
 				}
@@ -184,29 +184,16 @@ public class CotHtmlParser {
 		}
 	}
 	
-	private List<License> parseLicenses(Element licensesLink) {
-		String[] licenseCodes = null;
+	private License parseLicenses(Element licensesLink) {
 		String licenseText = licensesLink.ownText();
-		String lowerCased = licenseText.toLowerCase();
-		if(lowerCased.equals("custom license") || lowerCased.equals("custom")) {
-			// This is a custom license with a custom license URL. This is the only case where we need to deal with the URL.
-			// TODO Still have to figure out what to do with the custom license URL
-			List<License> licenses = new ArrayList<License>();
-			licenses.add(new License("CL", licensesLink.attr("href")));
-			return licenses; 
-		} else if(licenseText.startsWith("CC ")) {
-			// This is a group of Creative Commons license codes. They're easy to handle and are always separated by a dash.
-			licenseText = licenseText.replace("CC ", "CC-");
-			licenseCodes = licenseText.split("-");
-		} else {
-			licenseCodes = new String[] { licenseText };
-		}
+		if(null != licenseText && licenseText.toUpperCase().contains("CUSTOM"))
+			licenseText = "Custom";
 		
-		List<License> licenses = new ArrayList<License>();
-		for(String code: licenseCodes) {
-			licenses.add(new License(code));
-		}
-		return licenses;
+		String licenseLink = licensesLink.attr("href");
+		if(null != licenseLink && licenseLink.startsWith("#"))
+			licenseLink = null;
+		
+		return new License(licenseText, licenseLink);
 	}
 	
 	public String replace(String name, String replaceWords) {
@@ -246,7 +233,7 @@ public class CotHtmlParser {
 					.append("\r\ntitle:\t").append(resource.getTitle())
 					.append("\r\nurl:\t").append(resource.getUrl())
 					.append("\r\nancillariesUrl:\t").append(resource.getAncillariesUrl())
-					.append("\r\nexternalReviewUrl:\t").append(resource.getExternalReviewUrl())
+					.append("\r\nexternalReviewUrl:\t").append(resource.getCotReviewUrl())
 					
 					.append("\r\nauthors: [");
 					if(null != resource.getAuthors()) {
@@ -261,10 +248,8 @@ public class CotHtmlParser {
 					}
 					sb.append("],")
 					.append("\r\nlicenses: [");
-					if(null != resource.getLicenses()) {
-						for(License license: resource.getLicenses())
-							sb.append("\r\n\tid:\t").append(license.getId());
-					}
+					if(null != resource.getLicense())
+						sb.append("\r\n\tname:\t").append(resource.getLicense());
 					sb.append("]");
 					System.out.println(sb.toString());
 					System.out.println();

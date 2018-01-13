@@ -8,7 +8,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.collegeopentextbooks.api.model.Author;
 import org.collegeopentextbooks.api.model.Editor;
-import org.collegeopentextbooks.api.model.License;
 import org.collegeopentextbooks.api.model.Organization;
 import org.collegeopentextbooks.api.model.Repository;
 import org.collegeopentextbooks.api.model.Resource;
@@ -95,11 +94,6 @@ public class CotHtmlImporter implements Importer {
 						for(Editor editor: resource.getEditors()) {
 							editorService.save(editor);
 							resourceService.addEditorToResource(resource, editor);
-						}
-					}
-					if(null != resource.getLicenses()) {
-						for(License license: resource.getLicenses()) {
-							resourceService.addLicenseToResource(resource, license.getId());
 						}
 					}
 					

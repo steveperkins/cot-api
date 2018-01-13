@@ -3,6 +3,8 @@ package org.collegeopentextbooks.api.db.rowmapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.commons.lang3.StringUtils;
+import org.collegeopentextbooks.api.model.License;
 import org.collegeopentextbooks.api.model.Organization;
 import org.collegeopentextbooks.api.model.Repository;
 import org.collegeopentextbooks.api.model.Resource;
@@ -20,7 +22,7 @@ public class ResourceRowMapper extends AbstractRowMapper<Resource> {
 	public Resource mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Resource resource = new Resource();
 		resource.setAncillariesUrl(rs.getString("ancillaries_url"));
-		resource.setExternalReviewUrl(rs.getString("external_review_url"));
+		resource.setCotReviewUrl(rs.getString("cot_review_url"));
 		resource.setTitle(rs.getString("title"));
 		resource.setSearchTitle(rs.getString("search_title"));
 		resource.setUrl(rs.getString("url"));
@@ -33,6 +35,7 @@ public class ResourceRowMapper extends AbstractRowMapper<Resource> {
 		repository.setSearchName(rs.getString("repository_search_name"));
 		repository.setCreatedDate(rs.getTimestamp("repository_created_date"));
 		repository.setUpdatedDate(rs.getTimestamp("repository_updated_date"));
+		resource.setRepository(repository);
 		
 		Organization organization = new Organization();
 		organization.setId(rs.getInt("organization_id"));
@@ -44,7 +47,15 @@ public class ResourceRowMapper extends AbstractRowMapper<Resource> {
 		organization.setUpdatedDate(rs.getTimestamp("organization_updated_date"));
 		repository.setOrganization(organization);
 		
-		resource.setRepository(repository);
+		License license = new License();
+		license.setName(rs.getString("license_name"));
+		license.setUrl(rs.getString("search_license"));
+		String customLicenseUrl = rs.getString("license_url");
+		if(StringUtils.isNotBlank(customLicenseUrl))
+			license.setUrl(customLicenseUrl);
+		
+		resource.setLicense(license);
+		
 		return super.mapRow(rs, resource);
 	}
 

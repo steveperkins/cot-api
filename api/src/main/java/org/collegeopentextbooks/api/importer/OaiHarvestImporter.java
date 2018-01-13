@@ -11,7 +11,6 @@ import org.collegeopentextbooks.api.model.Resource;
 import org.collegeopentextbooks.api.model.Tag;
 import org.dom4j.Element;
 import org.dom4j.Node;
-import org.springframework.util.CollectionUtils;
 
 import se.kb.oai.OAIException;
 import se.kb.oai.pmh.Header;
@@ -55,11 +54,30 @@ public abstract class OaiHarvestImporter implements Importer {
 						
 						String license = parseLicense(xml);
 						if(StringUtils.isNotBlank(license)) {
-							List<License> licenses = parseLicenses(license);
-							if(!CollectionUtils.isEmpty(licenses)) {
-								resource.setLicenses(licenses);
-							}
+							String upper = license.toUpperCase();
+							if(upper.contains("CC BY-NC-SA")
+									|| upper.contains("BY-NC-SA"))
+								license = "CC BY-NC-SA";
+							else if(upper.contains("CC BY-NC-ND")
+									|| upper.contains("BY-NC-ND"))
+								license = "CC BY-NC-ND";
+							else if(upper.contains("CC BY-NC")
+									|| upper.contains("BY-NC"))
+								license = "CC BY-NC";
+							else if(upper.contains("CC BY-ND")
+									|| upper.contains("BY-ND"))
+								license = "CC BY-ND";
+							else if(upper.contains("CC BY-SA")
+									|| license.contains("BY-SA"))
+								license = "CC BY-SA";
+							else if(upper.contains("CC BY"))
+								license = "CC BY";
+							else if(upper.contains("GNU FREE DOCUMENTATION LICENSE"))
+								license = "GFDL";
+							resource.setLicense(new License(license));
 						}
+						
+						// TODO Parse out custom license URL
 						
 						resource.setUrl(parseContentUrl(xml));
 						
@@ -81,12 +99,8 @@ public abstract class OaiHarvestImporter implements Importer {
 						System.out.println("Identifier: " +  resource.getExternalId());
 						System.out.println("Content URL: " + resource.getUrl());
 						System.out.println("Authors: " + resource.getAuthors().size());
-						System.out.println("License: " + license);
-						if(null != resource.getLicenses()) {
-							System.out.print("Licenses: ");
-							for(License l: resource.getLicenses()) {
-								System.out.print(l.getId() + " ");
-							}
+						if(null != resource.getLicense()) {
+							System.out.print("License: " + resource.getLicense().getName());
 						}
 						System.out.println();
 					}
