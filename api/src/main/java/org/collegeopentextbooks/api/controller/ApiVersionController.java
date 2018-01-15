@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(
 		path="/version", 
-		consumes={ MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, 
 		produces={ MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 public class ApiVersionController {
 
@@ -19,7 +18,7 @@ public class ApiVersionController {
 	
 	@RequestMapping(method=RequestMethod.GET, value="")
     @ResponseBody String getVersion() {
-        return applicationVersion;
+        return "{ \"version\": \"" + applicationVersion + "\" }";
     }
 	
 }

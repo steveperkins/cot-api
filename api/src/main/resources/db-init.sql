@@ -390,3 +390,10 @@ INSERT INTO organization(name, url, logo_url, search_name, created_date) VALUES
 
 INSERT INTO repository(organization_id, name, url, search_name, created_date) VALUES
 ((SELECT id FROM organization WHERE search_name='florida virtual campus'), 'Orange Grove', 'https://florida.theorangegrove.org/og/oai', 'orange grove', CURRENT_TIMESTAMP);
+
+
+INSERT INTO organization(name, url, logo_url, search_name, created_date)
+VALUES('College Open Textbooks', 'http://collegeopentextbooks.org', 'http://www.collegeopentextbooks.org/images/logo-inner.png', 'college open textbooks', CURRENT_TIMESTAMP);
+
+INSERT INTO repository(organization_id, name, url, search_name, created_date) 
+VALUES((SELECT id FROM organization WHERE name='College Open Textbooks'), 'College Open Textbooks', 'http://www.collegeopentextbooks.org', 'college open textbooks', CURRENT_TIMESTAMP);

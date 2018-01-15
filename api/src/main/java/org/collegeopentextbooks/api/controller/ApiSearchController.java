@@ -6,6 +6,7 @@ import org.collegeopentextbooks.api.model.Resource;
 import org.collegeopentextbooks.api.model.SearchCriteria;
 import org.collegeopentextbooks.api.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,7 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(
-		path="/search")
+		path="/search",
+		produces={ MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 public class ApiSearchController {
 
 	@Autowired

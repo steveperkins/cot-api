@@ -8,9 +8,11 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
 import org.collegeopentextbooks.api.model.License;
+import org.collegeopentextbooks.api.model.Organization;
 import org.collegeopentextbooks.api.model.Repository;
 import org.collegeopentextbooks.api.model.Resource;
 import org.collegeopentextbooks.api.model.Tag;
+import org.collegeopentextbooks.api.service.OrganizationService;
 import org.collegeopentextbooks.api.service.RepositoryService;
 import org.collegeopentextbooks.api.service.ResourceService;
 import org.collegeopentextbooks.api.service.TagService;
@@ -28,6 +30,9 @@ public class FloridaVirtualCampusImporter extends OaiHarvestImporter implements 
 	
 	@Autowired
 	private RepositoryService repositoryService;
+	
+	@Autowired
+	private OrganizationService organizationService;
 	
 	private Map<Tag, List<String>> tagKeywords;
 	private Repository repository;
@@ -48,6 +53,23 @@ public class FloridaVirtualCampusImporter extends OaiHarvestImporter implements 
 	public void init() {
 		tagKeywords = tagService.getAllKeywords();
 		repository = repositoryService.getRepository("Orange Grove");
+
+		if(null == repository) {
+			Organization organization = organizationService.getOrganization("Florida Virtual Campus");
+			if(null == organization) {
+				organization = new Organization();
+				organization.setName("Florida Virtual Campus");
+				organization.setUrl("https://www.floridashines.org/orange-grove");
+				organization.setLogoUrl("https://www.floridashines.org/floridaShines.org-theme/images/flvc.png");
+				organization = organizationService.save(organization);
+			}
+			
+			repository = new Repository();
+	    	repository.setName("College Open Textbooks");
+	    	repository.setOrganization(organization);
+	    	repository.setUrl("http://www.collegeopentextbooks.org");
+	    	repositoryService.save(repository);
+		}
 	}
 
 	@Override
