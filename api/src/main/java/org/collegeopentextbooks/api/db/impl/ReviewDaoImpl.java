@@ -57,8 +57,11 @@ public class ReviewDaoImpl implements ReviewDao {
 	 */
 	@Override
 	public Review getById(int reviewId) {
-		Review result = jdbcTemplate.queryForObject(GET_REVIEW_BY_ID_SQL, new Integer[] { reviewId }, rowMapper);
-		return result;
+		List<Review> results = jdbcTemplate.query(GET_REVIEW_BY_ID_SQL, new Integer[] { reviewId }, rowMapper);
+		if(null == results) {
+			return null;
+		}
+		return results.get(0);
 	}
 	
 	/* (non-Javadoc)

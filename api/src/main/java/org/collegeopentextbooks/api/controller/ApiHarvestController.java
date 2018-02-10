@@ -38,9 +38,9 @@ public class ApiHarvestController {
 		// We really only need to import the HTML repository once
 		cotHtmlImporter.setInputFolder(new File(inputFolder));
     	List<Importer> importers = new ArrayList<>();
-//    	importers.add(cotHtmlImporter);
     	importers.add(floridaVirtualCampusImporter);
 //    	importers.add(exampleImporter);
+    	importers.add(cotHtmlImporter);
     	
     	for(Importer importer: importers) {
     		importer.run();

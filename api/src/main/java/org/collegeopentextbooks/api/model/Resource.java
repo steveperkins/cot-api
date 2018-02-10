@@ -18,7 +18,7 @@ public class Resource extends AbstractModelObject {
 	private String title;
 	private String url;
 	private String ancillariesUrl;
-	private String cotRevieUrl;
+	private String cotReviewUrl;
 	private String searchTitle;
 	private String externalId;
 	
@@ -79,10 +79,10 @@ public class Resource extends AbstractModelObject {
 		this.ancillariesUrl = ancillariesUrl;
 	}
 	public String getCotReviewUrl() {
-		return cotRevieUrl;
+		return cotReviewUrl;
 	}
 	public void setCotReviewUrl(String cotReviewUrl) {
-		this.cotRevieUrl = cotReviewUrl;
+		this.cotReviewUrl = cotReviewUrl;
 	}
 	public String getSearchTitle() {
 		return searchTitle;

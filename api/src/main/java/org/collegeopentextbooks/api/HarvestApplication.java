@@ -11,7 +11,6 @@ import org.collegeopentextbooks.api.importer.CotHtmlImporter;
 import org.collegeopentextbooks.api.importer.FloridaVirtualCampusImporter;
 import org.collegeopentextbooks.api.importer.Importer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -22,10 +21,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
-//@EnableAutoConfiguration
-//@ComponentScan("org.collegeopentextbooks.api")
-//@PropertySource("classpath:application.properties")
-//@Component
+@EnableAutoConfiguration
+@ComponentScan("org.collegeopentextbooks.api")
+@PropertySource("classpath:application.properties")
+@Component
 public class HarvestApplication {
 	
 	public static void main(String[] args) {
@@ -68,19 +67,19 @@ public class HarvestApplication {
 //	private ExampleImporter exampleImporter;
 //	
 	@Autowired
-	private Importer floridaVirtualCampusImporter;
+	private FloridaVirtualCampusImporter floridaVirtualCampusImporter;
 	
-//	@Autowired
-//	private CotHtmlImporter cotHtmlImporter;
+	@Autowired
+	private CotHtmlImporter cotHtmlImporter;
 	
 	private String inputFolder;
 	
     public void start() {
-//    	cotHtmlImporter.setInputFolder(new File(inputFolder));
+    	cotHtmlImporter.setInputFolder(new File(inputFolder));
     	List<Importer> importers = new ArrayList<>();
-//    	importers.add(cotHtmlImporter);
     	importers.add(floridaVirtualCampusImporter);
 //    	importers.add(exampleImporter);
+    	importers.add(cotHtmlImporter);
     	
     	for(Importer importer: importers) {
     		importer.run();
