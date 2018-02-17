@@ -198,7 +198,7 @@ public class ResourceServiceImpl implements ResourceService {
 		if(null != resource.getLicense() && StringUtils.isNotBlank(resource.getLicense().getName()) && resource.getLicense().getName().length() > LICENSE_MAX_LENGTH)
 			resource.getLicense().setName(resource.getLicense().getName().substring(0, LICENSE_MAX_LENGTH - 1));
 		
-		Resource existingResource = resourceDao.getBySearchTerm(resource.getTitle());
+		Resource existingResource = resourceDao.getBySearchTerm(resource.getRepository().getId(), resource.getTitle());
 		if(null != existingResource) {
 			resource.setId(existingResource.getId());
 		}
@@ -265,7 +265,7 @@ public class ResourceServiceImpl implements ResourceService {
 		}
 		// Then by its title
 		if(null == dbResource) {
-			dbResource = resourceDao.getBySearchTerm(resource.getSearchTitle());
+			dbResource = resourceDao.getBySearchTerm(resource.getRepository().getId(), resource.getSearchTitle());
 		}
 		// If we still haven't found it, create a new record
 		if(null == dbResource) {

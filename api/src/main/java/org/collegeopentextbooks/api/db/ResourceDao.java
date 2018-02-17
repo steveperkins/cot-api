@@ -11,7 +11,7 @@ public interface ResourceDao {
 
 	Resource getById(int resourceId);
 	
-	Resource getBySearchTerm(String searchTerm);
+	Resource getBySearchTerm(int repositoryId, String searchTerm);
 
 	List<Resource> getByRepositoryId(int repositoryId);
 
