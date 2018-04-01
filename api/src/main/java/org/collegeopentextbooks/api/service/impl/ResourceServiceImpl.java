@@ -208,6 +208,7 @@ public class ResourceServiceImpl implements ResourceService {
 		if(null != resource.getAuthors()) {
 			List<Author> authors = new ArrayList<Author>(resource.getAuthors());
 			for(Author author: authors) {
+				author.setRepositoryId(resource.getRepository().getId());
 				authorService.save(author);
 				addAuthorToResource(resource, author);
 			}

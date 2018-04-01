@@ -24,9 +24,7 @@ public class ApiHarvestController {
 	@Value("${harvest.collegeopentextbooks.inputFolder}")
 	private String inputFolder;
 	
-//	@Autowired
-//	private ExampleImporter exampleImporter;
-//	
+	
 	@Autowired
 	private FloridaVirtualCampusImporter floridaVirtualCampusImporter;
 	
@@ -39,7 +37,6 @@ public class ApiHarvestController {
 		cotHtmlImporter.setInputFolder(new File(inputFolder));
     	List<Importer> importers = new ArrayList<>();
     	importers.add(floridaVirtualCampusImporter);
-//    	importers.add(exampleImporter);
     	importers.add(cotHtmlImporter);
     	
     	for(Importer importer: importers) {

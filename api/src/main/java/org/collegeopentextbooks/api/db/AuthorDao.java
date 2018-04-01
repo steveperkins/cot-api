@@ -17,7 +17,7 @@ public interface AuthorDao {
 	 * @return the matching author or null if no match is found
 	 * @author steve.perkins
 	 */
-	Author getBySearchTerm(String name);
+	Author getBySearchTerm(int repositoryId, String name);
 	
 	List<Author> getAuthorsByResourceId(Integer resourceId);
 

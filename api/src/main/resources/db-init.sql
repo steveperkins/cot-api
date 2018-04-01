@@ -66,6 +66,7 @@ CREATE INDEX idx_resource_search_license ON resource(license_name);
 
 CREATE TABLE author (
     id serial PRIMARY KEY,
+    repositoryId INT NULL REFERENCES repository(id),
     name VARCHAR(255) NOT NULL,
     search_name VARCHAR(255) NOT NULL,
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -76,10 +76,10 @@ public class TagServiceImpl implements TagService {
 			throw new RequiredValueEmptyException("Tag type is required");
 		
 		if(StringUtils.isBlank(tag.getName()))
-			throw new RequiredValueEmptyException("Name cannot be blank");
+			throw new RequiredValueEmptyException("Tag name cannot be blank");
 		
 		if(tag.getName().length() > NAME_MAX_LENGTH)
-			throw new ValueTooLongException("Name exceeds max length (" + NAME_MAX_LENGTH + ")");
+			throw new ValueTooLongException("Tag name exceeds max length (" + NAME_MAX_LENGTH + ")");
 		
 		Tag existingTag = tagDao.getTagByName(tag.getName());
 		if(null != existingTag) {

@@ -22,7 +22,7 @@ public class AuthorDaoImpl implements AuthorDao {
 	
 	private static String GET_AUTHORS_SQL = "SELECT a.* FROM author a";
 	private static String GET_AUTHOR_BY_ID_SQL = "SELECT a.* FROM author a WHERE a.id=?";
-	private static String GET_AUTHOR_BY_SEARCH_TERM_SQL = "SELECT a.* FROM author a WHERE a.search_name=?";
+	private static String GET_AUTHOR_BY_SEARCH_TERM_SQL = "SELECT a.* FROM author a WHERE a.search_name=? and a.repositoryId=?";
 	private static String GET_AUTHORS_BY_RESOURCE_SQL = "SELECT a.* FROM resource_author ra INNER JOIN author a ON ra.author_id=a.id WHERE ra.resource_id=?";
 	private static String UPDATE_SQL = "UPDATE author SET name=?, search_name=? WHERE id=?";
 	
@@ -66,8 +66,8 @@ public class AuthorDaoImpl implements AuthorDao {
 	 * @see org.collegeopentextbooks.api.db.impl.AuthorDao#getBySearchTerm(java.lang.String)
 	 */
 	@Override
-	public Author getBySearchTerm(String name) {
-		List<Author> authors = jdbcTemplate.query(GET_AUTHOR_BY_SEARCH_TERM_SQL, new String[] { name.toLowerCase() }, rowMapper);
+	public Author getBySearchTerm(int repositoryId, String name) {
+		List<Author> authors = jdbcTemplate.query(GET_AUTHOR_BY_SEARCH_TERM_SQL, new Object[] { name.toLowerCase(), repositoryId }, rowMapper);
 		if(null != authors && !authors.isEmpty()) {
 			return authors.get(0);
 		}
@@ -110,7 +110,7 @@ public class AuthorDaoImpl implements AuthorDao {
 		List<Author> finalAuthors = new ArrayList<Author>();
 		if(!CollectionUtils.isEmpty(authors)) {
 			for(Author author: authors) {
-				Author dbAuthor = getBySearchTerm(author.getSearchName());
+				Author dbAuthor = getBySearchTerm(author.getRepositoryId(), author.getSearchName());
 				if(null == dbAuthor) {
 					dbAuthor = save(author);
 				}
@@ -148,7 +148,8 @@ public class AuthorDaoImpl implements AuthorDao {
 	}
 	
 	protected Author insert(Author author) {
-		Map<String, Object> parameters = new HashMap<String, Object>(2);
+		Map<String, Object> parameters = new HashMap<String, Object>(3);
+        parameters.put("repositoryId", author.getRepositoryId());
         parameters.put("name", author.getName());
         parameters.put("search_name", author.getName().toLowerCase());
         Number newId = this.insert.executeAndReturnKey(parameters);

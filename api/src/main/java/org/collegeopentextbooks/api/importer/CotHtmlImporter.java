@@ -86,6 +86,7 @@ public class CotHtmlImporter implements Importer {
 					if(null != resource.getAuthors()) {
 						List<Author> authors = new ArrayList<Author>(resource.getAuthors());
 						for(Author author: authors) {
+							author.setRepositoryId(repository.getId());
 							authorService.save(author);
 							resourceService.addAuthorToResource(resource, author);
 						}
