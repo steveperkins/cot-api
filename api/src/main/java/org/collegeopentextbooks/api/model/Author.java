@@ -6,7 +6,7 @@ package org.collegeopentextbooks.api.model;
  *
  */
 public class Author extends AbstractModelObject {
-	private int repositoryId;
+	private Integer repositoryId;
 	private String name;
 	private String searchName;
 	
@@ -14,10 +14,10 @@ public class Author extends AbstractModelObject {
 	public Author(String name) {
 		this.setName(name);
 	}
-	public int getRepositoryId() {
+	public Integer getRepositoryId() {
 		return repositoryId;
 	}
-	public void setRepositoryId(int repositoryId) {
+	public void setRepositoryId(Integer repositoryId) {
 		this.repositoryId = repositoryId;
 	}
 	public String getName() {
