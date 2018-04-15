@@ -122,4 +122,9 @@ public class ExampleImporter implements Importer {
     	reviewServiceImpl.save(review);
     }
 
+	@Override
+	public String getName() {
+		return "Example";
+	}
+
 }

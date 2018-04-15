@@ -122,4 +122,11 @@ public interface ResourceService {
 	 */
 	Resource importAndMerge(Resource resource);
 
+	/**
+	 * Deletes the specified resource
+	 * @param resource
+	 * @author steve.perkins
+	 */
+	void delete(Resource resource);
+
 }

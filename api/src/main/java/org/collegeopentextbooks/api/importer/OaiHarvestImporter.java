@@ -1,14 +1,19 @@
 package org.collegeopentextbooks.api.importer;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.collegeopentextbooks.api.model.Author;
 import org.collegeopentextbooks.api.model.License;
+import org.collegeopentextbooks.api.model.Repository;
 import org.collegeopentextbooks.api.model.Resource;
 import org.collegeopentextbooks.api.model.Tag;
+import org.collegeopentextbooks.api.service.ResourceService;
 import org.dom4j.Element;
 import org.dom4j.Node;
 
@@ -21,14 +26,31 @@ import se.kb.oai.pmh.RecordsList;
 public abstract class OaiHarvestImporter implements Importer {
 
 	protected String baseUrl;
+	protected Repository repository;
 	protected List<String> collectionIds = new ArrayList<String>();
-			
+	
+	protected ResourceService resourceService;
+	
+	protected OaiHarvestImporter(ResourceService resourceService) {
+		this.resourceService = resourceService;
+	}
+	
+	/**
+	 * Assumes the implementation subclass has populated the repository property with the appropriate repo from the database
+	 */
 	@Override
 	public void run() {
+		if(null == repository) {
+			throw new NullPointerException("Repository can't be null. Set the appropriate repository when initializing your OaiHarvestImporter subclass.");
+		}
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+		String fromDate = dateFormatter.format(repository.getLastImportedDate());
+		String untilDate = dateFormatter.format(new Date());
+		
 		OaiPmhServer server = new OaiPmhServer(baseUrl);
 		for(String collectionId: collectionIds) {
 			try {
-				RecordsList recordsList = server.listRecords("oai_dc", "2005-01-01", "2017-12-31", collectionId);
+				RecordsList recordsList = server.listRecords("oai_dc", fromDate, untilDate, collectionId);
 				while(null != recordsList) {
 					List<Record> records = recordsList.asList();
 					for(Record record: records) {
@@ -38,6 +60,17 @@ public abstract class OaiHarvestImporter implements Importer {
 						resource.setExternalId(header.getIdentifier());
 						
 						Element metadata = record.getMetadata();
+						if(null == metadata && StringUtils.isNotBlank(resource.getExternalId())) {
+							// This resource has been deleted. The OAI-PMH library we're using to abstract away some of the 
+							// convolution of the OAI-PMH framework doesn't support the status attribute that can be set
+							// on the <header> element. The spec says that if a resource has been deleted, the response 
+							// for that resource must not include a <metadata> element. To avoid reimplementing the
+							// existing library, we make the assumption here that the repository matches the spec.
+							// http://www.openarchives.org/OAI/openarchivesprotocol.html#DeletedRecords
+							resourceService.delete(resource);
+							continue;
+						}
+						
 						String xml = metadata.asXML();
 						System.out.println();
 						System.out.println("Current XML:");
@@ -114,6 +147,9 @@ public abstract class OaiHarvestImporter implements Importer {
 				e.printStackTrace();
 			}
 		}
+		
+		// Update the last imported date and perform any other repository-specific teardown
+		onFinish();
 	}
 	
 	/**
@@ -122,7 +158,72 @@ public abstract class OaiHarvestImporter implements Importer {
 	 * @return
 	 * @author steve.perkins
 	 */
-	protected abstract List<License> parseLicenses(String text);
+	protected List<License> parseLicenses(String text) {
+		// This implementation only considers Creative Commons licensing
+		List<License> licenses = new ArrayList<License>();
+		if(StringUtils.isBlank(text))
+			return licenses;
+		
+		int index = text.indexOf("CC0");
+		if(index >= 0) {
+			// Public domain, which trumps other licenses
+			licenses.add(new License("CC"));
+			licenses.add(new License("PD"));
+			return licenses;
+		}
+		
+		index = text.indexOf("CC ");
+		if(index >= 0) {
+			licenses.add(new License("CC"));
+			
+			// Look for any further CC sublicenses
+			text = text.substring(index + 3);
+			index = text.indexOf(" ");
+			if(index > 1) {
+				text = text.substring(0, index);
+				
+				while(index >= 0) {
+					// Dashes denote additional sublicenses
+					index = text.indexOf("-");
+					if(index >= 1) {
+						String license = text.substring(0, index);
+						// All sublicenses are two characters
+						if(license.length() == 2) {
+							licenses.add(new License(license));
+						}
+						text = text.substring(index + 1);
+						index = text.indexOf("-");
+					}
+				}
+			}
+		}
+		index = text.indexOf("CC-");
+		if(index >= 0) {
+			licenses.add(new License("CC"));
+			
+			// Look for any further CC sublicenses
+			text = text.substring(index + 3);
+			index = text.indexOf(" ");
+			if(index > 1) {
+				text = text.substring(0, index);
+				
+				while(index >= 0) {
+					// Dashes denote additional sublicenses
+					index = text.indexOf("-");
+					if(index >= 1) {
+						String license = text.substring(0, index);
+						// All sublicenses are two characters
+						if(license.length() == 2) {
+							licenses.add(new License(license));
+						}
+						text = text.substring(index + 1);
+						index = text.indexOf("-");
+					}
+				}
+			}
+		}
+		return licenses;
+	}
 	
 	/**
 	 * Implementors should override this method to merge each new record into the data store
@@ -138,6 +239,20 @@ public abstract class OaiHarvestImporter implements Importer {
 	 * @author steve.perkins
 	 */
 	protected abstract List<Tag> analyzeDisciplines(List<String> keywords);
+	
+	protected List<Tag> analyzeDisciplines(List<String> keywords, Map<Tag, List<String>> tagKeywords) {
+		List<Tag> matches = new ArrayList<>();
+		for(String keyword : keywords) {
+			keyword = keyword.trim();
+			for(Map.Entry<Tag, List<String>> entry : tagKeywords.entrySet()) {
+				// Loop through the tags and attempt to find a match for the current keyword
+				if(entry.getValue().contains(keyword.toLowerCase())) {
+					matches.add(entry.getKey());
+				}
+			}
+		}
+		return matches;
+	}
 	
 	
 	/**
@@ -234,5 +349,14 @@ public abstract class OaiHarvestImporter implements Importer {
 		value = value.substring(0, value.indexOf("</dc:" + tagName + ">"));
 		return value;
 	}
+	
+	/**
+	 * Called when the importer has successfully imported all available resources from the current repository.
+	 * Implement this event to update the repository's last imported date and perform any other teardown needed
+	 * for your specific repository.
+	 * 
+	 * @author steve.perkins
+	 */
+	protected abstract void onFinish();
 
 }

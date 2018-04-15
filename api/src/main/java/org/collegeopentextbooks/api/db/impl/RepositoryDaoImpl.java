@@ -12,8 +12,6 @@ import org.collegeopentextbooks.api.db.rowmapper.RepositoryRowMapper;
 import org.collegeopentextbooks.api.model.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +21,7 @@ public class RepositoryDaoImpl implements RepositoryDao {
 	private static String GET_REPOSITORIES_SQL = "SELECT r.*, o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM repository r INNER JOIN organization o ON r.organization_id=o.id";
 	private static String GET_REPOSITORY_BY_ID_SQL = "SELECT r.*, o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM repository r INNER JOIN organization o ON r.organization_id=o.id WHERE r.id=?";
 	private static String GET_REPOSITORY_BY_NAME_SQL = "SELECT r.*, o.id AS organization_id, o.name AS organization_name, o.url AS organization_url, o.logo_url AS organization_logo_url, o.search_name AS organization_search_name, o.created_date AS organization_created_date, o.updated_date AS organization_updated_date FROM repository r INNER JOIN organization o ON r.organization_id=o.id WHERE r.search_name=?";
-	private static String UPDATE_SQL = "UPDATE repository SET name=:name, url=:url, organization_id=:organizationId, search_name=LOWER(:name) WHERE id=:id";
+	private static String UPDATE_SQL = "UPDATE repository SET name=?, url=?, organization_id=?, search_name=LOWER(?), last_imported_date=? WHERE id=?";
 	
 	private JdbcTemplate jdbcTemplate;
 	private SimpleJdbcInsert insert;
@@ -95,8 +93,13 @@ public class RepositoryDaoImpl implements RepositoryDao {
 	}
 	
 	protected Repository update(Repository repository) {
-		SqlParameterSource parameters = new BeanPropertySqlParameterSource(repository);
-		this.jdbcTemplate.update(UPDATE_SQL, parameters);
+		// This is more than a little ridiculous. BeanPropertySqlParameterSource and MapSqlParameterSource can't manage to properly convert a java.util.Date
+		// to a valid SQL value, so we have to revert to old-school crud.
+		java.sql.Timestamp sometimesSpringSucks = null;
+		if(null != repository.getLastImportedDate()) {
+			sometimesSpringSucks = new java.sql.Timestamp(repository.getLastImportedDate().getTime());
+		}
+		this.jdbcTemplate.update(UPDATE_SQL, new Object[] { repository.getName(), repository.getUrl(), repository.getOrganization().getId(), repository.getName(), sometimesSpringSucks, repository.getId() });
 		return repository;
 	}
 	

@@ -287,4 +287,9 @@ public class ResourceServiceImpl implements ResourceService {
 		return populate(dbResource);
 	}
 	
+	@Override
+	public void delete(Resource resource) {
+		resourceDao.delete(resource);
+	}
+	
 }

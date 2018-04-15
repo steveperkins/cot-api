@@ -21,6 +21,7 @@ public class RepositoryRowMapper extends AbstractRowMapper<Repository> {
 		repository.setName(rs.getString("name"));
 		repository.setUrl(rs.getString("url"));
 		repository.setSearchName(rs.getString("search_name"));
+		repository.setLastImportedDate(rs.getTimestamp("last_imported_date"));
 		
 		Organization organization = new Organization();
 		organization.setId(rs.getInt("organization_id"));

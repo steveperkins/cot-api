@@ -41,6 +41,7 @@ CREATE TABLE repository (
     name VARCHAR(255) NOT NULL,
     url VARCHAR(255) NULL,
     search_name VARCHAR(255) NOT NULL,
+    last_imported_date TIMESTAMP NOT NULL DEFAULT '2000-01-01',
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_date TIMESTAMP DEFAULT NULL
 );

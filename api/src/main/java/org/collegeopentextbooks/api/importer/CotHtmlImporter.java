@@ -55,19 +55,19 @@ public class CotHtmlImporter implements Importer {
 	public void run() {
 		File[] inputFiles = inputFolder.listFiles();
 		
-		Organization organization = organizationService.getOrganization("College Open Textbooks");
+		Organization organization = organizationService.getOrganization(getName());
 		if(null == organization) {
 			organization = new Organization();
-	    	organization.setName("College Open Textbooks");
+	    	organization.setName(getName());
 	    	organization.setUrl("http://collegeopentextbooks.org");
 	    	organization.setLogoUrl("http://www.collegeopentextbooks.org/images/logo-inner.png");
 	    	organization = organizationService.save(organization);
 		}
 		
-		Repository repository = repositoryService.getRepository("College Open Textbooks");
+		Repository repository = repositoryService.getRepository(getName());
 		if(null == repository) {
 			repository = new Repository();
-	    	repository.setName("College Open Textbooks");
+	    	repository.setName(getName());
 	    	repository.setOrganization(organization);
 	    	repository.setUrl("http://www.collegeopentextbooks.org");
 	    	repositoryService.save(repository);
@@ -111,5 +111,10 @@ public class CotHtmlImporter implements Importer {
 				LOG.error("Could not parse " + inputFile.getAbsolutePath(), e);
 			}
 		}
+	}
+
+	@Override
+	public String getName() {
+		return "College Open Textbooks";
 	}
 }

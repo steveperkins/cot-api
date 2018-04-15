@@ -1,5 +1,7 @@
 package org.collegeopentextbooks.api.model;
 
+import java.util.Date;
+
 /**
  * A repository containing resources
  * @author steve.perkins
@@ -10,6 +12,7 @@ public class Repository extends AbstractModelObject {
 	private String name;
 	private String url;
 	private String searchName;
+	private Date lastImportedDate;
 	
 	public Organization getOrganization() {
 		return organization;
@@ -37,5 +40,10 @@ public class Repository extends AbstractModelObject {
 	public void setSearchName(String searchName) {
 		this.searchName = searchName;
 	}
-    
+	public Date getLastImportedDate() {
+		return lastImportedDate;
+	}
+	public void setLastImportedDate(Date lastImportedDate) {
+		this.lastImportedDate = lastImportedDate;
+	}
 }

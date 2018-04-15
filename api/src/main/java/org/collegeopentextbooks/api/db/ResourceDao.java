@@ -39,4 +39,11 @@ public interface ResourceDao {
 	 */
 	Resource getByExternalId(String externalId);
 
+	/**
+	 * Deletes the given resource
+	 * @param resource
+	 * @author steve.perkins
+	 */
+	void delete(Resource resource);
+
 }
