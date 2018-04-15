@@ -54,8 +54,11 @@ public class OrganizationDaoImpl implements OrganizationDao {
 	 */
 	@Override
 	public Organization getById(int organizationId) {
-		Organization organization = jdbcTemplate.queryForObject(GET_ORGANIZATION_BY_ID_SQL, new Integer[] { organizationId }, rowMapper);
-		return organization;
+		List<Organization> organizations = jdbcTemplate.query(GET_ORGANIZATION_BY_ID_SQL, new Integer[] { organizationId }, rowMapper);
+		if(null == organizations || organizations.size() < 1) {
+			return null;
+		}
+		return organizations.get(0);
 	}
 	
 	/* (non-Javadoc)

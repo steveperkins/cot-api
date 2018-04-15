@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.log4j.Logger;
 import org.collegeopentextbooks.api.model.Organization;
 import org.collegeopentextbooks.api.model.Repository;
 import org.collegeopentextbooks.api.model.Resource;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BcCampusImporter extends OaiHarvestImporter implements Importer {
 
+	private static final Logger LOG = Logger.getLogger(BcCampusImporter.class);
 	private ResourceService resourceService;
 	private TagService tagService;
 	private RepositoryService repositoryService;
@@ -61,16 +63,19 @@ public class BcCampusImporter extends OaiHarvestImporter implements Importer {
 	@PostConstruct
 	public void init() {
 		tagKeywords = tagService.getAllKeywords();
-		repository = repositoryService.getRepository("BC Campus SOLR");
+		repository = repositoryService.getRepository(getName() + " SOLR");
 
 		if(null == repository) {
+			LOG.info("Repository not found for " + getName() + ", creating it now");
 			Organization organization = organizationService.getOrganization(getName());
 			if(null == organization) {
+				LOG.info("Organization not found for " + getName() + ", creating it now");
 				organization = new Organization();
 				organization.setName(getName());
 				organization.setUrl("https://bccampus.ca");
 				organization.setLogoUrl("https://bccampus.ca/wp-content/themes/wordpress-bootstrap-child/images/bccampus-logo.png");
 				organization = organizationService.save(organization);
+				LOG.debug("Organization " + getName() + " created with ID " + organization.getId());
 			}
 			
 			repository = new Repository();
@@ -78,6 +83,7 @@ public class BcCampusImporter extends OaiHarvestImporter implements Importer {
 	    	repository.setOrganization(organization);
 	    	repository.setUrl("http://solr.bccampus.ca:8001/bcc/oai");
 	    	repositoryService.save(repository);
+	    	LOG.debug("Repository " + getName() + " created with ID " + repository.getId());
 		}
 	}
 

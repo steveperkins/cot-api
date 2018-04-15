@@ -58,8 +58,11 @@ public class AuthorDaoImpl implements AuthorDao {
 	 */
 	@Override
 	public Author getById(Integer authorId) {
-		Author author = jdbcTemplate.queryForObject(GET_AUTHOR_BY_ID_SQL, new Integer[] { authorId }, rowMapper);
-		return author;
+		List<Author> authors = jdbcTemplate.query(GET_AUTHOR_BY_ID_SQL, new Integer[] { authorId }, rowMapper);
+		if(null == authors || authors.size() < 1) {
+			return null;
+		}
+		return authors.get(0);
 	}
 	
 	/* (non-Javadoc)

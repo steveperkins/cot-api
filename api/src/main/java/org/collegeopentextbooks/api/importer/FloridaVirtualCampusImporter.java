@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.log4j.Logger;
 import org.collegeopentextbooks.api.model.Organization;
 import org.collegeopentextbooks.api.model.Repository;
 import org.collegeopentextbooks.api.model.Resource;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class FloridaVirtualCampusImporter extends OaiHarvestImporter implements Importer {
 
+	private static final Logger LOG = Logger.getLogger(FloridaVirtualCampusImporter.class);
 	private ResourceService resourceService;
 	private TagService tagService;
 	private RepositoryService repositoryService;
@@ -55,13 +57,16 @@ public class FloridaVirtualCampusImporter extends OaiHarvestImporter implements 
 		repository = repositoryService.getRepository("Orange Grove");
 
 		if(null == repository) {
+			LOG.info("Repository not found for Orange Grove, creating it now");
 			Organization organization = organizationService.getOrganization("Florida Virtual Campus");
 			if(null == organization) {
+				LOG.info("Organization not found for Florida Virtual Campus, creating it now");
 				organization = new Organization();
 				organization.setName("Florida Virtual Campus");
 				organization.setUrl("https://www.floridashines.org/orange-grove");
 				organization.setLogoUrl("https://www.floridashines.org/floridaShines.org-theme/images/flvc.png");
 				organization = organizationService.save(organization);
+				LOG.debug("Organization created with ID " + organization.getId());
 			}
 			
 			repository = new Repository();
@@ -69,6 +74,7 @@ public class FloridaVirtualCampusImporter extends OaiHarvestImporter implements 
 	    	repository.setOrganization(organization);
 	    	repository.setUrl("https://www.floridashines.org/orange-grove");
 	    	repositoryService.save(repository);
+	    	LOG.debug("Repository created with ID " + repository.getId());
 		}
 	}
 

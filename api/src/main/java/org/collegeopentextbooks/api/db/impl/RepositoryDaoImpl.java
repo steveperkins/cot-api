@@ -54,8 +54,11 @@ public class RepositoryDaoImpl implements RepositoryDao {
 	 */
 	@Override
 	public Repository getById(int repositoryId) {
-		Repository result = jdbcTemplate.queryForObject(GET_REPOSITORY_BY_ID_SQL, new Integer[] { repositoryId }, rowMapper);
-		return result;
+		List<Repository> results = jdbcTemplate.query(GET_REPOSITORY_BY_ID_SQL, new Integer[] { repositoryId }, rowMapper);
+		if(null == results || results.size() < 1) {
+			return null;
+		}
+		return results.get(0);
 	}
 	
 	/* (non-Javadoc)

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.collegeopentextbooks.api.model.Author;
 import org.collegeopentextbooks.api.model.License;
 import org.collegeopentextbooks.api.model.Repository;
@@ -25,6 +26,7 @@ import se.kb.oai.pmh.RecordsList;
 
 public abstract class OaiHarvestImporter implements Importer {
 
+	private static final Logger LOG = Logger.getLogger(OaiHarvestImporter.class);
 	protected String baseUrl;
 	protected Repository repository;
 	protected List<String> collectionIds = new ArrayList<String>();
@@ -41,6 +43,7 @@ public abstract class OaiHarvestImporter implements Importer {
 	@Override
 	public void run() {
 		if(null == repository) {
+			LOG.error("Repository should be supplied by subclass implementing OaiHarvestImporter, but was null");
 			throw new NullPointerException("Repository can't be null. Set the appropriate repository when initializing your OaiHarvestImporter subclass.");
 		}
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -72,14 +75,13 @@ public abstract class OaiHarvestImporter implements Importer {
 						}
 						
 						String xml = metadata.asXML();
-						System.out.println();
-						System.out.println("Current XML:");
-						System.out.println(xml);
+						LOG.info("Current XML: ");
+						LOG.info(xml);
 						
 						resource.setTitle(parseTitle(xml));
 						if(StringUtils.isBlank(resource.getTitle())) {
 							// No name means no way to reference this resource, so we'll skip it
-							System.out.println("Skipping resource ID " + resource.getExternalId() + " because it has no title attribute");
+							LOG.debug("Skipping resource ID " + resource.getExternalId() + " because it has no title attribute");
 							continue;
 						}
 						
@@ -128,14 +130,14 @@ public abstract class OaiHarvestImporter implements Importer {
 						
 						resource = save(resource);
 						
-						System.out.println("Title: " + resource.getTitle());
-						System.out.println("Identifier: " +  resource.getExternalId());
-						System.out.println("Content URL: " + resource.getUrl());
-						System.out.println("Authors: " + resource.getAuthors().size());
+						LOG.debug("Title: " + resource.getTitle());
+						LOG.debug("Identifier: " +  resource.getExternalId());
+						LOG.debug("Content URL: " + resource.getUrl());
+						LOG.debug("Authors: " + resource.getAuthors().size());
 						if(null != resource.getLicense()) {
-							System.out.print("License: " + resource.getLicense().getName());
+							LOG.debug("License: " + resource.getLicense().getName());
 						}
-						System.out.println();
+						LOG.debug("");
 					}
 					if(null != recordsList.getResumptionToken()) {
 						recordsList = server.listRecords(recordsList.getResumptionToken());
@@ -161,8 +163,10 @@ public abstract class OaiHarvestImporter implements Importer {
 	protected List<License> parseLicenses(String text) {
 		// This implementation only considers Creative Commons licensing
 		List<License> licenses = new ArrayList<License>();
-		if(StringUtils.isBlank(text))
+		if(StringUtils.isBlank(text)) {
+			LOG.debug("Empty license text encountered. No licenses will be set for this resource.");
 			return licenses;
+		}
 		
 		int index = text.indexOf("CC0");
 		if(index >= 0) {

@@ -58,8 +58,11 @@ public class EditorDaoImpl implements EditorDao {
 	 */
 	@Override
 	public Editor getById(int editorId) {
-		Editor editor = jdbcTemplate.queryForObject(GET_EDITOR_BY_ID_SQL, new Integer[] { editorId }, rowMapper);
-		return editor;
+		List<Editor> editors = jdbcTemplate.query(GET_EDITOR_BY_ID_SQL, new Integer[] { editorId }, rowMapper);
+		if(null == editors || editors.size() < 1) {
+			return null;
+		}
+		return editors.get(0);
 	}
 	
 	/* (non-Javadoc)

@@ -51,10 +51,17 @@ public class TagDaoImpl implements TagDao {
 	 */
 	@Override
 	public Tag getTag(Integer tagId) {
-		Tag tag = jdbcTemplate.queryForObject(GET_TAG_SQL, new Integer[] { tagId }, rowMapper);
+		List<Tag> tags = jdbcTemplate.query(GET_TAG_SQL, new Integer[] { tagId }, rowMapper);
+		if(null == tags || tags.size() < 1) {
+			return null;
+		}
+		
+		Tag tag = tags.get(0);
+		
 		List<Tag> children = getTagsByParent(tag.getId());
 		if(!children.isEmpty())
 			tag.setChildren(children);
+		
 		return tag;
 	}
 	
