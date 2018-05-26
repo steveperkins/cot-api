@@ -16,6 +16,8 @@ public class SearchCriteria {
 	private String partialTitle;
 	private String partialUrl;
 	private List<String> licenseCodes;
+	private Boolean hasAncillaries;
+	private Boolean hasReview;
 	
 	public List<Integer> getRepositoryIds() {
 		return repositoryIds;
@@ -58,6 +60,18 @@ public class SearchCriteria {
 	}
 	public void setLicenseCodes(List<String> licenseCodes) {
 		this.licenseCodes = licenseCodes;
+	}
+	public Boolean getHasAncillaries() {
+		return hasAncillaries;
+	}
+	public void setHasAncillary(Boolean hasAncillary) {
+		this.hasAncillaries = hasAncillary;
+	}
+	public Boolean getHasReview() {
+		return hasReview;
+	}
+	public void setHasReview(Boolean hasReview) {
+		this.hasReview = hasReview;
 	}
 	
 }

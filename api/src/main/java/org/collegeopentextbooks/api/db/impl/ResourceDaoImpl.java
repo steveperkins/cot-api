@@ -155,6 +155,37 @@ public class ResourceDaoImpl implements ResourceDao {
 		List<Object> arguments = new ArrayList<Object>();
 		
 		// Constrain to selected repositories
+		addRepositoryCriteria(searchCriteria, conditions, arguments);
+		// Constrain to selected authors
+		addAuthorCriteria(searchCriteria, conditions, arguments);
+		// Constrain to selected editors
+		addEditorCriteria(searchCriteria, conditions, arguments);
+		// Constrain to selected tags
+		addTagCriteria(searchCriteria, conditions, arguments);
+		// Match on title
+		addPartialTitleCriteria(searchCriteria, conditions, arguments);
+		// Match on URL
+		addPartialUrlCriteria(searchCriteria, conditions, arguments);
+		// Constrain to selected licenses
+		addLicenseCodeCriteria(searchCriteria, conditions, arguments);
+		addAncillariesCriteria(searchCriteria, conditions, arguments);
+		addReviewCriteria(searchCriteria, conditions, arguments);
+		
+		StringBuilder criteria = new StringBuilder(SEARCH_SQL_SELECT + " WHERE 1=1");
+		for(String condition: conditions) {
+			criteria.append(" AND ").append(condition);
+		}
+		
+		String query = criteria.toString();
+		LOG.info("Search query is: " + query);
+		List<Resource> results = jdbcTemplate.query(query, arguments.toArray(), rowMapper);
+		if(null == results) {
+			results = new ArrayList<Resource>();
+		}
+		return results;
+	}
+	
+	private void addRepositoryCriteria(SearchCriteria searchCriteria, List<String> conditions, List<Object> arguments) {
 		if(null != searchCriteria.getRepositoryIds() 
 				&& !searchCriteria.getRepositoryIds().isEmpty()) {
 			List<Integer> list = searchCriteria.getRepositoryIds();
@@ -169,8 +200,9 @@ public class ResourceDaoImpl implements ResourceDao {
 			condition += ")";
 			conditions.add(condition);
 		}
-		
-		// Constrain to selected authors
+	}
+	
+	private void addAuthorCriteria(SearchCriteria searchCriteria, List<String> conditions, List<Object> arguments) {
 		if(null != searchCriteria.getAuthorIds() 
 				&& !searchCriteria.getAuthorIds().isEmpty()) {
 			List<Integer> list = searchCriteria.getAuthorIds();
@@ -186,8 +218,9 @@ public class ResourceDaoImpl implements ResourceDao {
 			condition += ")) > 0";
 			conditions.add(condition);
 		}
-		
-		// Constrain to selected editors
+	}
+	
+	private void addEditorCriteria(SearchCriteria searchCriteria, List<String> conditions, List<Object> arguments) {
 		if(null != searchCriteria.getEditorIds() 
 				&& !searchCriteria.getEditorIds().isEmpty()) {
 			List<Integer> list = searchCriteria.getEditorIds();
@@ -203,7 +236,9 @@ public class ResourceDaoImpl implements ResourceDao {
 			condition += ")) > 0";
 			conditions.add(condition);
 		}
-		
+	}
+	
+	private void addTagCriteria(SearchCriteria searchCriteria, List<String> conditions, List<Object> arguments) {
 		if(null != searchCriteria.getTagIds() 
 				&& !searchCriteria.getTagIds().isEmpty()) {
 			List<Integer> list = searchCriteria.getTagIds();
@@ -219,19 +254,26 @@ public class ResourceDaoImpl implements ResourceDao {
 			condition += ")) > 0";
 			conditions.add(condition);
 		}
-		
+	}
+	
+	private void addPartialTitleCriteria(SearchCriteria searchCriteria, List<String> conditions, List<Object> arguments) {
 		// TODO Test for SQL injection
 		if(StringUtils.isNotBlank(searchCriteria.getPartialTitle())
 				&& searchCriteria.getPartialTitle().length() > 3) {
 			conditions.add("r.search_title LIKE ?");
 			arguments.add("%" + searchCriteria.getPartialTitle().toLowerCase() + "%");
 		}
+	}
+	
+	private void addPartialUrlCriteria(SearchCriteria searchCriteria, List<String> conditions, List<Object> arguments) {
 		if(StringUtils.isNotBlank(searchCriteria.getPartialUrl())
 				&& searchCriteria.getPartialUrl().length() > 3) {
 			conditions.add("r.url LIKE ?");
 			arguments.add("%" + searchCriteria.getPartialUrl() + "%");
 		}
-		// Constrain to selected licenses
+	}
+	
+	private void addLicenseCodeCriteria(SearchCriteria searchCriteria, List<String> conditions, List<Object> arguments) {
 		if(null != searchCriteria.getLicenseCodes()) {
 			List<String> list = searchCriteria.getLicenseCodes();
 			String condition = "(";
@@ -250,24 +292,18 @@ public class ResourceDaoImpl implements ResourceDao {
 			}
 			conditions.add(condition + ")");
 		}
-		
-		StringBuilder criteria = new StringBuilder(SEARCH_SQL_SELECT + " WHERE ");
-		int count = 0;
-		for(String condition: conditions) {
-			if(count > 0)
-				criteria.append(" AND ");
-			
-			criteria.append(condition);
-			count++;
+	}
+	
+	private void addAncillariesCriteria(SearchCriteria searchCriteria, List<String> conditions, List<Object> arguments) {
+		if(null != searchCriteria.getHasAncillaries()) {
+			conditions.add("r.ancillaries_url IS " + (searchCriteria.getHasAncillaries() ? "NOT " : "") + "NULL");
 		}
-		
-		String query = criteria.toString();
-		LOG.info("Search query is: " + query);
-		List<Resource> results = jdbcTemplate.query(query, arguments.toArray(), rowMapper);
-		if(null == results) {
-			results = new ArrayList<Resource>();
+	}
+	
+	private void addReviewCriteria(SearchCriteria searchCriteria, List<String> conditions, List<Object> arguments) {
+		if(null != searchCriteria.getHasReview()) {
+			conditions.add("r.cot_review_url IS " + (searchCriteria.getHasReview() ? "NOT " : "") + "NULL");
 		}
-		return results;
 	}
 	
 	@Override

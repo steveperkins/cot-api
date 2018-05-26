@@ -393,9 +393,14 @@ INSERT INTO organization(name, url, logo_url, search_name, created_date) VALUES
 INSERT INTO repository(organization_id, name, url, search_name, created_date) VALUES
 ((SELECT id FROM organization WHERE search_name='florida virtual campus'), 'Orange Grove', 'https://florida.theorangegrove.org/og/oai', 'orange grove', CURRENT_TIMESTAMP);
 
-
 INSERT INTO organization(name, url, logo_url, search_name, created_date)
 VALUES('College Open Textbooks', 'http://collegeopentextbooks.org', 'http://www.collegeopentextbooks.org/images/logo-inner.png', 'college open textbooks', CURRENT_TIMESTAMP);
 
 INSERT INTO repository(organization_id, name, url, search_name, created_date) 
 VALUES((SELECT id FROM organization WHERE name='College Open Textbooks'), 'College Open Textbooks', 'http://www.collegeopentextbooks.org', 'college open textbooks', CURRENT_TIMESTAMP);
+
+INSERT INTO organization(name, url, logo_url, search_name, created_date)
+VALUES('BC Campus', '"https://bccampus.ca/"', '"https://bccampus.ca/wp-content/themes/wordpress-bootstrap-child/images/bccampus-logo.png"', '"bc campus"', CURRENT_TIMESTAMP);
+
+INSERT INTO repository(organization_id, name, url, search_name, created_date) 
+VALUES((SELECT id FROM organization WHERE name='BC Campus'), 'BC Campus SOLR', 'http://solr.bccampus.ca:8001/bcc/oai', 'bc campus solr', CURRENT_TIMESTAMP);
