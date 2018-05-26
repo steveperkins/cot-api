@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.collegeopentextbooks.api.importer.CotHtmlImporter;
 import org.collegeopentextbooks.api.importer.FloridaVirtualCampusImporter;
@@ -45,7 +44,6 @@ public class ApiHarvestController {
 		LOG.info("Parsing importer list");
 		for(String importerClass: importerClasses.split(",")) {
 			String[] names = applicationContext.getBeanNamesForType(FloridaVirtualCampusImporter.class);
-			LOG.info("Names: " + StringUtils.join(names, ","));
 			Importer importer = (Importer)applicationContext. getAutowireCapableBeanFactory().getBean(importerClass);
 			
 			// COT HTML importer is a special animal that requires a file path
