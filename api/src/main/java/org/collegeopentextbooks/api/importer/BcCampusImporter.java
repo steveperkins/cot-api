@@ -1,5 +1,7 @@
 package org.collegeopentextbooks.api.importer;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +84,7 @@ public class BcCampusImporter extends OaiHarvestImporter implements Importer {
 	    	repository.setName(getName()  + "SOLR");
 	    	repository.setOrganization(organization);
 	    	repository.setUrl("http://solr.bccampus.ca:8001/bcc/oai");
+	    	repository.setLastImportedDate(Date.from(LocalDateTime.of(1970, 01, 01, 0, 0, 0, 0).atZone(ZoneId.systemDefault()).toInstant()));
 	    	repositoryService.save(repository);
 	    	LOG.debug("Repository " + getName() + " created with ID " + repository.getId());
 		}

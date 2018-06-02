@@ -90,6 +90,7 @@ public class RepositoryDaoImpl implements RepositoryDao {
         parameters.put("url", repository.getUrl());
         parameters.put("organization_id", repository.getOrganization().getId());
         parameters.put("search_name", repository.getSearchName());
+        parameters.put("last_imported_date", repository.getLastImportedDate());
         Number newId = this.insert.executeAndReturnKey(parameters);
         repository.setId(newId.intValue());
         return repository;

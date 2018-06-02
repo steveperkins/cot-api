@@ -1,5 +1,7 @@
 package org.collegeopentextbooks.api.importer;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +75,7 @@ public class FloridaVirtualCampusImporter extends OaiHarvestImporter implements 
 	    	repository.setName("Florida Virtual Campus");
 	    	repository.setOrganization(organization);
 	    	repository.setUrl("https://www.floridashines.org/orange-grove");
+	    	repository.setLastImportedDate(Date.from(LocalDateTime.of(1970, 01, 01, 0, 0, 0, 0).atZone(ZoneId.systemDefault()).toInstant()));
 	    	repositoryService.save(repository);
 	    	LOG.debug("Repository created with ID " + repository.getId());
 		}

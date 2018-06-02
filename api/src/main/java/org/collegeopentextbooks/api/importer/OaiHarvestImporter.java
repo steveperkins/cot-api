@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -24,7 +23,7 @@ import se.kb.oai.pmh.OaiPmhServer;
 import se.kb.oai.pmh.Record;
 import se.kb.oai.pmh.RecordsList;
 
-public abstract class OaiHarvestImporter implements Importer {
+public abstract class OaiHarvestImporter extends AbstractImporter implements Importer {
 
 	private static final Logger LOG = Logger.getLogger(OaiHarvestImporter.class);
 	protected String baseUrl;
@@ -243,20 +242,6 @@ public abstract class OaiHarvestImporter implements Importer {
 	 * @author steve.perkins
 	 */
 	protected abstract List<Tag> analyzeDisciplines(List<String> keywords);
-	
-	protected List<Tag> analyzeDisciplines(List<String> keywords, Map<Tag, List<String>> tagKeywords) {
-		List<Tag> matches = new ArrayList<>();
-		for(String keyword : keywords) {
-			keyword = keyword.trim();
-			for(Map.Entry<Tag, List<String>> entry : tagKeywords.entrySet()) {
-				// Loop through the tags and attempt to find a match for the current keyword
-				if(entry.getValue().contains(keyword.toLowerCase())) {
-					matches.add(entry.getKey());
-				}
-			}
-		}
-		return matches;
-	}
 	
 	
 	/**

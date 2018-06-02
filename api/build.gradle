@@ -74,3 +74,5 @@ springBoot {
 bootRepackage {
     mainClass = 'org.collegeopentextbooks.api.Application'
 }
+// Create a runnable jar with gradlew clean bootRepackage
+// The resulting .jar will be copied to /build/libs/api.jar

@@ -2,7 +2,10 @@ package org.collegeopentextbooks.api.importer;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -70,6 +73,7 @@ public class CotHtmlImporter implements Importer {
 	    	repository.setName(getName());
 	    	repository.setOrganization(organization);
 	    	repository.setUrl("http://www.collegeopentextbooks.org");
+	    	repository.setLastImportedDate(Date.from(LocalDateTime.of(1970, 01, 01, 0, 0, 0, 0).atZone(ZoneId.systemDefault()).toInstant()));
 	    	repositoryService.save(repository);
 		}
 		
