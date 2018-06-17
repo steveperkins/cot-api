@@ -11,6 +11,7 @@ import org.collegeopentextbooks.api.db.TagDao;
 import org.collegeopentextbooks.api.db.rowmapper.StringRowMapper;
 import org.collegeopentextbooks.api.model.Resource;
 import org.collegeopentextbooks.api.model.Tag;
+import org.collegeopentextbooks.api.model.TagSearchCriteria;
 import org.collegeopentextbooks.api.model.TagType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -26,6 +27,7 @@ public class TagDaoImpl implements TagDao {
 	private static String GET_TAGS_BY_PARENT_SQL = "SELECT t.* FROM tag t WHERE parent_tag_id=?";
 	private static String GET_TAGS_SQL = "SELECT t.* FROM tag t";
 	private static String GET_TAGS_BY_TYPE_SQL = "SELECT t.* FROM tag t WHERE t.tag_type=?";
+	private static String SEARCH_TAGS_SQL = "SELECT t.* FROM tag t WHERE t.search_name=?";
 	private static String GET_TAGS_BY_RESOURCE_ID_SQL = "SELECT t.* FROM tag t INNER JOIN resource_tag rt ON t.id=rt.tag_id WHERE rt.resource_id=?";
 	private static String GET_TAGS_BY_NAME_SQL = "SELECT t.* FROM tag t WHERE t.search_name=?";
 	private static String GET_KEYWORDS_BY_TAG_SQL = "SELECT tk.* FROM tag_keyword tk WHERE tk.tag_id=?";
@@ -105,6 +107,20 @@ public class TagDaoImpl implements TagDao {
 	@Override
 	public List<Tag> getTagsByType(TagType tagType) {
 		List<Tag> results = jdbcTemplate.query(GET_TAGS_BY_TYPE_SQL, new String[] { tagType.toString() }, rowMapper);
+		if(null == results) {
+			results = new ArrayList<Tag>();
+		}
+		for(Tag tag: results) {
+			List<Tag> children = getTagsByParent(tag.getId());
+			if(!children.isEmpty())
+				tag.setChildren(children);
+		}
+		return results;
+	}
+	
+	@Override
+	public List<Tag> search(TagSearchCriteria searchCriteria) {
+		List<Tag> results = jdbcTemplate.query(SEARCH_TAGS_SQL, new String[] { searchCriteria.getName().toLowerCase() }, rowMapper);
 		if(null == results) {
 			results = new ArrayList<Tag>();
 		}

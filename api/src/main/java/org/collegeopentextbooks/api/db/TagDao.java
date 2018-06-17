@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.collegeopentextbooks.api.model.Resource;
 import org.collegeopentextbooks.api.model.Tag;
+import org.collegeopentextbooks.api.model.TagSearchCriteria;
 import org.collegeopentextbooks.api.model.TagType;
 
 public interface TagDao {
@@ -48,5 +49,7 @@ public interface TagDao {
 	Tag save(Tag tag);
 	
 	List<Tag> merge(Resource resource, List<Tag> tags);
+
+	List<Tag> search(TagSearchCriteria searchCriterai);
 
 }

@@ -7,6 +7,7 @@ import org.collegeopentextbooks.api.exception.RequiredValueEmptyException;
 import org.collegeopentextbooks.api.exception.ValueTooLongException;
 import org.collegeopentextbooks.api.model.Resource;
 import org.collegeopentextbooks.api.model.Tag;
+import org.collegeopentextbooks.api.model.TagSearchCriteria;
 import org.collegeopentextbooks.api.model.TagType;
 
 public interface TagService {
@@ -14,6 +15,8 @@ public interface TagService {
 	List<Tag> getAll();
 
 	List<Tag> getByType(TagType tagType);
+	
+	List<Tag> search(TagSearchCriteria critera);
 
 	List<Tag> getByResource(Integer resourceId);
 

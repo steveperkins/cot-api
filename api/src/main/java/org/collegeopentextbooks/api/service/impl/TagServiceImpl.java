@@ -1,5 +1,6 @@
 package org.collegeopentextbooks.api.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.collegeopentextbooks.api.exception.RequiredValueEmptyException;
 import org.collegeopentextbooks.api.exception.ValueTooLongException;
 import org.collegeopentextbooks.api.model.Resource;
 import org.collegeopentextbooks.api.model.Tag;
+import org.collegeopentextbooks.api.model.TagSearchCriteria;
 import org.collegeopentextbooks.api.model.TagType;
 import org.collegeopentextbooks.api.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,14 @@ public class TagServiceImpl implements TagService {
 	@Override
 	public List<Tag> getByType(TagType tagType) {
 		return tagDao.getTagsByType(tagType);
+	}
+	
+	@Override
+	public List<Tag> search(TagSearchCriteria searchCriteria) {
+		if(StringUtils.isBlank(searchCriteria.getName())) {
+			return new ArrayList<Tag>();
+		}
+		return tagDao.search(searchCriteria);
 	}
 	
 	/* (non-Javadoc)
