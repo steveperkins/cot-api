@@ -52,7 +52,8 @@ public abstract class OaiHarvestImporter extends AbstractImporter implements Imp
 		OaiPmhServer server = new OaiPmhServer(baseUrl);
 		for(String collectionId: collectionIds) {
 			try {
-				RecordsList recordsList = server.listRecords("oai_dc", fromDate, untilDate, collectionId);
+//				RecordsList recordsList = server.listRecords("oai_dc", fromDate, untilDate, collectionId);
+				RecordsList recordsList = server.listRecords("oai_dc");
 				while(null != recordsList) {
 					List<Record> records = recordsList.asList();
 					for(Record record: records) {
